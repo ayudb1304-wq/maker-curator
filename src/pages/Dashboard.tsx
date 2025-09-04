@@ -321,7 +321,7 @@ const Dashboard = () => {
     return <Navigate to="/auth" replace />;
   }
 
-  const username = profile.username || user.email?.split('@')[0] || 'user';
+  const username = profile.username || user?.email?.split('@')[0] || 'user';
   
   const copyPublicUrl = () => {
     const url = `${window.location.origin}/${username}`;
@@ -368,7 +368,7 @@ const Dashboard = () => {
                 Settings
               </Button>
               <span className="text-sm text-muted-foreground">
-                Welcome, {user.email}
+                Welcome, {user?.email || username}
               </span>
               <Button variant="ghost" size="sm" onClick={signOut}>
                 <LogOut className="w-4 h-4 mr-2" />
