@@ -9,8 +9,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings, FolderPlus } from 'lucide-react';
+import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings, FolderPlus, Mail } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Item {
@@ -380,6 +381,19 @@ const Dashboard = () => {
       </header>
 
       <div className="container mx-auto px-6 py-8">
+        {/* Email Verification Alert */}
+        {user && !user.email_confirmed_at && (
+          <Alert className="mb-6 border-amber-200 bg-amber-50">
+            <Mail className="h-4 w-4 text-amber-600" />
+            <AlertDescription className="text-amber-800">
+              <div className="font-medium mb-1">Please verify your email address</div>
+              <div className="text-sm">
+                We've sent a verification email to <strong>{user.email}</strong>. 
+                Please check your inbox and click the verification link to access all features of your dashboard.
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
         {/* Page Title & Description Section */}
         <Card className="mb-8">
           <CardHeader>

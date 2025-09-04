@@ -79,9 +79,9 @@ const Login = () => {
           title: "Account created successfully!",
           description: "Please check your email to verify your account before signing in.",
         });
-        // Redirect to sign in after a brief delay
+        // Redirect to dashboard after a brief delay
         setTimeout(() => {
-          navigate('/auth', { replace: true });
+          navigate('/dashboard', { replace: true });
           setSignupSuccess(false);
         }, 3000);
       }
