@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate, Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,12 +8,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Palette, ArrowLeft } from 'lucide-react';
+import { Palette, ArrowLeft, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useUsernameCheck } from '@/hooks/useUsernameCheck';
+import { cn } from '@/lib/utils';
 
 const Login = () => {
   const { user, signIn, signUp, resetPassword } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -23,6 +26,9 @@ const Login = () => {
   const [error, setError] = useState('');
   const [resetEmail, setResetEmail] = useState('');
   const [showResetForm, setShowResetForm] = useState(false);
+  const [signupSuccess, setSignupSuccess] = useState(false);
+  
+  const usernameCheck = useUsernameCheck(username);
 
   if (user) {
     return <Navigate to="/dashboard" replace />;
@@ -48,22 +54,36 @@ const Login = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    
+    // Validate username availability before proceeding
+    if (!usernameCheck.available) {
+      setError(usernameCheck.message || 'Please choose a valid username');
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
       const { error } = await signUp(email, password, {
-        username,
+        username: username.toLowerCase().trim(),
         occupation,
         gender,
         display_name: username
       });
+      
       if (error) {
         setError(error.message);
       } else {
+        setSignupSuccess(true);
         toast({
-          title: "Account created!",
-          description: "Please check your email to verify your account.",
+          title: "Account created successfully!",
+          description: "Please check your email to verify your account before signing in.",
         });
+        // Redirect to sign in after a brief delay
+        setTimeout(() => {
+          navigate('/auth', { replace: true });
+          setSignupSuccess(false);
+        }, 3000);
       }
     } catch (err) {
       setError('An unexpected error occurred');
@@ -255,14 +275,44 @@ const Login = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-username">Username</Label>
-                    <Input
-                      id="signup-username"
-                      type="text"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Choose username"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="signup-username"
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                        placeholder="Choose username"
+                        className={cn(
+                          "pr-8",
+                          username.length >= 3 && !usernameCheck.isChecking && 
+                          (usernameCheck.available ? "border-green-500" : "border-red-500")
+                        )}
+                        required
+                      />
+                      <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                        {username.length >= 3 && (
+                          <>
+                            {usernameCheck.isChecking && (
+                              <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                            )}
+                            {!usernameCheck.isChecking && usernameCheck.available && (
+                              <CheckCircle className="w-4 h-4 text-green-500" />
+                            )}
+                            {!usernameCheck.isChecking && !usernameCheck.available && (
+                              <XCircle className="w-4 h-4 text-red-500" />
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {username.length >= 3 && usernameCheck.message && (
+                      <p className={cn(
+                        "text-sm",
+                        usernameCheck.available ? "text-green-600" : "text-red-600"
+                      )}>
+                        {usernameCheck.message}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -302,9 +352,23 @@ const Login = () => {
                     </Select>
                   </div>
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  disabled={isLoading || !usernameCheck.available || usernameCheck.isChecking || username.length < 3}
+                >
                   {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
+                
+                {signupSuccess && (
+                  <Alert className="border-green-200 bg-green-50">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <AlertDescription className="text-green-800">
+                      Account created successfully! Please check your email to verify your account before signing in. 
+                      You'll be redirected to the sign in page shortly.
+                    </AlertDescription>
+                  </Alert>
+                )}
               </form>
             </TabsContent>
           </Tabs>
