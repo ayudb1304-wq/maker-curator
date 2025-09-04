@@ -494,10 +494,12 @@ const Dashboard = () => {
             {/* Categories Management */}
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Organize Your Content</h2>
-              <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90">
-                <FolderPlus className="w-4 h-4 mr-2" />
-                Add Category
-              </Button>
+              {categories.length > 0 && (
+                <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90">
+                  <FolderPlus className="w-4 h-4 mr-2" />
+                  Add Category
+                </Button>
+              )}
             </div>
 
             {categories.length === 0 ? (
