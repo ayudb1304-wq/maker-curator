@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Palette } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -7,23 +8,23 @@ const Header = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <Palette className="w-5 h-5 text-white" />
+              <Palette className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
               Curator
             </span>
-          </div>
+          </Link>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
               Features
             </a>
-            <a href="#examples" className="text-muted-foreground hover:text-foreground transition-colors">
-              Examples
-            </a>
+            <Link to="/demo" className="text-muted-foreground hover:text-foreground transition-colors">
+              Example
+            </Link>
             <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
               Pricing
             </a>
@@ -32,10 +33,10 @@ const Header = () => {
           {/* Auth buttons */}
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" asChild>
-              <a href="/auth">Login</a>
+              <Link to="/auth">Login</Link>
             </Button>
             <Button variant="default" size="sm" asChild>
-              <a href="/auth">Start Free</a>
+              <Link to="/auth">Start Free</Link>
             </Button>
           </div>
         </div>

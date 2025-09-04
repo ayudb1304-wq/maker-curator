@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTA = () => {
   return (
@@ -30,17 +31,23 @@ const CTA = () => {
               variant="secondary" 
               size="lg" 
               className="bg-white text-primary hover:bg-white/90 shadow-glow group"
+              asChild
             >
-              Claim Your Username
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <Link to="/auth">
+                Claim Your Username
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
             
             <Button 
               variant="outline" 
               size="lg" 
               className="border-white/30 text-white hover:bg-white/10 hover:border-white/50"
+              asChild
             >
-              See Example Page
+              <Link to="/demo">
+                See Example Page
+              </Link>
             </Button>
           </div>
 
