@@ -82,6 +82,25 @@ const Dashboard = () => {
   });
   
   const usernameCheck = useUsernameCheck(profileData.username);
+  
+  // Calculate username cooldown info
+  const getUsernameCooldownInfo = () => {
+    if (!profile.username_changed_at) return { canChange: true, daysRemaining: 0, nextChangeDate: null };
+    
+    const lastChanged = new Date(profile.username_changed_at);
+    const thirtyDaysLater = new Date(lastChanged.getTime() + (30 * 24 * 60 * 60 * 1000));
+    const now = new Date();
+    const canChange = now >= thirtyDaysLater;
+    const daysRemaining = canChange ? 0 : Math.ceil((thirtyDaysLater.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
+    
+    return {
+      canChange,
+      daysRemaining,
+      nextChangeDate: thirtyDaysLater
+    };
+  };
+  
+  const cooldownInfo = getUsernameCooldownInfo();
 
 
   useEffect(() => {
@@ -899,8 +918,8 @@ const Dashboard = () => {
                 Customize your public page title, description, and URL
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
+            <div className="grid gap-6">
+              <div className="grid gap-2">
                 <Label htmlFor="profile-title">Page Title</Label>
                 <Input
                   id="profile-title"
@@ -909,7 +928,7 @@ const Dashboard = () => {
                   placeholder="My Favorite Tech Gear"
                 />
               </div>
-              <div>
+              <div className="grid gap-2">
                 <Label htmlFor="profile-description">Page Description</Label>
                 <Textarea
                   id="profile-description"
@@ -919,14 +938,33 @@ const Dashboard = () => {
                   rows={3}
                 />
               </div>
-              <div>
+              <div className="grid gap-2">
                 <Label htmlFor="profile-username">Username (URL)</Label>
+                
+                {/* Username Cooldown Warning */}
+                {!cooldownInfo.canChange && (
+                  <Alert className="border-amber-200 bg-amber-50">
+                    <AlertDescription className="text-amber-800">
+                      <div className="font-medium mb-1">Username Change Restriction</div>
+                      <div className="text-sm">
+                        You can change your username again in <strong>{cooldownInfo.daysRemaining} days</strong> ({cooldownInfo.nextChangeDate?.toLocaleDateString('en-US', { 
+                          weekday: 'long', 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}).
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+                )}
+                
                 <div className="relative">
                   <Input
                     id="profile-username"
                     value={profileData.username}
                     onChange={(e) => setProfileData({ ...profileData, username: e.target.value.toLowerCase() })}
                     placeholder="your-username"
+                    disabled={!cooldownInfo.canChange}
                     className={cn(
                       "pr-8",
                       profileData.username.length >= 3 && profileData.username !== profile.username && !usernameCheck.isChecking && 
@@ -934,7 +972,7 @@ const Dashboard = () => {
                     )}
                   />
                   <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                    {profileData.username.length >= 3 && profileData.username !== profile.username && (
+                    {profileData.username.length >= 3 && profileData.username !== profile.username && cooldownInfo.canChange && (
                       <>
                         {usernameCheck.isChecking && (
                           <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
@@ -949,7 +987,7 @@ const Dashboard = () => {
                     )}
                   </div>
                 </div>
-                {profileData.username.length >= 3 && profileData.username !== profile.username && usernameCheck.message && (
+                {profileData.username.length >= 3 && profileData.username !== profile.username && usernameCheck.message && cooldownInfo.canChange && (
                   <p className={cn(
                     "text-sm mt-1",
                     usernameCheck.available ? "text-green-600" : "text-red-600"
@@ -961,7 +999,7 @@ const Dashboard = () => {
                   Your page will be available at: thecurately.com/{profileData.username}
                 </p>
               </div>
-              <div className="space-y-2">
+              <div className="grid gap-2">
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -983,8 +1021,9 @@ const Dashboard = () => {
                 onClick={handleUpdateProfile} 
                 className="w-full"
                 disabled={
-                  profileData.username !== profile.username && 
-                  (!usernameCheck.available || usernameCheck.isChecking || profileData.username.length < 3)
+                  (profileData.username !== profile.username && !cooldownInfo.canChange) ||
+                  (profileData.username !== profile.username && 
+                  (!usernameCheck.available || usernameCheck.isChecking || profileData.username.length < 3))
                 }
               >
                 Update Settings
