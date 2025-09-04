@@ -421,10 +421,6 @@ const Dashboard = () => {
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={() => setIsEditingProfile(true)} className="hover:shadow-card transition-shadow duration-200">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
               <span className="text-sm text-muted-foreground">
                 Welcome, {user?.email || username}
               </span>
@@ -564,31 +560,42 @@ const Dashboard = () => {
             {/* Items Management */}
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Your Recommendations</h2>
-              <Button onClick={() => setIsAddingItem(true)} className="bg-gradient-primary hover:opacity-90">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Recommendation
-              </Button>
+              {categories.length > 0 && (
+                <Button onClick={() => setIsAddingItem(true)} className="bg-gradient-primary hover:opacity-90">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Recommendation
+                </Button>
+              )}
             </div>
 
-            {/* Categories with Items */}
+            {/* Empty State Logic */}
             {categories.length === 0 && items.length === 0 ? (
               <Card className="border-border/50 bg-gradient-card shadow-card">
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <div className="text-center space-y-4">
                     <h3 className="text-lg font-medium">No recommendations yet</h3>
                     <p className="text-muted-foreground">
-                      Start by creating categories first, then add your recommendations to organize them better
+                      Start by creating categories first to organize your recommendations
                     </p>
-                    <div className="flex gap-2 justify-center">
-                      <Button onClick={() => setIsAddingCategory(true)} variant="outline">
-                        <FolderPlus className="w-4 h-4 mr-2" />
-                        Add Category First
-                      </Button>
-                      <Button onClick={() => setIsAddingItem(true)} className="bg-gradient-primary hover:opacity-90">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add Recommendation
-                      </Button>
-                    </div>
+                    <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90">
+                      <FolderPlus className="w-4 h-4 mr-2" />
+                      Create Your First Category
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : categories.length === 0 ? (
+              <Card className="border-border/50 bg-gradient-card shadow-card">
+                <CardContent className="flex flex-col items-center justify-center py-12">
+                  <div className="text-center space-y-4">
+                    <h3 className="text-lg font-medium">Create categories first</h3>
+                    <p className="text-muted-foreground">
+                      You have recommendations but no categories. Organize them by creating categories first.
+                    </p>
+                    <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90">
+                      <FolderPlus className="w-4 h-4 mr-2" />
+                      Add Category
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
