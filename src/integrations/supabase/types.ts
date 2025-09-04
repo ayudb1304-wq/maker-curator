@@ -60,6 +60,7 @@ export type Database = {
           updated_at: string
           user_id: string
           username: string | null
+          username_changed_at: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -73,6 +74,7 @@ export type Database = {
           updated_at?: string
           user_id: string
           username?: string | null
+          username_changed_at?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -86,6 +88,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
           username?: string | null
+          username_changed_at?: string | null
         }
         Relationships: []
       }
@@ -171,7 +174,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_change_username: {
+        Args: { user_id_param: string }
+        Returns: boolean
+      }
+      update_username: {
+        Args: { new_username: string; user_id_param: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

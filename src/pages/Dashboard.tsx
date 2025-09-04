@@ -9,9 +9,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings, FolderPlus, Mail } from 'lucide-react';
+import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings, FolderPlus, Mail, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useUsernameCheck } from '@/hooks/useUsernameCheck';
+import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Item {
@@ -36,6 +38,7 @@ interface Profile {
   page_title: string;
   page_description: string;
   public_profile: boolean;
+  username_changed_at?: string;
 }
 
 const Dashboard = () => {
@@ -47,7 +50,8 @@ const Dashboard = () => {
     username: '',
     page_title: '',
     page_description: '',
-    public_profile: false
+    public_profile: false,
+    username_changed_at: undefined
   });
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
@@ -73,8 +77,11 @@ const Dashboard = () => {
     username: '',
     page_title: '',
     page_description: '',
-    public_profile: false
+    public_profile: false,
+    username_changed_at: undefined
   });
+  
+  const usernameCheck = useUsernameCheck(profileData.username);
 
 
   useEffect(() => {
@@ -89,7 +96,7 @@ const Dashboard = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, page_title, page_description, public_profile')
+        .select('username, page_title, page_description, public_profile, username_changed_at')
         .eq('user_id', user.id)
         .single();
 
@@ -99,7 +106,8 @@ const Dashboard = () => {
           username: data.username || '',
           page_title: data.page_title || '',
           page_description: data.page_description || '',
-          public_profile: data.public_profile || false
+          public_profile: data.public_profile || false,
+          username_changed_at: data.username_changed_at
         };
         setProfile(profileData);
         setProfileData(profileData);
@@ -283,14 +291,44 @@ const Dashboard = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      const { error } = await supabase
+      // Check if username has changed and handle it separately
+      if (profileData.username !== profile.username) {
+        const { data, error } = await supabase.rpc('update_username', {
+          user_id_param: user.id,
+          new_username: profileData.username
+        });
+
+        if (error) throw error;
+
+        const result = data as { success: boolean; message: string; error?: string };
+
+        if (!result.success) {
+          toast({ 
+            description: result.message, 
+            variant: 'destructive' 
+          });
+          return;
+        }
+
+        toast({ description: result.message });
+      }
+
+      // Update other profile fields
+      const updateData = {
+        page_title: profileData.page_title,
+        page_description: profileData.page_description,
+        public_profile: profileData.public_profile
+      };
+
+      const { error: updateError } = await supabase
         .from('profiles')
-        .update(profileData)
+        .update(updateData)
         .eq('user_id', user.id);
 
-      if (error) throw error;
+      if (updateError) throw updateError;
 
-      setProfile(profileData);
+      // Fetch fresh profile data
+      await fetchProfile();
       setIsEditingProfile(false);
       toast({ description: 'Profile updated successfully!' });
     } catch (error) {
@@ -883,12 +921,42 @@ const Dashboard = () => {
               </div>
               <div>
                 <Label htmlFor="profile-username">Username (URL)</Label>
-                <Input
-                  id="profile-username"
-                  value={profileData.username}
-                  onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
-                  placeholder="your-username"
-                />
+                <div className="relative">
+                  <Input
+                    id="profile-username"
+                    value={profileData.username}
+                    onChange={(e) => setProfileData({ ...profileData, username: e.target.value.toLowerCase() })}
+                    placeholder="your-username"
+                    className={cn(
+                      "pr-8",
+                      profileData.username.length >= 3 && profileData.username !== profile.username && !usernameCheck.isChecking && 
+                      (usernameCheck.available ? "border-green-500" : "border-red-500")
+                    )}
+                  />
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                    {profileData.username.length >= 3 && profileData.username !== profile.username && (
+                      <>
+                        {usernameCheck.isChecking && (
+                          <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                        )}
+                        {!usernameCheck.isChecking && usernameCheck.available && (
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                        )}
+                        {!usernameCheck.isChecking && !usernameCheck.available && (
+                          <XCircle className="w-4 h-4 text-red-500" />
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+                {profileData.username.length >= 3 && profileData.username !== profile.username && usernameCheck.message && (
+                  <p className={cn(
+                    "text-sm mt-1",
+                    usernameCheck.available ? "text-green-600" : "text-red-600"
+                  )}>
+                    {usernameCheck.message}
+                  </p>
+                )}
                 <p className="text-xs text-muted-foreground mt-1">
                   Your page will be available at: thecurately.com/{profileData.username}
                 </p>
@@ -911,7 +979,14 @@ const Dashboard = () => {
                   When disabled, only you can access your recommendations.
                 </p>
               </div>
-              <Button onClick={handleUpdateProfile} className="w-full">
+              <Button 
+                onClick={handleUpdateProfile} 
+                className="w-full"
+                disabled={
+                  profileData.username !== profile.username && 
+                  (!usernameCheck.available || usernameCheck.isChecking || profileData.username.length < 3)
+                }
+              >
                 Update Settings
               </Button>
             </div>
