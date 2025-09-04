@@ -32,10 +32,10 @@ const Header = () => {
           {/* Auth buttons */}
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" asChild>
-              <a href="/login">Login</a>
+              <a href="/auth">Login</a>
             </Button>
             <Button variant="default" size="sm" asChild>
-              <a href="/login">Start Free</a>
+              <a href="/auth">Start Free</a>
             </Button>
           </div>
         </div>

@@ -20,7 +20,7 @@ interface Item {
 }
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
   const { toast } = useToast();
   const [items, setItems] = useState<Item[]>([]);
   const [isAddingItem, setIsAddingItem] = useState(false);
@@ -34,7 +34,7 @@ const Dashboard = () => {
   });
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/auth" replace />;
   }
 
   const handleAddItem = () => {
@@ -77,13 +77,15 @@ const Dashboard = () => {
     });
   };
 
+  const username = user.email?.split('@')[0] || 'user';
+  
   const copyPublicUrl = () => {
-    const url = `${window.location.origin}/${user.username}`;
+    const url = `${window.location.origin}/${username}`;
     navigator.clipboard.writeText(url);
     toast({ description: 'Public URL copied to clipboard!' });
   };
 
-  const publicUrl = `${window.location.origin}/${user.username}`;
+  const publicUrl = `${window.location.origin}/${username}`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -103,7 +105,7 @@ const Dashboard = () => {
               <span className="text-sm text-muted-foreground">
                 Welcome, {user.email}
               </span>
-              <Button variant="ghost" size="sm" onClick={logout}>
+              <Button variant="ghost" size="sm" onClick={signOut}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
               </Button>
@@ -133,7 +135,7 @@ const Dashboard = () => {
                 Copy
               </Button>
               <Button variant="outline" asChild>
-                <a href={`/${user.username}`} target="_blank" rel="noopener noreferrer">
+                <a href={`/${username}`} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="w-4 h-4 mr-2" />
                   View
                 </a>
