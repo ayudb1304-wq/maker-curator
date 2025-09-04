@@ -53,12 +53,12 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // Check if username exists in users table
-    const { data, error } = await supabase
-      .from('users')
-      .select('username')
-      .eq('username', username.toLowerCase())
-      .maybeSingle();
+    // Use secure database function to check username availability
+    // This doesn't expose email addresses or other sensitive data
+    const { data: isAvailable, error } = await supabase
+      .rpc('is_username_available', {
+        check_username: username.toLowerCase()
+      });
 
     if (error) {
       console.error('Error checking username:', error);
@@ -71,10 +71,9 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    const available = !data;
-    const message = available ? 'Username is available' : 'Username is already taken';
+    const message = isAvailable ? 'Username is available' : 'Username is already taken';
 
-    return new Response(JSON.stringify({ available, message }), {
+    return new Response(JSON.stringify({ available: isAvailable, message }), {
       status: 200,
       headers: { 'Content-Type': 'application/json', ...corsHeaders },
     });

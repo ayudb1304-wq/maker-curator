@@ -178,6 +178,14 @@ export type Database = {
         Args: { user_id_param: string }
         Returns: boolean
       }
+      check_username_availability: {
+        Args: { check_username: string }
+        Returns: boolean
+      }
+      is_username_available: {
+        Args: { check_username: string }
+        Returns: boolean
+      }
       update_username: {
         Args: { new_username: string; user_id_param: string }
         Returns: Json
