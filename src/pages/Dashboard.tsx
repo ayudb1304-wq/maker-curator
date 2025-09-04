@@ -75,9 +75,6 @@ const Dashboard = () => {
     public_profile: false
   });
 
-  if (!user) {
-    return <Navigate to="/auth" replace />;
-  }
 
   useEffect(() => {
     if (user) {
@@ -319,6 +316,10 @@ const Dashboard = () => {
       description: category.description
     });
   };
+
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
 
   const username = profile.username || user.email?.split('@')[0] || 'user';
   
