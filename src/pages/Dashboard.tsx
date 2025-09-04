@@ -636,8 +636,8 @@ const Dashboard = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">No Category</SelectItem>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
+                    {categories.filter((c) => !!c && !!c.id).map((category) => (
+                      <SelectItem key={category.id} value={category.id as string}>
                         {category.name}
                       </SelectItem>
                     ))}
@@ -742,8 +742,8 @@ const Dashboard = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">No Category</SelectItem>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
+                    {categories.filter((c) => !!c && !!c.id).map((category) => (
+                      <SelectItem key={category.id} value={category.id as string}>
                         {category.name}
                       </SelectItem>
                     ))}
