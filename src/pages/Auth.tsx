@@ -77,13 +77,10 @@ const Login = () => {
         setSignupSuccess(true);
         toast({
           title: "Account created successfully!",
-          description: "Please check your email to verify your account before signing in.",
+          description: "Please check your email to verify your account.",
         });
-        // Redirect to dashboard after a brief delay
-        setTimeout(() => {
-          navigate('/dashboard', { replace: true });
-          setSignupSuccess(false);
-        }, 3000);
+        // Redirect immediately to dashboard
+        navigate('/dashboard', { replace: true });
       }
     } catch (err) {
       setError('An unexpected error occurred');
