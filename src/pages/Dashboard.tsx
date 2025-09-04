@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,64 +7,179 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut } from 'lucide-react';
+import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Item {
   id: string;
   title: string;
   description: string;
-  imageUrl: string;
-  targetUrl: string;
+  image_url: string;
+  target_url: string;
   position: number;
+}
+
+interface Profile {
+  username: string;
+  page_title: string;
+  page_description: string;
 }
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const [items, setItems] = useState<Item[]>([]);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    imageUrl: '',
-    targetUrl: ''
+    image_url: '',
+    target_url: ''
+  });
+
+  const [profileData, setProfileData] = useState({
+    username: '',
+    page_title: '',
+    page_description: ''
   });
 
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
 
-  const handleAddItem = () => {
-    const newItem: Item = {
-      id: Date.now().toString(),
-      ...formData,
-      position: items.length
-    };
-    setItems([...items, newItem]);
-    setFormData({ title: '', description: '', imageUrl: '', targetUrl: '' });
-    setIsAddingItem(false);
-    toast({ description: 'Item added successfully!' });
+  useEffect(() => {
+    if (user) {
+      fetchProfile();
+      fetchRecommendations();
+    }
+  }, [user]);
+
+  const fetchProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('username, page_title, page_description')
+        .eq('user_id', user.id)
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        setProfile(data);
+        setProfileData(data);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      toast({ description: 'Failed to load profile', variant: 'destructive' });
+    }
   };
 
-  const handleEditItem = () => {
+  const fetchRecommendations = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('recommendations')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_active', true)
+        .order('position');
+
+      if (error) throw error;
+      setItems(data || []);
+    } catch (error) {
+      console.error('Error fetching recommendations:', error);
+      toast({ description: 'Failed to load recommendations', variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddItem = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('recommendations')
+        .insert([{
+          ...formData,
+          user_id: user.id,
+          position: items.length
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+      
+      setItems([...items, data]);
+      setFormData({ title: '', description: '', image_url: '', target_url: '' });
+      setIsAddingItem(false);
+      toast({ description: 'Item added successfully!' });
+    } catch (error) {
+      console.error('Error adding item:', error);
+      toast({ description: 'Failed to add item', variant: 'destructive' });
+    }
+  };
+
+  const handleEditItem = async () => {
     if (!editingItem) return;
     
-    setItems(items.map(item => 
-      item.id === editingItem.id 
-        ? { ...item, ...formData }
-        : item
-    ));
-    setFormData({ title: '', description: '', imageUrl: '', targetUrl: '' });
-    setEditingItem(null);
-    toast({ description: 'Item updated successfully!' });
+    try {
+      const { data, error } = await supabase
+        .from('recommendations')
+        .update(formData)
+        .eq('id', editingItem.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setItems(items.map(item => 
+        item.id === editingItem.id ? data : item
+      ));
+      setFormData({ title: '', description: '', image_url: '', target_url: '' });
+      setEditingItem(null);
+      toast({ description: 'Item updated successfully!' });
+    } catch (error) {
+      console.error('Error updating item:', error);
+      toast({ description: 'Failed to update item', variant: 'destructive' });
+    }
   };
 
-  const handleDeleteItem = (id: string) => {
-    setItems(items.filter(item => item.id !== id));
-    toast({ description: 'Item deleted successfully!' });
+  const handleDeleteItem = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('recommendations')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setItems(items.filter(item => item.id !== id));
+      toast({ description: 'Item deleted successfully!' });
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      toast({ description: 'Failed to delete item', variant: 'destructive' });
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(profileData)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setProfile(profileData);
+      setIsEditingProfile(false);
+      toast({ description: 'Profile updated successfully!' });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({ description: 'Failed to update profile', variant: 'destructive' });
+    }
   };
 
   const openEditDialog = (item: Item) => {
@@ -72,12 +187,23 @@ const Dashboard = () => {
     setFormData({
       title: item.title,
       description: item.description,
-      imageUrl: item.imageUrl,
-      targetUrl: item.targetUrl
+      image_url: item.image_url,
+      target_url: item.target_url
     });
   };
 
-  const username = user.email?.split('@')[0] || 'user';
+  const openProfileDialog = () => {
+    if (profile) {
+      setProfileData({
+        username: profile.username,
+        page_title: profile.page_title,
+        page_description: profile.page_description
+      });
+    }
+    setIsEditingProfile(true);
+  };
+
+  const username = profile?.username || user.email?.split('@')[0] || 'user';
   
   const copyPublicUrl = () => {
     const url = `${window.location.origin}/${username}`;
@@ -86,6 +212,17 @@ const Dashboard = () => {
   };
 
   const publicUrl = `${window.location.origin}/${username}`;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -102,6 +239,10 @@ const Dashboard = () => {
               </span>
             </div>
             <div className="flex items-center gap-4">
+              <Button variant="ghost" size="sm" onClick={openProfileDialog}>
+                <Settings className="w-4 h-4 mr-2" />
+                Profile Settings
+              </Button>
               <span className="text-sm text-muted-foreground">
                 Welcome, {user.email}
               </span>
@@ -120,7 +261,7 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle>Your Public Page</CardTitle>
             <CardDescription>
-              Share this URL to showcase your recommendations
+              Share this URL to showcase your recommendations: {profile?.page_title || 'My Recommendations'}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -172,20 +313,20 @@ const Dashboard = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="imageUrl">Image URL</Label>
+                  <Label htmlFor="image_url">Image URL</Label>
                   <Input
-                    id="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                    id="image_url"
+                    value={formData.image_url}
+                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                     placeholder="https://example.com/image.jpg"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="targetUrl">Target URL</Label>
+                  <Label htmlFor="target_url">Target URL</Label>
                   <Input
-                    id="targetUrl"
-                    value={formData.targetUrl}
-                    onChange={(e) => setFormData({ ...formData, targetUrl: e.target.value })}
+                    id="target_url"
+                    value={formData.target_url}
+                    onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
                     placeholder="https://your-affiliate-link.com"
                   />
                 </div>
@@ -229,7 +370,7 @@ const Dashboard = () => {
               <Card key={item.id} className="overflow-hidden">
                 <div className="aspect-video w-full overflow-hidden">
                   <img 
-                    src={item.imageUrl} 
+                    src={item.image_url} 
                     alt={item.title}
                     className="w-full h-full object-cover"
                   />
@@ -282,19 +423,19 @@ const Dashboard = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-imageUrl">Image URL</Label>
+                <Label htmlFor="edit-image_url">Image URL</Label>
                 <Input
-                  id="edit-imageUrl"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                  id="edit-image_url"
+                  value={formData.image_url}
+                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                 />
               </div>
               <div>
-                <Label htmlFor="edit-targetUrl">Target URL</Label>
+                <Label htmlFor="edit-target_url">Target URL</Label>
                 <Input
-                  id="edit-targetUrl"
-                  value={formData.targetUrl}
-                  onChange={(e) => setFormData({ ...formData, targetUrl: e.target.value })}
+                  id="edit-target_url"
+                  value={formData.target_url}
+                  onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
                 />
               </div>
               <div>
@@ -310,11 +451,59 @@ const Dashboard = () => {
                 Update Recommendation
               </Button>
             </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+
+          {/* Profile Settings Dialog */}
+          <Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Profile Settings</DialogTitle>
+                <DialogDescription>
+                  Customize your public page title, description, and URL
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="profile-username">Username (URL)</Label>
+                  <Input
+                    id="profile-username"
+                    value={profileData.username}
+                    onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
+                    placeholder="your-username"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Your page will be available at: thecurately.com/{profileData.username}
+                  </p>
+                </div>
+                <div>
+                  <Label htmlFor="profile-title">Page Title</Label>
+                  <Input
+                    id="profile-title"
+                    value={profileData.page_title}
+                    onChange={(e) => setProfileData({ ...profileData, page_title: e.target.value })}
+                    placeholder="My Favorite Tech Gear"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="profile-description">Page Description</Label>
+                  <Textarea
+                    id="profile-description"
+                    value={profileData.page_description}
+                    onChange={(e) => setProfileData({ ...profileData, page_description: e.target.value })}
+                    placeholder="A curated list of tools I use every day..."
+                    rows={3}
+                  />
+                </div>
+                <Button onClick={handleUpdateProfile} className="w-full">
+                  Update Profile
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 export default Dashboard;
