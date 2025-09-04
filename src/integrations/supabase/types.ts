@@ -56,6 +56,7 @@ export type Database = {
           id: string
           page_description: string | null
           page_title: string | null
+          public_profile: boolean
           updated_at: string
           user_id: string
           username: string | null
@@ -68,6 +69,7 @@ export type Database = {
           id?: string
           page_description?: string | null
           page_title?: string | null
+          public_profile?: boolean
           updated_at?: string
           user_id: string
           username?: string | null
@@ -80,6 +82,7 @@ export type Database = {
           id?: string
           page_description?: string | null
           page_title?: string | null
+          public_profile?: boolean
           updated_at?: string
           user_id?: string
           username?: string | null

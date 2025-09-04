@@ -34,6 +34,7 @@ interface Profile {
   username: string;
   page_title: string;
   page_description: string;
+  public_profile: boolean;
 }
 
 const Dashboard = () => {
@@ -41,7 +42,12 @@ const Dashboard = () => {
   const { toast } = useToast();
   const [items, setItems] = useState<Item[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [profile, setProfile] = useState<Profile>({
+    username: '',
+    page_title: '',
+    page_description: '',
+    public_profile: false
+  });
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
@@ -62,10 +68,11 @@ const Dashboard = () => {
     description: ''
   });
 
-  const [profileData, setProfileData] = useState({
+  const [profileData, setProfileData] = useState<Profile>({
     username: '',
     page_title: '',
-    page_description: ''
+    page_description: '',
+    public_profile: false
   });
 
   if (!user) {
@@ -84,14 +91,20 @@ const Dashboard = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, page_title, page_description')
+        .select('username, page_title, page_description, public_profile')
         .eq('user_id', user.id)
         .single();
 
       if (error) throw error;
       if (data) {
-        setProfile(data);
-        setProfileData(data);
+        const profileData = {
+          username: data.username || '',
+          page_title: data.page_title || '',
+          page_description: data.page_description || '',
+          public_profile: data.public_profile || false
+        };
+        setProfile(profileData);
+        setProfileData(profileData);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -307,7 +320,7 @@ const Dashboard = () => {
     });
   };
 
-  const username = profile?.username || user.email?.split('@')[0] || 'user';
+  const username = profile.username || user.email?.split('@')[0] || 'user';
   
   const copyPublicUrl = () => {
     const url = `${window.location.origin}/${username}`;
@@ -371,9 +384,9 @@ const Dashboard = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-2xl">{profile?.page_title || 'My Recommendations'}</CardTitle>
+                <CardTitle className="text-2xl">{profile.page_title || 'My Recommendations'}</CardTitle>
                 <CardDescription className="mt-2">
-                  {profile?.page_description || 'A curated list of my favorite products and tools.'}
+                  {profile.page_description || 'A curated list of my favorite products and tools.'}
                 </CardDescription>
               </div>
               <Button variant="outline" onClick={() => setIsEditingProfile(true)}>
@@ -863,6 +876,24 @@ const Dashboard = () => {
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   Your page will be available at: thecurately.com/{profileData.username}
+                </p>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="public_profile"
+                    checked={profileData.public_profile}
+                    onChange={(e) => setProfileData({ ...profileData, public_profile: e.target.checked })}
+                    className="rounded border border-input"
+                  />
+                  <Label htmlFor="public_profile" className="text-sm font-medium">
+                    Make my page publicly visible
+                  </Label>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  When enabled, your recommendations page will be visible to everyone at the public URL above.
+                  When disabled, only you can access your recommendations.
                 </p>
               </div>
               <Button onClick={handleUpdateProfile} className="w-full">

@@ -46,17 +46,18 @@ const PublicPage = () => {
       setLoading(true);
       setError(null);
 
-      // First get the profile
+      // First get the profile - only public profiles are accessible
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('username', username)
+        .eq('public_profile', true)
         .maybeSingle();
 
       if (profileError) throw profileError;
       
       if (!profileData) {
-        setError('User not found');
+        setError('This profile is private or not found');
         return;
       }
 
@@ -111,8 +112,11 @@ const PublicPage = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2">Page Not Found</h1>
+          <h1 className="text-2xl font-bold mb-2">Profile Not Found</h1>
           <p className="text-muted-foreground">{error || 'The requested user page could not be found.'}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            This profile may be set to private or doesn't exist.
+          </p>
           <Link to="/" className="text-primary hover:underline mt-4 inline-block">
             ← Back to Curately
           </Link>
