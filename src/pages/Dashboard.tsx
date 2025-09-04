@@ -409,11 +409,11 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border/50 bg-background/80 backdrop-blur-md">
+      <header className="border-b border-border/50 bg-background/80 backdrop-blur-md shadow-card">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center shadow-glow">
                 <Palette className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
@@ -421,14 +421,14 @@ const Dashboard = () => {
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={() => setIsEditingProfile(true)}>
+              <Button variant="ghost" size="sm" onClick={() => setIsEditingProfile(true)} className="hover:shadow-card transition-shadow duration-200">
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
               </Button>
               <span className="text-sm text-muted-foreground">
                 Welcome, {user?.email || username}
               </span>
-              <Button variant="ghost" size="sm" onClick={signOut}>
+              <Button variant="ghost" size="sm" onClick={signOut} className="hover:shadow-card transition-shadow duration-200">
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
               </Button>
@@ -452,7 +452,7 @@ const Dashboard = () => {
           </Alert>
         )}
         {/* Page Title & Description Section */}
-        <Card className="mb-8">
+        <Card className="mb-8 border-border/50 bg-gradient-card shadow-card">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -461,7 +461,7 @@ const Dashboard = () => {
                   {profile.page_description || 'A curated list of my favorite products and tools.'}
                 </CardDescription>
               </div>
-              <Button variant="outline" onClick={() => setIsEditingProfile(true)}>
+              <Button variant="outline" onClick={() => setIsEditingProfile(true)} className="hover:shadow-card transition-shadow duration-200">
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Page Info
               </Button>
@@ -474,11 +474,11 @@ const Dashboard = () => {
                 readOnly 
                 className="flex-1 font-mono text-sm"
               />
-              <Button variant="outline" onClick={copyPublicUrl}>
+              <Button variant="outline" onClick={copyPublicUrl} className="hover:shadow-card transition-shadow duration-200">
                 <Copy className="w-4 h-4 mr-2" />
                 Copy
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="outline" asChild className="hover:shadow-card transition-shadow duration-200">
                 <a href={`/${username}`} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="w-4 h-4 mr-2" />
                   View
@@ -488,39 +488,105 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        <Tabs defaultValue="recommendations" className="w-full">
+        <Tabs defaultValue="categories" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
             <TabsTrigger value="categories">Categories</TabsTrigger>
+            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="categories" className="space-y-6">
+            {/* Categories Management */}
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold">Organize Your Content</h2>
+              <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90">
+                <FolderPlus className="w-4 h-4 mr-2" />
+                Add Category
+              </Button>
+            </div>
+
+            {categories.length === 0 ? (
+              <Card className="border-border/50 bg-gradient-card shadow-card">
+                <CardContent className="flex flex-col items-center justify-center py-12">
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium mb-2">Start with Categories</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Categories help organize your recommendations into meaningful groups like "Tools", "Books", or "Apps"
+                    </p>
+                    <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90">
+                      <FolderPlus className="w-4 h-4 mr-2" />
+                      Create Your First Category
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {categories.map((category) => (
+                  <Card key={category.id} className="border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">{category.name}</CardTitle>
+                        <div className="flex gap-1">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => openCategoryEditDialog(category)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => handleDeleteCategory(category.id)}
+                            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      {category.description && (
+                        <CardDescription className="text-sm">{category.description}</CardDescription>
+                      )}
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground">
+                        {getItemsByCategory(category.id).length} recommendations
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
           
           <TabsContent value="recommendations" className="space-y-6">
             {/* Items Management */}
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">Your Recommendations</h2>
-              <Button onClick={() => setIsAddingItem(true)}>
+              <Button onClick={() => setIsAddingItem(true)} className="bg-gradient-primary hover:opacity-90">
                 <Plus className="w-4 h-4 mr-2" />
-                Add Item
+                Add Recommendation
               </Button>
             </div>
 
             {/* Categories with Items */}
             {categories.length === 0 && items.length === 0 ? (
-              <Card>
+              <Card className="border-border/50 bg-gradient-card shadow-card">
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <div className="text-center">
                     <h3 className="text-lg font-medium mb-2">No recommendations yet</h3>
                     <p className="text-muted-foreground mb-4">
-                      Start building your curated list by adding categories and recommendations
+                      Start by creating categories first, then add your recommendations to organize them better
                     </p>
                     <div className="flex gap-2">
                       <Button onClick={() => setIsAddingCategory(true)} variant="outline">
                         <FolderPlus className="w-4 h-4 mr-2" />
-                        Add Category
+                        Add Category First
                       </Button>
-                      <Button onClick={() => setIsAddingItem(true)}>
+                      <Button onClick={() => setIsAddingItem(true)} className="bg-gradient-primary hover:opacity-90">
                         <Plus className="w-4 h-4 mr-2" />
-                        Add Item
+                        Add Recommendation
                       </Button>
                     </div>
                   </div>
@@ -543,7 +609,7 @@ const Dashboard = () => {
                       </div>
                       
                       {categoryItems.length === 0 ? (
-                        <Card>
+                        <Card className="border-border/50 bg-gradient-card shadow-card">
                           <CardContent className="flex items-center justify-center py-8">
                             <p className="text-muted-foreground text-sm">No items in this category yet</p>
                           </CardContent>
@@ -551,7 +617,7 @@ const Dashboard = () => {
                       ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {categoryItems.map((item) => (
-                            <Card key={item.id} className="overflow-hidden">
+                            <Card key={item.id} className="overflow-hidden border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
                               <div className="aspect-video w-full overflow-hidden">
                                 <img 
                                   src={item.image_url} 
@@ -569,18 +635,30 @@ const Dashboard = () => {
                                     variant="outline" 
                                     size="sm" 
                                     onClick={() => openEditDialog(item)}
+                                    className="hover:shadow-card transition-shadow duration-200"
                                   >
-                                    <Edit className="w-3 h-3 mr-1" />
-                                    Edit
+                                    <Edit className="w-4 h-4" />
                                   </Button>
                                   <Button 
                                     variant="outline" 
                                     size="sm" 
                                     onClick={() => handleDeleteItem(item.id)}
+                                    className="text-destructive hover:text-destructive hover:shadow-card transition-all duration-200"
                                   >
-                                    <Trash2 className="w-3 h-3 mr-1" />
-                                    Delete
+                                    <Trash2 className="w-4 h-4" />
                                   </Button>
+                                  {item.target_url && (
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm" 
+                                      asChild
+                                      className="hover:shadow-card transition-shadow duration-200"
+                                    >
+                                      <a href={item.target_url} target="_blank" rel="noopener noreferrer">
+                                        <ExternalLink className="w-4 h-4" />
+                                      </a>
+                                    </Button>
+                                  )}
                                 </div>
                               </CardContent>
                             </Card>
@@ -594,10 +672,16 @@ const Dashboard = () => {
                 {/* Uncategorized Items */}
                 {uncategorizedItems.length > 0 && (
                   <div className="space-y-4">
-                    <h3 className="text-xl font-semibold">Uncategorized</h3>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-xl font-semibold">Uncategorized</h3>
+                        <p className="text-muted-foreground text-sm">Items without a category</p>
+                      </div>
+                    </div>
+                    
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {uncategorizedItems.map((item) => (
-                        <Card key={item.id} className="overflow-hidden">
+                        <Card key={item.id} className="overflow-hidden border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
                           <div className="aspect-video w-full overflow-hidden">
                             <img 
                               src={item.image_url} 
@@ -615,18 +699,30 @@ const Dashboard = () => {
                                 variant="outline" 
                                 size="sm" 
                                 onClick={() => openEditDialog(item)}
+                                className="hover:shadow-card transition-shadow duration-200"
                               >
-                                <Edit className="w-3 h-3 mr-1" />
-                                Edit
+                                <Edit className="w-4 h-4" />
                               </Button>
                               <Button 
                                 variant="outline" 
                                 size="sm" 
                                 onClick={() => handleDeleteItem(item.id)}
+                                className="text-destructive hover:text-destructive hover:shadow-card transition-all duration-200"
                               >
-                                <Trash2 className="w-3 h-3 mr-1" />
-                                Delete
+                                <Trash2 className="w-4 h-4" />
                               </Button>
+                              {item.target_url && (
+                                <Button 
+                                  variant="outline" 
+                                  size="sm" 
+                                  asChild
+                                  className="hover:shadow-card transition-shadow duration-200"
+                                >
+                                  <a href={item.target_url} target="_blank" rel="noopener noreferrer">
+                                    <ExternalLink className="w-4 h-4" />
+                                  </a>
+                                </Button>
+                              )}
                             </div>
                           </CardContent>
                         </Card>
@@ -634,70 +730,6 @@ const Dashboard = () => {
                     </div>
                   </div>
                 )}
-              </div>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="categories" className="space-y-6">
-            {/* Categories Management */}
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Categories</h2>
-              <Button onClick={() => setIsAddingCategory(true)}>
-                <FolderPlus className="w-4 h-4 mr-2" />
-                Add Category
-              </Button>
-            </div>
-
-            {categories.length === 0 ? (
-              <Card>
-                <CardContent className="flex flex-col items-center justify-center py-12">
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium mb-2">No categories yet</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Create categories to organize your recommendations
-                    </p>
-                    <Button onClick={() => setIsAddingCategory(true)}>
-                      <FolderPlus className="w-4 h-4 mr-2" />
-                      Add Your First Category
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {categories.map((category) => (
-                  <Card key={category.id}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center justify-between">
-                        {category.name}
-                        <div className="flex gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => openCategoryEditDialog(category)}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteCategory(category.id)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </CardTitle>
-                      {category.description && (
-                        <CardDescription>{category.description}</CardDescription>
-                      )}
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        {getItemsByCategory(category.id).length} items
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
               </div>
             )}
           </TabsContent>
@@ -940,6 +972,13 @@ const Dashboard = () => {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="profile-username">Username (URL)</Label>
+                
+                {/* Subtle warning about 30-day restriction */}
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+                  <p className="text-sm text-blue-800">
+                    <span className="font-medium">Username Change Policy:</span> You can only change your username once every 30 days. Choose carefully!
+                  </p>
+                </div>
                 
                 {/* Username Cooldown Warning */}
                 {!cooldownInfo.canChange && (
