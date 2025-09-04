@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Navigate, Link, useNavigate } from 'react-router-dom';
+import { Navigate, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +17,7 @@ const Login = () => {
   const { user, signIn, signUp, resetPassword } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -29,6 +30,30 @@ const Login = () => {
   const [signupSuccess, setSignupSuccess] = useState(false);
   
   const usernameCheck = useUsernameCheck(username);
+
+  // Handle email verification callback
+  useEffect(() => {
+    const verified = searchParams.get('verified');
+    const reset = searchParams.get('reset');
+    
+    if (verified === 'true') {
+      toast({
+        title: "Email verified successfully!",
+        description: "Your account has been verified. You can now sign in.",
+      });
+      // Clear the URL parameter
+      navigate('/auth', { replace: true });
+    }
+    
+    if (reset === 'true') {
+      toast({
+        title: "Password reset link confirmed",
+        description: "Please enter your new password below.",
+      });
+      // Clear the URL parameter
+      navigate('/auth', { replace: true });
+    }
+  }, [searchParams, navigate, toast]);
 
   if (user) {
     return <Navigate to="/dashboard" replace />;
