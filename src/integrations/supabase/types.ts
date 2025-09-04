@@ -190,6 +190,13 @@ export type Database = {
         Args: { new_username: string; user_id_param: string }
         Returns: Json
       }
+      verify_user_data_isolation: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          can_see_other_users: boolean
+          total_visible_records: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
