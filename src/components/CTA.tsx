@@ -23,7 +23,7 @@ const CTA = () => {
           
           <p className="text-xl text-white/90 leading-relaxed">
             Join creators who are already building beautiful recommendation pages. 
-            Your unique curator.app/username is waiting.
+            Your unique thecurately.com/username is waiting.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

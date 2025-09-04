@@ -106,7 +106,7 @@ const Login = () => {
                 <Palette className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                Curator
+                Curately
               </span>
             </div>
             <CardTitle>Reset Password</CardTitle>
@@ -160,7 +160,7 @@ const Login = () => {
               <Palette className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              Curator
+              Curately
             </span>
           </div>
           <Link 
@@ -182,7 +182,7 @@ const Login = () => {
               <div className="text-center">
                 <h2 className="text-lg font-semibold">Welcome back</h2>
                 <p className="text-sm text-muted-foreground">
-                  Sign in to your Curator account
+                  Sign in to your Curately account
                 </p>
               </div>
               
@@ -231,7 +231,7 @@ const Login = () => {
               <div className="text-center">
                 <h2 className="text-lg font-semibold">Create account</h2>
                 <p className="text-sm text-muted-foreground">
-                  Join Curator and start building your recommendations
+                  Join Curately and start building your recommendations
                 </p>
               </div>
               

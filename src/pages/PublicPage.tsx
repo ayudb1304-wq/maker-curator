@@ -62,7 +62,7 @@ const PublicPage = () => {
                 <Palette className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                Curator
+                Curately
               </span>
             </Link>
             <div className="text-sm text-muted-foreground">
@@ -123,7 +123,7 @@ const PublicPage = () => {
               to="/" 
               className="text-primary hover:underline font-medium"
             >
-              Curator
+              Curately
             </Link>
           </p>
         </footer>

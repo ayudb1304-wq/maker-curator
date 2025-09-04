@@ -22,7 +22,7 @@ const Hero = () => {
               </div>
               
               <h1 className="text-5xl lg:text-7xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
-                Curator
+                Curately
               </h1>
               
               <h2 className="text-2xl lg:text-4xl font-semibold text-foreground/90">
@@ -31,7 +31,7 @@ const Hero = () => {
               
               <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 Replace boring link-in-bio pages with stunning product recommendations. 
-                Share what you love, earn what you deserve, all from your unique curator page.
+                Share what you love, earn what you deserve, all from your unique curately page.
               </p>
             </div>
 
@@ -76,7 +76,7 @@ const Hero = () => {
             
             {/* Floating elements */}
             <div className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-card">
-              <div className="text-sm font-semibold text-primary">curator.app/you</div>
+              <div className="text-sm font-semibold text-primary">thecurately.com/you</div>
               <div className="text-xs text-muted-foreground">Your unique URL</div>
             </div>
             

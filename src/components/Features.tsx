@@ -7,7 +7,7 @@ const Features = () => {
     {
       icon: Link,
       title: "Your Unique URL",
-      description: "Get curator.app/yourname - a clean, professional link for all your social profiles.",
+      description: "Get thecurately.com/yourname - a clean, professional link for all your social profiles.",
       highlight: "Professional branding"
     },
     {
