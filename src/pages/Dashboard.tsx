@@ -574,12 +574,12 @@ const Dashboard = () => {
             {categories.length === 0 && items.length === 0 ? (
               <Card className="border-border/50 bg-gradient-card shadow-card">
                 <CardContent className="flex flex-col items-center justify-center py-12">
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium mb-2">No recommendations yet</h3>
-                    <p className="text-muted-foreground mb-4">
+                  <div className="text-center space-y-4">
+                    <h3 className="text-lg font-medium">No recommendations yet</h3>
+                    <p className="text-muted-foreground">
                       Start by creating categories first, then add your recommendations to organize them better
                     </p>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 justify-center">
                       <Button onClick={() => setIsAddingCategory(true)} variant="outline">
                         <FolderPlus className="w-4 h-4 mr-2" />
                         Add Category First
