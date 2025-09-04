@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { ExternalLink, Palette } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { safeOpenUrl, sanitizeText } from '@/lib/security';
 
 interface Item {
   id: string;
@@ -151,12 +152,12 @@ const PublicPage = () => {
       <main className="container mx-auto px-6 py-12">
         {/* Page Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            {profile.page_title}
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            {profile.page_description}
-          </p>
+           <h1 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
+             {sanitizeText(profile.page_title)}
+           </h1>
+           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+             {sanitizeText(profile.page_description)}
+           </p>
         </div>
 
         {/* Categories with Items */}
@@ -177,14 +178,14 @@ const PublicPage = () => {
               return (
                 <section key={category.id} className="space-y-8">
                   <div className="text-center">
-                    <h2 className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent">
-                      {category.name}
-                    </h2>
-                    {category.description && (
-                      <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                        {category.description}
-                      </p>
-                    )}
+                     <h2 className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent">
+                       {sanitizeText(category.name)}
+                     </h2>
+                     {category.description && (
+                       <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                         {sanitizeText(category.description)}
+                       </p>
+                     )}
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -192,7 +193,7 @@ const PublicPage = () => {
                       <Card 
                         key={item.id} 
                         className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
-                        onClick={() => window.open(item.target_url, '_blank')}
+                        onClick={() => safeOpenUrl(item.target_url)}
                       >
                         <div className="aspect-video w-full overflow-hidden">
                           <img 
@@ -204,15 +205,15 @@ const PublicPage = () => {
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between mb-2">
                             <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                              {item.title}
+                              {sanitizeText(item.title)}
                             </h3>
                             <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
                           </div>
-                          {item.description && (
-                            <p className="text-muted-foreground leading-relaxed">
-                              {item.description}
-                            </p>
-                          )}
+                           {item.description && (
+                             <p className="text-muted-foreground leading-relaxed">
+                               {sanitizeText(item.description)}
+                             </p>
+                           )}
                         </CardContent>
                       </Card>
                     ))}
@@ -234,11 +235,11 @@ const PublicPage = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {uncategorizedItems.map((item) => (
-                    <Card 
-                      key={item.id} 
-                      className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
-                      onClick={() => window.open(item.target_url, '_blank')}
-                    >
+                     <Card 
+                       key={item.id} 
+                       className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+                       onClick={() => safeOpenUrl(item.target_url)}
+                     >
                       <div className="aspect-video w-full overflow-hidden">
                         <img 
                           src={item.image_url} 
@@ -248,16 +249,16 @@ const PublicPage = () => {
                       </div>
                       <CardContent className="p-6">
                         <div className="flex items-start justify-between mb-2">
-                          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                            {item.title}
-                          </h3>
+                           <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                             {sanitizeText(item.title)}
+                           </h3>
                           <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
                         </div>
-                        {item.description && (
-                          <p className="text-muted-foreground leading-relaxed">
-                            {item.description}
-                          </p>
-                        )}
+                         {item.description && (
+                           <p className="text-muted-foreground leading-relaxed">
+                             {sanitizeText(item.description)}
+                           </p>
+                         )}
                       </CardContent>
                     </Card>
                   ))}

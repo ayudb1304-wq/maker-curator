@@ -15,6 +15,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useUsernameCheck } from '@/hooks/useUsernameCheck';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { isValidUrl, isValidLength, sanitizeText, safeOpenUrl } from '@/lib/security';
 
 interface Item {
   id: string;
@@ -174,11 +175,23 @@ const Dashboard = () => {
   };
 
   const handleAddCategory = async () => {
+    // Validate input data
+    if (!isValidLength(categoryData.name, 100)) {
+      toast({ description: 'Category name is too long (max 100 characters)', variant: 'destructive' });
+      return;
+    }
+    
+    if (!isValidLength(categoryData.description, 500)) {
+      toast({ description: 'Description is too long (max 500 characters)', variant: 'destructive' });
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('categories')
         .insert([{
-          ...categoryData,
+          name: sanitizeText(categoryData.name),
+          description: sanitizeText(categoryData.description),
           user_id: user.id,
           position: categories.length
         }])
@@ -240,9 +253,33 @@ const Dashboard = () => {
   };
 
   const handleAddItem = async () => {
+    // Validate input data
+    if (!isValidLength(formData.title, 200)) {
+      toast({ description: 'Title is too long (max 200 characters)', variant: 'destructive' });
+      return;
+    }
+    
+    if (!isValidLength(formData.description, 1000)) {
+      toast({ description: 'Description is too long (max 1000 characters)', variant: 'destructive' });
+      return;
+    }
+    
+    if (formData.target_url && !isValidUrl(formData.target_url)) {
+      toast({ description: 'Invalid target URL', variant: 'destructive' });
+      return;
+    }
+    
+    if (formData.image_url && !isValidUrl(formData.image_url)) {
+      toast({ description: 'Invalid image URL', variant: 'destructive' });
+      return;
+    }
+
     try {
       const itemData = {
-        ...formData,
+        title: sanitizeText(formData.title),
+        description: sanitizeText(formData.description),
+        image_url: formData.image_url,
+        target_url: formData.target_url,
         user_id: user.id,
         position: items.filter(item => item.category_id === formData.category_id).length,
         category_id: formData.category_id || null
@@ -309,6 +346,17 @@ const Dashboard = () => {
   };
 
   const handleUpdateProfile = async () => {
+    // Validate input data
+    if (!isValidLength(profileData.page_title, 200)) {
+      toast({ description: 'Page title is too long (max 200 characters)', variant: 'destructive' });
+      return;
+    }
+    
+    if (!isValidLength(profileData.page_description, 1000)) {
+      toast({ description: 'Page description is too long (max 1000 characters)', variant: 'destructive' });
+      return;
+    }
+
     try {
       // Check if username has changed and handle it separately
       if (profileData.username !== profile.username) {
@@ -334,8 +382,8 @@ const Dashboard = () => {
 
       // Update other profile fields
       const updateData = {
-        page_title: profileData.page_title,
-        page_description: profileData.page_description,
+        page_title: sanitizeText(profileData.page_title),
+        page_description: sanitizeText(profileData.page_description),
         public_profile: profileData.public_profile
       };
 
