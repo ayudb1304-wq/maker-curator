@@ -251,7 +251,7 @@ const PublicPage = () => {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
               <img 
-                src="/lovable-uploads/61b68216-f035-4896-8f00-3825ff39d04e.png" 
+                src="/logo.png" 
                 alt="Curately Logo" 
                 className="w-8 h-8"
               />

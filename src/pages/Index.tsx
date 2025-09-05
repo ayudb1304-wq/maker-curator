@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
+import Pro from "@/components/Pro";
 import CTA from "@/components/CTA";
 
 const Index = () => {
@@ -12,6 +13,7 @@ const Index = () => {
         <section id="features">
           <Features />
         </section>
+        <Pro />
         <CTA />
       </main>
     </div>

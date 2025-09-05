@@ -10,7 +10,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <img 
-              src="/lovable-uploads/61b68216-f035-4896-8f00-3825ff39d04e.png" 
+              src="/logo.png" 
               alt="Curately Logo" 
               className="w-8 h-8"
             />
@@ -27,8 +27,8 @@ const Header = () => {
             <Link to="/demo" className="text-muted-foreground hover:text-foreground transition-colors">
               Example
             </Link>
-            <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-              Pricing
+            <a href="#pro" className="text-muted-foreground hover:text-foreground transition-colors">
+              Pro
             </a>
           </nav>
 
