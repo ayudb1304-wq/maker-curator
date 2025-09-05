@@ -194,7 +194,7 @@ const PublicPage = () => {
                     {categoryItems.map((item) => (
                       <Card 
                         key={item.id} 
-                        className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+                        className="overflow-hidden bg-gradient-card border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
                         onClick={() => safeOpenUrl(item.target_url)}
                       >
                         <div className="aspect-video w-full overflow-hidden">
@@ -239,7 +239,7 @@ const PublicPage = () => {
                   {uncategorizedItems.map((item) => (
                      <Card 
                        key={item.id} 
-                       className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+                        className="overflow-hidden bg-gradient-card border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
                        onClick={() => safeOpenUrl(item.target_url)}
                      >
                       <div className="aspect-video w-full overflow-hidden">

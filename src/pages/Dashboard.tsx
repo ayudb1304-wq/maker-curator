@@ -456,7 +456,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-muted/20">
       {/* Header */}
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-md shadow-card">
         <div className="container mx-auto px-6 py-4">
@@ -571,7 +571,7 @@ const Dashboard = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {categories.map((category) => (
-                  <Card key={category.id} className="border-border/50 bg-card shadow-card hover:shadow-elegant transition-all duration-300">
+                  <Card key={category.id} className="border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-lg">{category.name}</CardTitle>
