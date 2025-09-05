@@ -89,20 +89,23 @@ const PublicPage = () => {
       
       // Determine active category based on scroll position
       let currentActive: string | null = null;
-      const scrollPosition = window.scrollY + 100;
+      const scrollPosition = window.scrollY + 200; // Increased offset for better detection
       
       Object.entries(categoryRefs.current).forEach(([categoryId, element]) => {
         if (element) {
           const rect = element.getBoundingClientRect();
           const elementTop = window.scrollY + rect.top;
+          const elementBottom = elementTop + element.offsetHeight;
           
-          if (scrollPosition >= elementTop) {
+          if (scrollPosition >= elementTop && scrollPosition <= elementBottom) {
             currentActive = categoryId;
           }
         }
       });
       
-      setActiveCategory(currentActive);
+      if (currentActive) {
+        setActiveCategory(currentActive);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -172,6 +175,7 @@ const PublicPage = () => {
   const scrollToCategory = (categoryId: string) => {
     const element = categoryRefs.current[categoryId];
     if (element) {
+      setActiveCategory(categoryId); // Set active immediately when clicked
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -67,6 +67,12 @@ const Dashboard = () => {
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [visibleItems, setVisibleItems] = useState<Record<string, number>>({});
+  const [showMoreClicked, setShowMoreClicked] = useState<Record<string, boolean>>({});
+  
+  const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
+  const navRef = useRef<HTMLElement | null>(null);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -120,6 +126,66 @@ const Dashboard = () => {
       fetchRecommendations();
     }
   }, [user]);
+
+  useEffect(() => {
+    // Initialize visible items count for each category
+    const initialVisibleItems: Record<string, number> = {};
+    const initialShowMore: Record<string, boolean> = {};
+    
+    categories.forEach(category => {
+      const categoryItems = getItemsByCategory(category.id);
+      initialVisibleItems[category.id] = Math.min(12, categoryItems.length);
+      initialShowMore[category.id] = false;
+    });
+    
+    // Handle uncategorized items
+    const uncategorizedItems = getItemsByCategory(null);
+    if (uncategorizedItems.length > 0) {
+      initialVisibleItems['uncategorized'] = Math.min(12, uncategorizedItems.length);
+      initialShowMore['uncategorized'] = false;
+    }
+    
+    setVisibleItems(initialVisibleItems);
+    setShowMoreClicked(initialShowMore);
+  }, [categories, items]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!navRef.current) return;
+      
+      const navRect = navRef.current.getBoundingClientRect();
+      const isSticky = navRect.top <= 0;
+      
+      if (isSticky) {
+        navRef.current.classList.add('sticky-nav');
+      } else {
+        navRef.current.classList.remove('sticky-nav');
+      }
+      
+      // Determine active category based on scroll position
+      let currentActive: string | null = null;
+      const scrollPosition = window.scrollY + 200;
+      
+      Object.entries(categoryRefs.current).forEach(([categoryId, element]) => {
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const elementTop = window.scrollY + rect.top;
+          const elementBottom = elementTop + element.offsetHeight;
+          
+          if (scrollPosition >= elementTop && scrollPosition <= elementBottom) {
+            currentActive = categoryId;
+          }
+        }
+      });
+      
+      if (currentActive) {
+        setActiveCategory(currentActive);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [categories]);
 
   const fetchProfile = async () => {
     try {
@@ -475,6 +541,47 @@ const Dashboard = () => {
     return items.filter(item => item.category_id === categoryId);
   };
 
+  const scrollToCategory = (categoryId: string) => {
+    const element = categoryRefs.current[categoryId];
+    if (element) {
+      setActiveCategory(categoryId); // Set active immediately when clicked
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleShowMore = (categoryId: string) => {
+    const categoryItems = categoryId === 'uncategorized' 
+      ? getItemsByCategory(null) 
+      : getItemsByCategory(categoryId);
+    
+    setVisibleItems(prev => ({
+      ...prev,
+      [categoryId]: categoryItems.length
+    }));
+    
+    setShowMoreClicked(prev => ({
+      ...prev,
+      [categoryId]: true
+    }));
+  };
+
+  const shouldShowMoreButton = (categoryId: string) => {
+    const categoryItems = categoryId === 'uncategorized' 
+      ? getItemsByCategory(null) 
+      : getItemsByCategory(categoryId);
+    
+    return categoryItems.length > 10 && !showMoreClicked[categoryId];
+  };
+
+  const getVisibleItems = (categoryId: string) => {
+    const categoryItems = categoryId === 'uncategorized' 
+      ? getItemsByCategory(null) 
+      : getItemsByCategory(categoryId);
+    
+    const visibleCount = visibleItems[categoryId] || 12;
+    return categoryItems.slice(0, visibleCount);
+  };
+
   const uncategorizedItems = getItemsByCategory(null);
 
   if (loading) {
@@ -687,6 +794,43 @@ const Dashboard = () => {
           </TabsContent>
           
           <TabsContent value="recommendations" className="space-y-6 animate-fade-in">
+            {/* Sticky Category Navigation */}
+            {categories.length > 0 && (
+              <nav 
+                ref={navRef}
+                className="bg-background/80 backdrop-blur-md border border-border/50 rounded-xl p-4 mb-8 transition-all duration-300 z-50"
+                style={{ position: 'sticky', top: '1rem' }}
+              >
+                <div className="flex flex-wrap gap-4 justify-center">
+                  {categories.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => scrollToCategory(category.id)}
+                      className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                        activeCategory === category.id
+                          ? 'bg-primary text-primary-foreground shadow-md'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      {category.name}
+                    </button>
+                  ))}
+                  {getItemsByCategory(null).length > 0 && (
+                    <button
+                      onClick={() => scrollToCategory('uncategorized')}
+                      className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                        activeCategory === 'uncategorized'
+                          ? 'bg-primary text-primary-foreground shadow-md'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      Uncategorized
+                    </button>
+                  )}
+                </div>
+              </nav>
+            )}
+
             {/* Items Management */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <h2 className="text-xl sm:text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">Your Recommendations</h2>
@@ -734,8 +878,13 @@ const Dashboard = () => {
                 {/* Categorized Items */}
                 {categories.map((category) => {
                   const categoryItems = getItemsByCategory(category.id);
+                  const visibleCategoryItems = getVisibleItems(category.id);
                   return (
-                    <div key={category.id} className="space-y-4">
+                    <div 
+                      key={category.id} 
+                      ref={el => categoryRefs.current[category.id] = el}
+                      className="space-y-4"
+                    >
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="text-xl font-semibold">{category.name}</h3>
@@ -752,10 +901,11 @@ const Dashboard = () => {
                           </CardContent>
                         </Card>
                       ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {categoryItems.map((item) => (
-                            <Card key={item.id} className="overflow-hidden border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
-                              <div className="aspect-video w-full overflow-hidden">
+                        <div>
+                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {visibleCategoryItems.map((item) => (
+                              <Card key={item.id} className="overflow-hidden border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
+                                <div className="aspect-video w-full overflow-hidden">
                                 <img 
                                   src={item.image_url} 
                                   alt={item.title}
@@ -800,6 +950,20 @@ const Dashboard = () => {
                               </CardContent>
                             </Card>
                           ))}
+                          </div>
+                          
+                          {/* Show More Button */}
+                          {shouldShowMoreButton(category.id) && (
+                            <div className="text-center pt-6">
+                              <Button
+                                variant="outline"
+                                onClick={() => handleShowMore(category.id)}
+                                className="px-8 py-2"
+                              >
+                                Show More ({categoryItems.length - (visibleItems[category.id] || 12)} more items)
+                              </Button>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -808,7 +972,10 @@ const Dashboard = () => {
 
                 {/* Uncategorized Items */}
                 {uncategorizedItems.length > 0 && (
-                  <div className="space-y-4">
+                  <div 
+                    ref={el => categoryRefs.current['uncategorized'] = el}
+                    className="space-y-4"
+                  >
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="text-xl font-semibold">Uncategorized</h3>
@@ -816,11 +983,11 @@ const Dashboard = () => {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {uncategorizedItems.map((item) => (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                      {getVisibleItems('uncategorized').map((item) => (
                         <Card key={item.id} className="overflow-hidden border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
                           <div className="aspect-video w-full overflow-hidden">
-                            <img 
+                            <img
                               src={item.image_url} 
                               alt={item.title}
                               className="w-full h-full object-cover"
@@ -865,6 +1032,19 @@ const Dashboard = () => {
                         </Card>
                       ))}
                     </div>
+                    
+                    {/* Show More Button for Uncategorized */}
+                    {shouldShowMoreButton('uncategorized') && (
+                      <div className="text-center pt-6">
+                        <Button
+                          variant="outline"
+                          onClick={() => handleShowMore('uncategorized')}
+                          className="px-8 py-2"
+                        >
+                          Show More ({uncategorizedItems.length - (visibleItems['uncategorized'] || 12)} more items)
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
