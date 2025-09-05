@@ -15,7 +15,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useUsernameCheck } from '@/hooks/useUsernameCheck';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
-import { isValidUrl, isValidLength, sanitizeText } from '@/lib/security';
+import { isValidUrl, isValidLength, sanitizeText, safeOpenUrl } from '@/lib/security';
 import { ImageUpload } from '@/components/ImageUpload';
 
 interface Item {
@@ -66,6 +66,7 @@ const Dashboard = () => {
     title: '',
     description: '',
     image_url: '',
+    target_url: '',
     category_id: ''
   });
 
@@ -265,6 +266,10 @@ const Dashboard = () => {
     }
     
     
+    if (formData.target_url.trim() && !isValidUrl(formData.target_url)) {
+      toast({ description: 'Invalid target URL', variant: 'destructive' });
+      return;
+    }
     if (formData.image_url && !isValidUrl(formData.image_url)) {
       toast({ description: 'Invalid image URL', variant: 'destructive' });
       return;
@@ -275,6 +280,7 @@ const Dashboard = () => {
         title: sanitizeText(formData.title),
         description: sanitizeText(formData.description),
         image_url: formData.image_url,
+        target_url: formData.target_url,
         user_id: user.id,
         position: items.filter(item => item.category_id === formData.category_id).length,
         category_id: formData.category_id || null
@@ -289,7 +295,7 @@ const Dashboard = () => {
       if (error) throw error;
       
       setItems([...items, data]);
-      setFormData({ title: '', description: '', image_url: '', category_id: '' });
+      setFormData({ title: '', description: '', image_url: '', target_url: '', category_id: '' });
       setIsAddingItem(false);
       toast({ description: 'Item added successfully!' });
     } catch (error) {
@@ -314,7 +320,7 @@ const Dashboard = () => {
       setItems(items.map(item => 
         item.id === editingItem.id ? data : item
       ));
-      setFormData({ title: '', description: '', image_url: '', category_id: '' });
+      setFormData({ title: '', description: '', image_url: '', target_url: '', category_id: '' });
       setEditingItem(null);
       toast({ description: 'Item updated successfully!' });
     } catch (error) {
@@ -405,6 +411,7 @@ const Dashboard = () => {
       title: item.title,
       description: item.description,
       image_url: item.image_url,
+      target_url: item.target_url,
       category_id: item.category_id || ''
     });
   };
@@ -841,6 +848,15 @@ const Dashboard = () => {
                   rows={3}
                 />
               </div>
+              <div>
+                <Label htmlFor="target_url">Affiliate Link (Optional)</Label>
+                <Input
+                  id="target_url"
+                  value={formData.target_url}
+                  onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
+                  placeholder="https://your-affiliate-link.com"
+                />
+              </div>
               <Button onClick={handleAddItem} className="w-full">
                 Add Recommendation
               </Button>
@@ -958,6 +974,15 @@ const Dashboard = () => {
                   id="edit-category-name"
                   value={categoryData.name}
                   onChange={(e) => setCategoryData({ ...categoryData, name: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-target_url">Affiliate Link (Optional)</Label>
+                <Input
+                  id="edit-target_url"
+                  value={formData.target_url}
+                  onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
+                  placeholder="https://your-affiliate-link.com"
                 />
               </div>
               <div>
