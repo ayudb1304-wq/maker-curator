@@ -31,12 +31,15 @@ const Header = () => {
           </nav>
 
           {/* Auth buttons */}
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
+          <div className="flex items-center gap-2 md:gap-3">
+            <Button variant="ghost" size="sm" className="hidden sm:flex" asChild>
               <Link to="/auth">Login</Link>
             </Button>
-            <Button variant="default" size="sm" asChild>
-              <Link to="/auth">Start Free</Link>
+            <Button variant="default" size="sm" className="text-sm px-3 py-2" asChild>
+              <Link to="/auth">
+                <span className="hidden sm:inline">Start Free</span>
+                <span className="sm:hidden">Sign Up</span>
+              </Link>
             </Button>
           </div>
         </div>

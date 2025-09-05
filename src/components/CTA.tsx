@@ -17,11 +17,11 @@ const CTA = () => {
             Join the creator revolution
           </div>
           
-          <h2 className="text-4xl lg:text-6xl font-bold text-white leading-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-tight">
             Ready to start curating?
           </h2>
           
-          <p className="text-xl text-white/90 leading-relaxed">
+          <p className="text-lg sm:text-xl text-white/90 leading-relaxed px-4">
             Join creators who are already building beautiful recommendation pages. 
             Your unique thecurately.com/username is waiting.
           </p>

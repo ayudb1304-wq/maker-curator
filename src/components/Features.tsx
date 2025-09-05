@@ -46,30 +46,30 @@ const Features = () => {
     <section className="py-24 bg-muted/30">
       <div className="container mx-auto px-6">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             Everything you need to curate
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
             Simple, powerful tools to create beautiful recommendation pages that your audience will actually want to visit.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16">
           {features.map((feature, index) => (
-            <Card key={index} className="p-8 bg-gradient-card border-border/50 hover:shadow-card transition-all duration-300 group">
+            <Card key={index} className="p-6 sm:p-8 bg-gradient-card border-border/50 hover:shadow-card transition-all duration-300 group">
               <div className="space-y-4">
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                   <feature.icon className="w-6 h-6 text-primary" />
                 </div>
                 
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-xl font-semibold">{feature.title}</h3>
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <h3 className="text-lg sm:text-xl font-semibold">{feature.title}</h3>
+                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full w-fit">
                       {feature.highlight}
                     </span>
                   </div>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                     {feature.description}
                   </p>
                 </div>

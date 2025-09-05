@@ -21,15 +21,15 @@ const Hero = () => {
                 Transform your recommendations
               </div>
               
-              <h1 className="text-5xl lg:text-7xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
                 Curately
               </h1>
               
-              <h2 className="text-2xl lg:text-4xl font-semibold text-foreground/90">
+              <h2 className="text-xl sm:text-2xl lg:text-4xl font-semibold text-foreground/90">
                 Your beautiful recommendation page
               </h2>
               
-              <p className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 Replace boring link-in-bio pages with stunning product recommendations. 
                 Share what you love, earn what you deserve, all from your unique curately page.
               </p>
@@ -75,13 +75,13 @@ const Hero = () => {
             </div>
             
             {/* Floating elements */}
-            <div className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-card">
-              <div className="text-sm font-semibold text-primary">thecurately.com/you</div>
+            <div className="absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white/90 backdrop-blur-sm p-3 lg:p-4 rounded-xl shadow-card">
+              <div className="text-xs sm:text-sm font-semibold text-primary">thecurately.com/you</div>
               <div className="text-xs text-muted-foreground">Your unique URL</div>
             </div>
             
-            <div className="absolute -bottom-6 -left-6 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-card">
-              <div className="text-sm font-semibold text-foreground">Beautiful & Mobile</div>
+            <div className="absolute -bottom-4 -left-4 lg:-bottom-6 lg:-left-6 bg-white/90 backdrop-blur-sm p-3 lg:p-4 rounded-xl shadow-card">
+              <div className="text-xs sm:text-sm font-semibold text-foreground">Beautiful & Mobile</div>
               <div className="text-xs text-muted-foreground">Optimized for sharing</div>
             </div>
           </div>
