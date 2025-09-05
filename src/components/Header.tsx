@@ -10,7 +10,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <img 
-              src="/logo.png" 
+              src="/lovable-uploads/1edf8796-86e3-4b7a-8081-247f973203a3.png" 
               alt="Curately Logo" 
               className="w-8 h-8"
             />

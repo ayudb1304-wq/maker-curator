@@ -603,7 +603,7 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
               <img 
-                src="/logo.png" 
+                src="/lovable-uploads/1edf8796-86e3-4b7a-8081-247f973203a3.png" 
                 alt="Curately Logo" 
                 className="w-6 h-6 sm:w-8 sm:h-8"
               />
