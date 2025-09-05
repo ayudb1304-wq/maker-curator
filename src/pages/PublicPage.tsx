@@ -161,7 +161,6 @@ const PublicPage = () => {
       <main className="container mx-auto px-6 py-12">
         {/* Profile Header */}
         <div className="relative mb-16 rounded-2xl border border-border/50 overflow-hidden shadow-card animate-fade-in">
-          <div className="absolute inset-0 bg-gradient-hero opacity-15"></div>
           <div className="relative px-6 py-10 text-center">
             <div className="flex justify-center mb-6">
               <Avatar className="w-32 h-32 border-4 border-background shadow-elegant">
