@@ -459,25 +459,28 @@ const Dashboard = () => {
     <div className="min-h-screen bg-muted/50">
       {/* Header */}
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-md shadow-card">
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
               <img 
                 src="/lovable-uploads/61b68216-f035-4896-8f00-3825ff39d04e.png" 
                 alt="Curately Logo" 
-                className="w-8 h-8"
+                className="w-6 h-6 sm:w-8 sm:h-8"
               />
-              <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+              <span className="text-lg sm:text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                 Curately
               </span>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">
-                Welcome, {user?.email || username}
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+              <span className="text-xs sm:text-sm text-muted-foreground hidden sm:block">
+                Welcome, {username}
               </span>
-              <Button variant="ghost" size="sm" onClick={signOut} className="hover:shadow-card transition-shadow duration-200">
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
+              <span className="text-xs text-muted-foreground block sm:hidden truncate max-w-20">
+                {username}
+              </span>
+              <Button variant="ghost" size="sm" onClick={signOut} className="hover:shadow-card transition-shadow duration-200 flex-shrink-0">
+                <LogOut className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             </div>
           </div>
@@ -508,29 +511,32 @@ const Dashboard = () => {
                   {profile.page_description || 'A curated list of my favorite products and tools.'}
                 </CardDescription>
               </div>
-              <Button variant="outline" onClick={() => setIsEditingProfile(true)} className="hover:shadow-card transition-shadow duration-200">
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Page Info
+              <Button variant="outline" onClick={() => setIsEditingProfile(true)} className="hover:shadow-card transition-shadow duration-200 flex-shrink-0">
+                <Edit className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Edit Page Info</span>
+                <span className="sm:hidden">Edit</span>
               </Button>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Input 
                 value={publicUrl} 
                 readOnly 
-                className="flex-1 font-mono text-sm"
+                className="flex-1 font-mono text-xs sm:text-sm"
               />
-              <Button variant="outline" onClick={copyPublicUrl} className="hover:shadow-card transition-shadow duration-200">
-                <Copy className="w-4 h-4 mr-2" />
-                Copy
-              </Button>
-              <Button variant="outline" asChild className="hover:shadow-card transition-shadow duration-200">
-                <a href={`/${username}`} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  View
-                </a>
-              </Button>
+              <div className="flex gap-2 flex-shrink-0">
+                <Button variant="outline" onClick={copyPublicUrl} className="hover:shadow-card transition-shadow duration-200 flex-1 sm:flex-initial">
+                  <Copy className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Copy</span>
+                </Button>
+                <Button variant="outline" asChild className="hover:shadow-card transition-shadow duration-200 flex-1 sm:flex-initial">
+                  <a href={`/${username}`} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4 sm:mr-2" />
+                    <span className="hidden sm:inline">View</span>
+                  </a>
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -543,10 +549,10 @@ const Dashboard = () => {
           
           <TabsContent value="categories" className="space-y-6">
             {/* Categories Management */}
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Organize Your Content</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 className="text-xl sm:text-2xl font-bold">Organize Your Content</h2>
               {categories.length > 0 && (
-                <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90">
+                <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90 w-full sm:w-auto">
                   <FolderPlus className="w-4 h-4 mr-2" />
                   Add Category
                 </Button>
@@ -611,10 +617,10 @@ const Dashboard = () => {
           
           <TabsContent value="recommendations" className="space-y-6">
             {/* Items Management */}
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Your Recommendations</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 className="text-xl sm:text-2xl font-bold">Your Recommendations</h2>
               {categories.length > 0 && (
-                <Button onClick={() => setIsAddingItem(true)} className="bg-gradient-primary hover:opacity-90">
+                <Button onClick={() => setIsAddingItem(true)} className="bg-gradient-primary hover:opacity-90 w-full sm:w-auto">
                   <Plus className="w-4 h-4 mr-2" />
                   Add Recommendation
                 </Button>
@@ -797,7 +803,7 @@ const Dashboard = () => {
 
         {/* Add Item Dialog */}
         <Dialog open={isAddingItem} onOpenChange={setIsAddingItem}>
-          <DialogContent>
+          <DialogContent className="mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Add New Recommendation</DialogTitle>
               <DialogDescription>
@@ -866,7 +872,7 @@ const Dashboard = () => {
 
         {/* Add Category Dialog */}
         <Dialog open={isAddingCategory} onOpenChange={setIsAddingCategory}>
-          <DialogContent>
+          <DialogContent className="mx-4 max-w-lg">
             <DialogHeader>
               <DialogTitle>Add New Category</DialogTitle>
               <DialogDescription>
@@ -907,7 +913,7 @@ const Dashboard = () => {
             setFormData({ title: '', description: '', image_url: '', target_url: '', category_id: '' });
           }
         }}>
-          <DialogContent>
+          <DialogContent className="mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Edit Recommendation</DialogTitle>
               <DialogDescription>
@@ -1008,7 +1014,7 @@ const Dashboard = () => {
 
         {/* Profile Settings Dialog */}
         <Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
-          <DialogContent>
+          <DialogContent className="mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Page Settings</DialogTitle>
               <DialogDescription>
