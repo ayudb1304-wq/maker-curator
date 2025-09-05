@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
 import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings, FolderPlus, Mail, CheckCircle, XCircle, Loader2, User, Camera } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -488,7 +489,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/50">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">{/* Header */}
       {/* Header */}
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-md shadow-card">
         <div className="container mx-auto px-4 py-3">
@@ -534,13 +535,13 @@ const Dashboard = () => {
           </Alert>
         )}
         {/* Profile Header Section */}
-        <Card className="mb-8 border-border/50 bg-gradient-card shadow-card">
+        <Card className="mb-8 border-border/50 bg-gradient-to-r from-card via-card/80 to-background/50 shadow-elegant backdrop-blur-sm animate-fade-in">{/* CardContent */}
           <CardContent className="pt-6">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               {/* Avatar Section */}
               <div className="flex-shrink-0">
                 <div className="relative group">
-                  <Avatar className="w-20 h-20 sm:w-24 sm:h-24 border-2 border-border">
+                  <Avatar className="w-20 h-20 sm:w-24 sm:h-24 border-2 border-border shadow-elegant hover-scale">
                     <AvatarImage src={profile.avatar_url} alt={displayName} />
                     <AvatarFallback className="text-lg sm:text-xl font-semibold bg-gradient-primary text-primary-foreground">
                       {getInitials(displayName)}
@@ -550,7 +551,7 @@ const Dashboard = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => setIsEditingProfile(true)}
-                    className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-background border-border shadow-lg"
+                    className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-background border-border shadow-lg hover-scale"
                   >
                     <Camera className="w-4 h-4" />
                   </Button>
@@ -571,12 +572,12 @@ const Dashboard = () => {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3">
                   <div className="flex gap-2 flex-1">
-                    <Button variant="outline" onClick={copyPublicUrl} className="hover:shadow-card transition-shadow duration-200 flex-1 sm:flex-initial">
+                    <Button variant="outline" onClick={copyPublicUrl} className="hover:shadow-elegant transition-all duration-300 hover-scale flex-1 sm:flex-initial">
                       <Copy className="w-4 h-4 sm:mr-2" />
                       <span className="hidden sm:inline">Copy URL</span>
                       <span className="sm:hidden">Copy</span>
                     </Button>
-                    <Button variant="outline" asChild className="hover:shadow-card transition-shadow duration-200 flex-1 sm:flex-initial">
+                    <Button variant="outline" asChild className="hover:shadow-elegant transition-all duration-300 hover-scale flex-1 sm:flex-initial">
                       <a href={`/${username}`} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="w-4 h-4 sm:mr-2" />
                         <span className="hidden sm:inline">View Page</span>
@@ -584,7 +585,7 @@ const Dashboard = () => {
                       </a>
                     </Button>
                   </div>
-                  <Button onClick={() => setIsEditingProfile(true)} className="bg-gradient-primary hover:opacity-90 w-full sm:w-auto">
+                  <Button onClick={() => setIsEditingProfile(true)} className="bg-gradient-primary hover:opacity-90 hover-scale transition-all duration-300 w-full sm:w-auto">
                     <Edit className="w-4 h-4 sm:mr-2" />
                     <span className="hidden sm:inline">Edit Profile</span>
                     <span className="sm:hidden">Edit</span>
@@ -605,18 +606,23 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
+        {/* Visual Separator */}
+        <div className="mb-8">
+          <Separator className="bg-gradient-to-r from-transparent via-border to-transparent" />
+        </div>
+
         <Tabs defaultValue="categories" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="categories">Categories</TabsTrigger>
-            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-muted/50 to-muted/80 border border-border/50">
+            <TabsTrigger value="categories" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Categories</TabsTrigger>
+            <TabsTrigger value="recommendations" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Recommendations</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="categories" className="space-y-6">
+          <TabsContent value="categories" className="space-y-6 animate-fade-in">
             {/* Categories Management */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <h2 className="text-xl sm:text-2xl font-bold">Organize Your Content</h2>
+              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">Organize Your Content</h2>
               {categories.length > 0 && (
-                <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90 w-full sm:w-auto">
+                <Button onClick={() => setIsAddingCategory(true)} className="bg-gradient-primary hover:opacity-90 hover-scale transition-all duration-300 w-full sm:w-auto">
                   <FolderPlus className="w-4 h-4 mr-2" />
                   Add Category
                 </Button>
@@ -679,12 +685,12 @@ const Dashboard = () => {
             )}
           </TabsContent>
           
-          <TabsContent value="recommendations" className="space-y-6">
+          <TabsContent value="recommendations" className="space-y-6 animate-fade-in">
             {/* Items Management */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <h2 className="text-xl sm:text-2xl font-bold">Your Recommendations</h2>
+              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">Your Recommendations</h2>
               {categories.length > 0 && (
-                <Button onClick={() => setIsAddingItem(true)} className="bg-gradient-primary hover:opacity-90 w-full sm:w-auto">
+                <Button onClick={() => setIsAddingItem(true)} className="bg-gradient-primary hover:opacity-90 hover-scale transition-all duration-300 w-full sm:w-auto">
                   <Plus className="w-4 h-4 mr-2" />
                   Add Recommendation
                 </Button>

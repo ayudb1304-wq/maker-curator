@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ExternalLink, Palette } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { safeOpenUrl, sanitizeText } from '@/lib/security';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 interface Item {
   id: string;
@@ -23,8 +24,10 @@ interface Category {
 
 interface Profile {
   username: string;
+  display_name: string;
   page_title: string;
   page_description: string;
+  avatar_url: string;
   user_id: string;
 }
 
@@ -50,7 +53,7 @@ const PublicPage = () => {
       // First get the profile - only public profiles are accessible
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('*')
+        .select('username, display_name, page_title, page_description, avatar_url, user_id')
         .eq('username', username)
         .eq('public_profile', true)
         .maybeSingle();
@@ -97,6 +100,10 @@ const PublicPage = () => {
   const getItemsByCategory = (categoryId: string | null) => {
     return items.filter(item => item.category_id === categoryId);
   };
+  
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
 
   if (loading) {
     return (
@@ -129,7 +136,7 @@ const PublicPage = () => {
   const uncategorizedItems = getItemsByCategory(null);
 
   return (
-    <div className="min-h-screen bg-muted/60">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       {/* Header */}
       <header className="bg-background/80 backdrop-blur-md border-b border-border/50">
         <div className="container mx-auto px-6 py-4">
@@ -152,14 +159,34 @@ const PublicPage = () => {
       </header>
 
       <main className="container mx-auto px-6 py-12">
-        {/* Page Header */}
-        <div className="text-center mb-12">
-           <h1 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-             {sanitizeText(profile.page_title)}
-           </h1>
-           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-             {sanitizeText(profile.page_description)}
-           </p>
+        {/* Profile Header */}
+        <div className="text-center mb-16 animate-fade-in">
+          <div className="flex justify-center mb-6">
+            <Avatar className="w-32 h-32 border-4 border-background shadow-elegant">
+              <AvatarImage src={profile.avatar_url} alt={profile.display_name || profile.username} />
+              <AvatarFallback className="text-3xl font-bold bg-gradient-primary text-primary-foreground">
+                {getInitials(profile.display_name || profile.username)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+          
+          <div className="space-y-4">
+            <div>
+              <h1 className="text-5xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
+                {sanitizeText(profile.display_name || profile.username)}
+              </h1>
+              <p className="text-lg text-muted-foreground font-mono">@{username}</p>
+            </div>
+            
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-semibold mb-3">
+                {sanitizeText(profile.page_title)}
+              </h2>
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                {sanitizeText(profile.page_description)}
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Categories with Items */}
