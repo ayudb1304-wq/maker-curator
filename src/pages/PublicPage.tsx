@@ -129,7 +129,7 @@ const PublicPage = () => {
   const uncategorizedItems = getItemsByCategory(null);
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/60">
       {/* Header */}
       <header className="bg-background/80 backdrop-blur-md border-b border-border/50">
         <div className="container mx-auto px-6 py-4">

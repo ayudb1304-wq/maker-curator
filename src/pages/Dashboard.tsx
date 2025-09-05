@@ -456,7 +456,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-muted/20">
+    <div className="min-h-screen bg-muted/50">
       {/* Header */}
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-md shadow-card">
         <div className="container mx-auto px-6 py-4">
