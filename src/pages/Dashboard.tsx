@@ -571,7 +571,7 @@ const Dashboard = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {categories.map((category) => (
-                  <Card key={category.id} className="border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
+                  <Card key={category.id} className="border-border/50 bg-card shadow-card hover:shadow-elegant transition-all duration-300">
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-lg">{category.name}</CardTitle>
@@ -951,6 +951,15 @@ const Dashboard = () => {
                   rows={3}
                 />
               </div>
+              <div>
+                <Label htmlFor="edit-target_url">Affiliate Link (Optional)</Label>
+                <Input
+                  id="edit-target_url"
+                  value={formData.target_url}
+                  onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
+                  placeholder="https://your-affiliate-link.com"
+                />
+              </div>
               <Button onClick={handleEditItem} className="w-full">
                 Update Recommendation
               </Button>
@@ -974,15 +983,6 @@ const Dashboard = () => {
                   id="edit-category-name"
                   value={categoryData.name}
                   onChange={(e) => setCategoryData({ ...categoryData, name: e.target.value })}
-                />
-              </div>
-              <div>
-                <Label htmlFor="edit-target_url">Affiliate Link (Optional)</Label>
-                <Input
-                  id="edit-target_url"
-                  value={formData.target_url}
-                  onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
-                  placeholder="https://your-affiliate-link.com"
                 />
               </div>
               <div>
