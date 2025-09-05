@@ -118,3 +118,13 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+.sticky-nav {
+  position: fixed !important;
+  top: 1rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 3rem) !important;
+  max-width: 1200px !important;
+  z-index: 50 !important;
+}
