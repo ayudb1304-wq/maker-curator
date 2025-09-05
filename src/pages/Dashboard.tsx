@@ -901,7 +901,12 @@ const Dashboard = () => {
         </Dialog>
 
         {/* Edit Item Dialog */}
-        <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
+        <Dialog open={!!editingItem} onOpenChange={(open) => {
+          if (!open) {
+            setEditingItem(null);
+            setFormData({ title: '', description: '', image_url: '', target_url: '', category_id: '' });
+          }
+        }}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Recommendation</DialogTitle>
