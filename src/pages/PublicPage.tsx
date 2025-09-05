@@ -161,7 +161,7 @@ const PublicPage = () => {
       <main className="container mx-auto px-6 py-12">
         {/* Profile Header */}
         <div className="relative mb-16 rounded-2xl border border-border/50 overflow-hidden shadow-card animate-fade-in">
-          <div className="absolute inset-0 bg-gradient-hero opacity-30"></div>
+          <div className="absolute inset-0 bg-gradient-hero opacity-15"></div>
           <div className="relative px-6 py-10 text-center">
             <div className="flex justify-center mb-6">
               <Avatar className="w-32 h-32 border-4 border-background shadow-elegant">
@@ -203,52 +203,64 @@ const PublicPage = () => {
         ) : (
           <div className="space-y-16 max-w-6xl mx-auto">
             {/* Categorized Items */}
-            {categories.map((category) => {
+            {categories.map((category, index) => {
               const categoryItems = getItemsByCategory(category.id);
               if (categoryItems.length === 0) return null;
               
+              // Alternate gradient backgrounds for each category
+              const gradientClasses = [
+                'bg-gradient-section-1',
+                'bg-gradient-section-2', 
+                'bg-gradient-section-3',
+                'bg-gradient-section-4'
+              ];
+              const gradientClass = gradientClasses[index % gradientClasses.length];
+              
               return (
-                <section key={category.id} className="space-y-8">
-                  <div className="text-center">
-                     <h2 className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent">
-                       {sanitizeText(category.name)}
-                     </h2>
-                     {category.description && (
-                       <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                         {sanitizeText(category.description)}
-                       </p>
-                     )}
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {categoryItems.map((item) => (
-                      <Card 
-                        key={item.id} 
-                        className="overflow-hidden bg-gradient-card border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
-                        onClick={() => safeOpenUrl(item.target_url)}
-                      >
-                        <div className="aspect-video w-full overflow-hidden">
-                          <img 
-                            src={item.image_url} 
-                            alt={item.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between mb-2">
-                            <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                              {sanitizeText(item.title)}
-                            </h3>
-                            <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
+                <section key={category.id} className="relative rounded-3xl overflow-hidden shadow-card">
+                  <div className={`absolute inset-0 ${gradientClass} opacity-10`}></div>
+                  <div className="relative px-6 py-12 space-y-8">
+                    <div className="text-center">
+                       <h2 className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent">
+                         {sanitizeText(category.name)}
+                       </h2>
+                       {category.description && (
+                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                           {sanitizeText(category.description)}
+                         </p>
+                       )}
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {categoryItems.map((item) => (
+                        <Card 
+                          key={item.id} 
+                          className="overflow-hidden bg-gradient-card border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+                          onClick={() => safeOpenUrl(item.target_url)}
+                        >
+                          <div className="aspect-video w-full overflow-hidden">
+                            <img 
+                              src={item.image_url} 
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
                           </div>
-                           {item.description && (
-                             <p className="text-muted-foreground leading-relaxed">
-                               {sanitizeText(item.description)}
-                             </p>
-                           )}
-                        </CardContent>
-                      </Card>
-                    ))}
+                          <CardContent className="p-6">
+                            <div className="flex items-start justify-between mb-2">
+                              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                                {sanitizeText(item.title)}
+                              </h3>
+                              <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
+                            </div>
+                             {item.description && (
+                               <p className="text-muted-foreground leading-relaxed">
+                                 {sanitizeText(item.description)}
+                               </p>
+                             )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
                   </div>
                 </section>
               );
