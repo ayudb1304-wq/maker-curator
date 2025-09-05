@@ -265,7 +265,7 @@ const Dashboard = () => {
       return;
     }
     
-    if (formData.target_url && !isValidUrl(formData.target_url)) {
+    if (formData.target_url.trim() && !isValidUrl(formData.target_url)) {
       toast({ description: 'Invalid target URL', variant: 'destructive' });
       return;
     }
