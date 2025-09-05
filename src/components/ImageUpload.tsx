@@ -21,6 +21,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
+    console.log('[ImageUpload] onDrop called. Files:', acceptedFiles, 'Chosen:', file);
     if (!file) return;
 
     // Validate file type
@@ -48,25 +49,29 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     try {
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
+      console.log('[ImageUpload] current user', user?.id);
       if (!user) throw new Error('Not authenticated');
 
       // Generate unique filename
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split('.').pop()?.toLowerCase() || 'png';
       const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      console.log('[ImageUpload] uploading to path:', fileName, 'type:', file.type, 'size:', file.size);
 
-      // Upload to Supabase Storage
-      const { data, error } = await supabase.storage
+      // Upload to Supabase Storage (upsert to avoid name collisions)
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('recommendation-images')
-        .upload(fileName, file);
+        .upload(fileName, file, { upsert: true, contentType: file.type, cacheControl: '3600' });
 
-      if (error) throw error;
+      if (uploadError) throw uploadError;
+      console.log('[ImageUpload] upload success', uploadData);
 
       // Get public URL
-      const { data: { publicUrl } } = supabase.storage
+      const { data: publicData } = supabase.storage
         .from('recommendation-images')
         .getPublicUrl(fileName);
 
-      onImageUploaded(publicUrl);
+      console.log('[ImageUpload] public URL', publicData?.publicUrl);
+      onImageUploaded(publicData.publicUrl);
       
       toast({
         title: "Image uploaded successfully",
