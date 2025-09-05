@@ -902,7 +902,7 @@ const Dashboard = () => {
                         </Card>
                       ) : (
                         <div>
-                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {visibleCategoryItems.map((item) => (
                               <Card key={item.id} className="overflow-hidden border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
                                 <div className="aspect-video w-full overflow-hidden">
@@ -983,7 +983,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                       {getVisibleItems('uncategorized').map((item) => (
                         <Card key={item.id} className="overflow-hidden border-border/50 bg-gradient-card shadow-card hover:shadow-elegant transition-all duration-300">
                           <div className="aspect-video w-full overflow-hidden">

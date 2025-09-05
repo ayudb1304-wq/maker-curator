@@ -381,7 +381,7 @@ const PublicPage = () => {
                        )}
                     </div>
                     
-                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                        {visibleCategoryItems.map((item) => (
                         <Card 
                           key={item.id} 
@@ -443,7 +443,7 @@ const PublicPage = () => {
                    </div>
                  )}
                  
-                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                    {getVisibleItems('uncategorized').map((item) => (
                      <Card 
                        key={item.id} 
