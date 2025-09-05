@@ -16,6 +16,7 @@ import { useUsernameCheck } from '@/hooks/useUsernameCheck';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { isValidUrl, isValidLength, sanitizeText, safeOpenUrl } from '@/lib/security';
+import { ImageUpload } from '@/components/ImageUpload';
 
 interface Item {
   id: string;
@@ -830,12 +831,11 @@ const Dashboard = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="image_url">Image URL</Label>
-                <Input
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                  placeholder="https://example.com/image.jpg"
+                <Label htmlFor="image_url">Image</Label>
+                <ImageUpload
+                  onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                  currentImageUrl={formData.image_url}
+                  onRemoveImage={() => setFormData({ ...formData, image_url: '' })}
                 />
               </div>
               <div>
@@ -935,11 +935,11 @@ const Dashboard = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-image_url">Image URL</Label>
-                <Input
-                  id="edit-image_url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                <Label htmlFor="edit-image_url">Image</Label>
+                <ImageUpload
+                  onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                  currentImageUrl={formData.image_url}
+                  onRemoveImage={() => setFormData({ ...formData, image_url: '' })}
                 />
               </div>
               <div>
