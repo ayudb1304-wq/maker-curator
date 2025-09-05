@@ -535,8 +535,9 @@ const Dashboard = () => {
           </Alert>
         )}
         {/* Profile Header Section */}
-        <Card className="mb-8 border-border/50 bg-gradient-to-r from-card via-card/80 to-background/50 shadow-elegant backdrop-blur-sm animate-fade-in">{/* CardContent */}
-          <CardContent className="pt-6">
+        <Card className="mb-8 relative overflow-hidden border-border/50 shadow-elegant backdrop-blur-sm animate-fade-in">
+          <div className="absolute inset-0 bg-gradient-hero opacity-30"></div>
+          <CardContent className="relative pt-6">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               {/* Avatar Section */}
               <div className="flex-shrink-0">

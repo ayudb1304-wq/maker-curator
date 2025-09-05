@@ -160,31 +160,34 @@ const PublicPage = () => {
 
       <main className="container mx-auto px-6 py-12">
         {/* Profile Header */}
-        <div className="text-center mb-16 animate-fade-in">
-          <div className="flex justify-center mb-6">
-            <Avatar className="w-32 h-32 border-4 border-background shadow-elegant">
-              <AvatarImage src={profile.avatar_url} alt={profile.display_name || profile.username} />
-              <AvatarFallback className="text-3xl font-bold bg-gradient-primary text-primary-foreground">
-                {getInitials(profile.display_name || profile.username)}
-              </AvatarFallback>
-            </Avatar>
-          </div>
-          
-          <div className="space-y-4">
-            <div>
-              <h1 className="text-5xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
-                {sanitizeText(profile.display_name || profile.username)}
-              </h1>
-              <p className="text-lg text-muted-foreground font-mono">@{username}</p>
+        <div className="relative mb-16 rounded-2xl border border-border/50 overflow-hidden shadow-card animate-fade-in">
+          <div className="absolute inset-0 bg-gradient-hero opacity-30"></div>
+          <div className="relative px-6 py-10 text-center">
+            <div className="flex justify-center mb-6">
+              <Avatar className="w-32 h-32 border-4 border-background shadow-elegant">
+                <AvatarImage src={profile.avatar_url} alt={profile.display_name || profile.username} />
+                <AvatarFallback className="text-3xl font-bold bg-gradient-primary text-primary-foreground">
+                  {getInitials(profile.display_name || profile.username)}
+                </AvatarFallback>
+              </Avatar>
             </div>
             
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-semibold mb-3">
-                {sanitizeText(profile.page_title)}
-              </h2>
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                {sanitizeText(profile.page_description)}
-              </p>
+            <div className="space-y-4">
+              <div>
+                <h1 className="text-5xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
+                  {sanitizeText(profile.display_name || profile.username)}
+                </h1>
+                <p className="text-lg text-muted-foreground font-mono">@{username}</p>
+              </div>
+              
+              <div className="max-w-3xl mx-auto">
+                <h2 className="text-2xl font-semibold mb-3">
+                  {sanitizeText(profile.page_title)}
+                </h2>
+                <p className="text-xl text-muted-foreground leading-relaxed">
+                  {sanitizeText(profile.page_description)}
+                </p>
+              </div>
             </div>
           </div>
         </div>
