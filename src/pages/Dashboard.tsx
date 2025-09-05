@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings, FolderPlus, Mail, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings, FolderPlus, Mail, CheckCircle, XCircle, Loader2, User, Camera } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useUsernameCheck } from '@/hooks/useUsernameCheck';
@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { isValidUrl, isValidLength, sanitizeText, safeOpenUrl } from '@/lib/security';
 import { ImageUpload } from '@/components/ImageUpload';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 interface Item {
   id: string;
@@ -37,8 +38,10 @@ interface Category {
 
 interface Profile {
   username: string;
+  display_name: string;
   page_title: string;
   page_description: string;
+  avatar_url: string;
   public_profile: boolean;
   username_changed_at?: string;
 }
@@ -50,8 +53,10 @@ const Dashboard = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [profile, setProfile] = useState<Profile>({
     username: '',
+    display_name: '',
     page_title: '',
     page_description: '',
+    avatar_url: '',
     public_profile: false,
     username_changed_at: undefined
   });
@@ -77,8 +82,10 @@ const Dashboard = () => {
 
   const [profileData, setProfileData] = useState<Profile>({
     username: '',
+    display_name: '',
     page_title: '',
     page_description: '',
+    avatar_url: '',
     public_profile: false,
     username_changed_at: undefined
   });
@@ -117,7 +124,7 @@ const Dashboard = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, page_title, page_description, public_profile, username_changed_at')
+        .select('username, display_name, page_title, page_description, avatar_url, public_profile, username_changed_at')
         .eq('user_id', user.id)
         .single();
 
@@ -125,8 +132,10 @@ const Dashboard = () => {
       if (data) {
         const profileData = {
           username: data.username || '',
+          display_name: data.display_name || '',
           page_title: data.page_title || '',
           page_description: data.page_description || '',
+          avatar_url: data.avatar_url || '',
           public_profile: data.public_profile || false,
           username_changed_at: data.username_changed_at
         };
@@ -399,8 +408,10 @@ const Dashboard = () => {
 
       // Update other profile fields
       const updateData = {
+        display_name: sanitizeText(profileData.display_name),
         page_title: sanitizeText(profileData.page_title),
         page_description: sanitizeText(profileData.page_description),
+        avatar_url: profileData.avatar_url,
         public_profile: profileData.public_profile
       };
 
@@ -445,6 +456,11 @@ const Dashboard = () => {
   }
 
   const username = profile.username || user?.email?.split('@')[0] || 'user';
+  const displayName = profile.display_name || user?.email?.split('@')[0] || 'User';
+  
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
   
   const copyPublicUrl = () => {
     const url = `${window.location.origin}/${username}`;
@@ -517,41 +533,73 @@ const Dashboard = () => {
             </AlertDescription>
           </Alert>
         )}
-        {/* Page Title & Description Section */}
+        {/* Profile Header Section */}
         <Card className="mb-8 border-border/50 bg-gradient-card shadow-card">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-2xl">{profile.page_title || 'My Recommendations'}</CardTitle>
-                <CardDescription className="mt-2">
-                  {profile.page_description || 'A curated list of my favorite products and tools.'}
-                </CardDescription>
+          <CardContent className="pt-6">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+              {/* Avatar Section */}
+              <div className="flex-shrink-0">
+                <div className="relative group">
+                  <Avatar className="w-20 h-20 sm:w-24 sm:h-24 border-2 border-border">
+                    <AvatarImage src={profile.avatar_url} alt={displayName} />
+                    <AvatarFallback className="text-lg sm:text-xl font-semibold bg-gradient-primary text-primary-foreground">
+                      {getInitials(displayName)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsEditingProfile(true)}
+                    className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity bg-background border-border shadow-lg"
+                  >
+                    <Camera className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
-              <Button variant="outline" onClick={() => setIsEditingProfile(true)} className="hover:shadow-card transition-shadow duration-200 flex-shrink-0">
-                <Edit className="w-4 h-4 sm:mr-2" />
-                <span className="hidden sm:inline">Edit Page Info</span>
-                <span className="sm:hidden">Edit</span>
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <Input 
-                value={publicUrl} 
-                readOnly 
-                className="flex-1 font-mono text-xs sm:text-sm"
-              />
-              <div className="flex gap-2 flex-shrink-0">
-                <Button variant="outline" onClick={copyPublicUrl} className="hover:shadow-card transition-shadow duration-200 flex-1 sm:flex-initial">
-                  <Copy className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Copy</span>
-                </Button>
-                <Button variant="outline" asChild className="hover:shadow-card transition-shadow duration-200 flex-1 sm:flex-initial">
-                  <a href={`/${username}`} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">View</span>
-                  </a>
-                </Button>
+
+              {/* Profile Info & Actions */}
+              <div className="flex-1 text-center sm:text-left space-y-4 min-w-0">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold mb-1">{displayName}</h1>
+                  <p className="text-muted-foreground font-mono text-sm">@{username}</p>
+                  <h2 className="text-lg sm:text-xl font-semibold mt-2 mb-1">{profile.page_title || 'My Recommendations'}</h2>
+                  <p className="text-muted-foreground text-sm">
+                    {profile.page_description || 'A curated list of my favorite products and tools.'}
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex gap-2 flex-1">
+                    <Button variant="outline" onClick={copyPublicUrl} className="hover:shadow-card transition-shadow duration-200 flex-1 sm:flex-initial">
+                      <Copy className="w-4 h-4 sm:mr-2" />
+                      <span className="hidden sm:inline">Copy URL</span>
+                      <span className="sm:hidden">Copy</span>
+                    </Button>
+                    <Button variant="outline" asChild className="hover:shadow-card transition-shadow duration-200 flex-1 sm:flex-initial">
+                      <a href={`/${username}`} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="w-4 h-4 sm:mr-2" />
+                        <span className="hidden sm:inline">View Page</span>
+                        <span className="sm:hidden">View</span>
+                      </a>
+                    </Button>
+                  </div>
+                  <Button onClick={() => setIsEditingProfile(true)} className="bg-gradient-primary hover:opacity-90 w-full sm:w-auto">
+                    <Edit className="w-4 h-4 sm:mr-2" />
+                    <span className="hidden sm:inline">Edit Profile</span>
+                    <span className="sm:hidden">Edit</span>
+                  </Button>
+                </div>
+
+                {/* Public URL Display */}
+                <div className="pt-2 border-t border-border/50">
+                  <p className="text-xs text-muted-foreground mb-2">Your public page:</p>
+                  <Input 
+                    value={publicUrl} 
+                    readOnly 
+                    className="font-mono text-xs bg-muted/50 border-border/50"
+                  />
+                </div>
               </div>
             </div>
           </CardContent>
@@ -1036,12 +1084,37 @@ const Dashboard = () => {
         <Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
           <DialogContent className="mx-2 sm:mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Page Settings</DialogTitle>
+              <DialogTitle>Edit Profile</DialogTitle>
               <DialogDescription>
-                Customize your public page title, description, and URL
+                Customize your profile picture, display name, page content, and URL
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="profile-avatar">Profile Picture</Label>
+                <div className="flex items-center gap-4">
+                  <Avatar className="w-16 h-16 border-2 border-border">
+                    <AvatarImage src={profileData.avatar_url} alt={profileData.display_name} />
+                    <AvatarFallback className="text-lg font-semibold bg-gradient-primary text-primary-foreground">
+                      {getInitials(profileData.display_name || 'User')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <ImageUpload
+                    onImageUploaded={(url) => setProfileData({ ...profileData, avatar_url: url })}
+                    currentImageUrl={profileData.avatar_url}
+                    onRemoveImage={() => setProfileData({ ...profileData, avatar_url: '' })}
+                  />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="profile-display-name">Display Name</Label>
+                <Input
+                  id="profile-display-name"
+                  value={profileData.display_name}
+                  onChange={(e) => setProfileData({ ...profileData, display_name: e.target.value })}
+                  placeholder="Your Name"
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="profile-title">Page Title</Label>
                 <Input
@@ -1147,7 +1220,7 @@ const Dashboard = () => {
                   When disabled, only you can access your recommendations.
                 </p>
               </div>
-              <Button 
+                <Button 
                 onClick={handleUpdateProfile} 
                 className="w-full"
                 disabled={
@@ -1156,7 +1229,7 @@ const Dashboard = () => {
                   (!usernameCheck.available || usernameCheck.isChecking || profileData.username.length < 3))
                 }
               >
-                Update Settings
+                Update Profile
               </Button>
             </div>
           </DialogContent>
