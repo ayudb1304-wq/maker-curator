@@ -254,7 +254,23 @@ const Dashboard = () => {
   };
 
   const handleAddItem = async () => {
-    // Validate input data
+    // Validate mandatory fields
+    if (!formData.title.trim()) {
+      toast({ description: 'Title is required', variant: 'destructive' });
+      return;
+    }
+    
+    if (!formData.image_url.trim()) {
+      toast({ description: 'Image is required', variant: 'destructive' });
+      return;
+    }
+    
+    if (!formData.description.trim()) {
+      toast({ description: 'Description is required', variant: 'destructive' });
+      return;
+    }
+    
+    // Validate field lengths
     if (!isValidLength(formData.title, 200)) {
       toast({ description: 'Title is too long (max 200 characters)', variant: 'destructive' });
       return;
@@ -803,7 +819,7 @@ const Dashboard = () => {
 
         {/* Add Item Dialog */}
         <Dialog open={isAddingItem} onOpenChange={setIsAddingItem}>
-          <DialogContent className="mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className="mx-2 sm:mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Add New Recommendation</DialogTitle>
               <DialogDescription>
@@ -828,16 +844,17 @@ const Dashboard = () => {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="title">Title</Label>
+                <Label htmlFor="title">Title *</Label>
                 <Input
                   id="title"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="Product or service name"
+                  required
                 />
               </div>
               <div>
-                <Label htmlFor="image_url">Image</Label>
+                <Label htmlFor="image_url">Image *</Label>
                 <ImageUpload
                   onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                   currentImageUrl={formData.image_url}
@@ -845,13 +862,14 @@ const Dashboard = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="description">Description (Optional)</Label>
+                <Label htmlFor="description">Description *</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Why do you recommend this?"
                   rows={3}
+                  required
                 />
               </div>
               <div>
@@ -872,7 +890,7 @@ const Dashboard = () => {
 
         {/* Add Category Dialog */}
         <Dialog open={isAddingCategory} onOpenChange={setIsAddingCategory}>
-          <DialogContent className="mx-4 max-w-lg">
+          <DialogContent className="mx-2 sm:mx-4 max-w-lg">
             <DialogHeader>
               <DialogTitle>Add New Category</DialogTitle>
               <DialogDescription>
@@ -913,7 +931,7 @@ const Dashboard = () => {
             setFormData({ title: '', description: '', image_url: '', target_url: '', category_id: '' });
           }
         }}>
-          <DialogContent className="mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className="mx-2 sm:mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Edit Recommendation</DialogTitle>
               <DialogDescription>
@@ -938,15 +956,16 @@ const Dashboard = () => {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="edit-title">Title</Label>
+                <Label htmlFor="edit-title">Title *</Label>
                 <Input
                   id="edit-title"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  required
                 />
               </div>
               <div>
-                <Label htmlFor="edit-image_url">Image</Label>
+                <Label htmlFor="edit-image_url">Image *</Label>
                 <ImageUpload
                   onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                   currentImageUrl={formData.image_url}
@@ -954,12 +973,13 @@ const Dashboard = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-description">Description</Label>
+                <Label htmlFor="edit-description">Description *</Label>
                 <Textarea
                   id="edit-description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
+                  required
                 />
               </div>
               <div>
@@ -980,7 +1000,7 @@ const Dashboard = () => {
 
         {/* Edit Category Dialog */}
         <Dialog open={!!editingCategory} onOpenChange={() => setEditingCategory(null)}>
-          <DialogContent>
+          <DialogContent className="mx-2 sm:mx-4 max-w-lg">
             <DialogHeader>
               <DialogTitle>Edit Category</DialogTitle>
               <DialogDescription>
@@ -1014,7 +1034,7 @@ const Dashboard = () => {
 
         {/* Profile Settings Dialog */}
         <Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
-          <DialogContent className="mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className="mx-2 sm:mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Page Settings</DialogTitle>
               <DialogDescription>
