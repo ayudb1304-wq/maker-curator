@@ -50,6 +50,13 @@ interface Profile {
   username_color?: string;
   page_title_color?: string;
   page_description_color?: string;
+  youtube_url?: string;
+  twitter_url?: string;
+  linkedin_url?: string;
+  tiktok_url?: string;
+  instagram_url?: string;
+  threads_url?: string;
+  snapchat_url?: string;
 }
 
 const Dashboard = () => {
@@ -69,7 +76,14 @@ const Dashboard = () => {
     display_name_color: '#ffffff',
     username_color: '#a1a1aa',
     page_title_color: '#ffffff',
-    page_description_color: '#a1a1aa'
+    page_description_color: '#a1a1aa',
+    youtube_url: '',
+    twitter_url: '',
+    linkedin_url: '',
+    tiktok_url: '',
+    instagram_url: '',
+    threads_url: '',
+    snapchat_url: ''
   });
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
@@ -109,7 +123,14 @@ const Dashboard = () => {
     display_name_color: '#ffffff',
     username_color: '#a1a1aa',
     page_title_color: '#ffffff',
-    page_description_color: '#a1a1aa'
+    page_description_color: '#a1a1aa',
+    youtube_url: '',
+    twitter_url: '',
+    linkedin_url: '',
+    tiktok_url: '',
+    instagram_url: '',
+    threads_url: '',
+    snapchat_url: ''
   });
   
   const usernameCheck = useUsernameCheck(profileData.username);
@@ -206,7 +227,7 @@ const Dashboard = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color')
+        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
         .eq('user_id', user.id)
         .single();
 
@@ -224,7 +245,14 @@ const Dashboard = () => {
           display_name_color: data.display_name_color || '#ffffff',
           username_color: data.username_color || '#a1a1aa',
           page_title_color: data.page_title_color || '#ffffff',
-          page_description_color: data.page_description_color || '#a1a1aa'
+          page_description_color: data.page_description_color || '#a1a1aa',
+          youtube_url: data.youtube_url || '',
+          twitter_url: data.twitter_url || '',
+          linkedin_url: data.linkedin_url || '',
+          tiktok_url: data.tiktok_url || '',
+          instagram_url: data.instagram_url || '',
+          threads_url: data.threads_url || '',
+          snapchat_url: data.snapchat_url || ''
         };
         setProfile(profileData);
         setProfileData(profileData);
@@ -504,7 +532,14 @@ const Dashboard = () => {
         display_name_color: profileData.display_name_color,
         username_color: profileData.username_color,
         page_title_color: profileData.page_title_color,
-        page_description_color: profileData.page_description_color
+        page_description_color: profileData.page_description_color,
+        youtube_url: profileData.youtube_url || null,
+        twitter_url: profileData.twitter_url || null,
+        linkedin_url: profileData.linkedin_url || null,
+        tiktok_url: profileData.tiktok_url || null,
+        instagram_url: profileData.instagram_url || null,
+        threads_url: profileData.threads_url || null,
+        snapchat_url: profileData.snapchat_url || null
       };
 
       const { error: updateError } = await supabase
@@ -1358,6 +1393,43 @@ const Dashboard = () => {
                   rows={3}
                   className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
                 />
+              </div>
+              
+              {/* Social Links */}
+              <div className="space-y-2 border border-border rounded-lg p-4">
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm font-medium">Social Links</Label>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="youtube_url" className="text-xs">YouTube</Label>
+                    <Input id="youtube_url" placeholder="https://youtube.com/@username" value={profileData.youtube_url || ''} onChange={(e) => setProfileData({ ...profileData, youtube_url: e.target.value })} className="h-10 text-sm" />
+                  </div>
+                  <div>
+                    <Label htmlFor="twitter_url" className="text-xs">X (Twitter)</Label>
+                    <Input id="twitter_url" placeholder="https://x.com/username" value={profileData.twitter_url || ''} onChange={(e) => setProfileData({ ...profileData, twitter_url: e.target.value })} className="h-10 text-sm" />
+                  </div>
+                  <div>
+                    <Label htmlFor="linkedin_url" className="text-xs">LinkedIn</Label>
+                    <Input id="linkedin_url" placeholder="https://linkedin.com/in/username" value={profileData.linkedin_url || ''} onChange={(e) => setProfileData({ ...profileData, linkedin_url: e.target.value })} className="h-10 text-sm" />
+                  </div>
+                  <div>
+                    <Label htmlFor="instagram_url" className="text-xs">Instagram</Label>
+                    <Input id="instagram_url" placeholder="https://instagram.com/username" value={profileData.instagram_url || ''} onChange={(e) => setProfileData({ ...profileData, instagram_url: e.target.value })} className="h-10 text-sm" />
+                  </div>
+                  <div>
+                    <Label htmlFor="tiktok_url" className="text-xs">TikTok</Label>
+                    <Input id="tiktok_url" placeholder="https://tiktok.com/@username" value={profileData.tiktok_url || ''} onChange={(e) => setProfileData({ ...profileData, tiktok_url: e.target.value })} className="h-10 text-sm" />
+                  </div>
+                  <div>
+                    <Label htmlFor="threads_url" className="text-xs">Threads</Label>
+                    <Input id="threads_url" placeholder="https://www.threads.net/@username" value={profileData.threads_url || ''} onChange={(e) => setProfileData({ ...profileData, threads_url: e.target.value })} className="h-10 text-sm" />
+                  </div>
+                  <div>
+                    <Label htmlFor="snapchat_url" className="text-xs">Snapchat</Label>
+                    <Input id="snapchat_url" placeholder="https://snapchat.com/add/username" value={profileData.snapchat_url || ''} onChange={(e) => setProfileData({ ...profileData, snapchat_url: e.target.value })} className="h-10 text-sm" />
+                  </div>
+                </div>
               </div>
               
               {/* Text Color Customization */}

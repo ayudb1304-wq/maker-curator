@@ -153,7 +153,7 @@ const PublicPage = () => {
       // First get the profile - only public profiles are accessible
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, use_avatar_background, user_id, display_name_color, username_color, page_title_color, page_description_color')
+        .select('username, display_name, page_title, page_description, avatar_url, use_avatar_background, user_id, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
         .eq('username', username)
         .eq('public_profile', true)
         .maybeSingle();
@@ -404,7 +404,7 @@ const PublicPage = () => {
         </div>
       ) : (
         /* Standard Compact Layout */
-        <main className="container mx-auto px-6 py-6">
+        <main className="container mx-auto px-6 py-6 pt-24">
           <div className="relative mb-8 rounded-xl border border-border/50 overflow-hidden shadow-card animate-fade-in">
             <div className="relative px-4 py-6 text-center">
               <div className="flex justify-center mb-4">
