@@ -31,11 +31,11 @@ interface DemoProfile {
 }
 
 const demoProfile: DemoProfile = {
-  username: "demo",
-  display_name: "Alex Chen",
-  page_title: "Alex's Curated Recommendations",
+  username: "sushmitha",
+  display_name: "Sushmitha",
+  page_title: "Sushmitha's Curated Recommendations",
   page_description: "A carefully curated collection of my favorite tools, products, and resources that make life better.",
-  avatar_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+  avatar_url: "/lovable-uploads/262910fa-1906-4d6c-a25c-5ab0cbfe4267.png",
   user_id: "demo-user"
 };
 

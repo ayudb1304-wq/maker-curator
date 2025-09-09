@@ -124,6 +124,20 @@ const PublicPage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [categories]);
 
+  // Auto-scroll navigation to active category
+  useEffect(() => {
+    if (activeCategory && navScrollRef.current) {
+      const activeButton = navScrollRef.current.querySelector(`[data-category="${activeCategory}"]`) as HTMLElement;
+      if (activeButton) {
+        activeButton.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+    }
+  }, [activeCategory]);
+
   const fetchProfileAndItems = async () => {
     try {
       setLoading(true);

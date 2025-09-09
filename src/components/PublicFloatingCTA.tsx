@@ -42,7 +42,7 @@ const PublicFloatingCTA = () => {
         </div>
         
         <div className="flex items-center gap-2">
-          <Link to="/auth">
+          <Link to="/">
             <Button 
               size="sm" 
               className="bg-gradient-primary hover:opacity-90 transition-opacity text-sm px-4 py-2 h-8"
