@@ -36,6 +36,7 @@ const Login = () => {
     const verified = searchParams.get('verified');
     const reset = searchParams.get('reset');
     const usernameParam = searchParams.get('username');
+    const tabParam = searchParams.get('tab');
     
     if (usernameParam) {
       setUsername(usernameParam);
@@ -220,7 +221,7 @@ const Login = () => {
           </Link>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
+          <Tabs defaultValue={searchParams.get('username') || searchParams.get('tab') === 'signup' ? "signup" : "signin"} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>

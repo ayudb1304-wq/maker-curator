@@ -21,23 +21,22 @@ const CTA = () => {
             Ready to start curating?
           </h2>
           
-          <p className="text-lg sm:text-xl text-white/90 leading-relaxed px-4">
-            Join creators who are already building beautiful recommendation pages. 
-            Your unique thecurately.com/username is waiting.
-          </p>
+           <p className="text-lg sm:text-xl text-white/90 leading-relaxed px-4">
+             Transform your knowledge into a beautiful, shareable recommendation page that your audience will love.
+           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              variant="secondary" 
-              size="lg" 
-              className="bg-white text-primary hover:bg-white/90 shadow-glow group"
-              asChild
-            >
-              <Link to="/auth">
-                Claim Your Username
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
+           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+             <Button 
+               variant="secondary" 
+               size="lg" 
+               className="bg-white text-primary hover:bg-white/90 shadow-glow group"
+               asChild
+             >
+               <Link to="/auth">
+                 Start Building Your Page
+                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+               </Link>
+             </Button>
             
             <Button 
               variant="outline" 

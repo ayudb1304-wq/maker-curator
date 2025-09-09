@@ -14,8 +14,8 @@ const Footer = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (usernameCheck.available && username.trim()) {
-      // Navigate to auth page with the username pre-filled
-      navigate(`/auth?username=${encodeURIComponent(username.trim().toLowerCase())}`);
+      // Navigate to auth page with the username pre-filled and signup tab active
+      navigate(`/auth?username=${encodeURIComponent(username.trim().toLowerCase())}&tab=signup`);
     }
   };
 

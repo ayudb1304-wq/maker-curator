@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
+import Hook from "@/components/Hook";
 import Pro from "@/components/Pro";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
@@ -14,6 +15,7 @@ const Index = () => {
         <section id="features">
           <Features />
         </section>
+        <Hook />
         <Pro />
         <CTA />
       </main>
