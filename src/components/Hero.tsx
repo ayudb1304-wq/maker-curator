@@ -1,9 +1,43 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Users, Sparkles, Zap } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Users, Sparkles, Zap, Check, X, Loader2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useUsernameCheck } from "@/hooks/useUsernameCheck";
+import { cn } from "@/lib/utils";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Hero = () => {
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+  const usernameCheck = useUsernameCheck(username, 300);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (usernameCheck.available && username.trim()) {
+      navigate(`/auth?username=${encodeURIComponent(username.trim().toLowerCase())}&tab=signup`);
+    }
+  };
+
+  const getInputIcon = () => {
+    if (usernameCheck.isChecking) {
+      return <Loader2 className="w-4 h-4 animate-spin text-white/60" />;
+    }
+    if (username.length >= 3) {
+      return usernameCheck.available ? 
+        <Check className="w-4 h-4 text-green-400" /> : 
+        <X className="w-4 h-4 text-red-400" />;
+    }
+    return null;
+  };
+
+  const getInputStatus = () => {
+    if (!username.trim()) return "";
+    if (username.length < 3) return "border-white/20";
+    if (usernameCheck.isChecking) return "border-white/20";
+    return usernameCheck.available ? "border-green-400/50" : "border-red-400/50";
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-primary/5">
       {/* Background decoration */}
@@ -35,15 +69,49 @@ const Hero = () => {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button variant="hero" size="lg" className="group" asChild>
-                <Link to="/auth">
-                  Start Curating Free
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
+            <div className="space-y-4">
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto lg:mx-0">
+                <div className="relative flex-1">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-sm">
+                    thecurately.com/
+                  </div>
+                  <Input
+                    type="text"
+                    placeholder="yourname"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
+                    className={cn(
+                      "pl-[120px] pr-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/60",
+                      getInputStatus()
+                    )}
+                    maxLength={20}
+                  />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    {getInputIcon()}
+                  </div>
+                </div>
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  variant="hero"
+                  className="h-12 px-6 group"
+                  disabled={!usernameCheck.available || username.length < 3 || usernameCheck.isChecking}
+                >
+                  Claim It
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </form>
               
-              <Button variant="outline" size="lg" className="border-primary/20 hover:border-primary/40" asChild>
+              {usernameCheck.message && (
+                <p className={cn(
+                  "text-sm text-center lg:text-left",
+                  usernameCheck.available ? "text-green-400" : "text-red-400"
+                )}>
+                  {usernameCheck.message}
+                </p>
+              )}
+              
+              <Button variant="outline" size="lg" className="border-white/20 hover:border-white/40 text-white hover:bg-white/10 mx-auto lg:mx-0" asChild>
                 <Link to="/demo">
                   View Example
                 </Link>
