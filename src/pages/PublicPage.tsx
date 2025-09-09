@@ -7,7 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { safeOpenUrl, sanitizeText } from '@/lib/security';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { wrapEmojisForPreservation } from '@/lib/emoji';
-import FloatingCTA from '@/components/FloatingCTA';
+import PublicFloatingCTA from '@/components/PublicFloatingCTA';
 
 interface Item {
   id: string;
@@ -523,7 +523,7 @@ const PublicPage = () => {
           </p>
         </footer>
       </main>
-      <FloatingCTA />
+      <PublicFloatingCTA />
     </div>
   );
 };
