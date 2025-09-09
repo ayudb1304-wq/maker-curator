@@ -332,7 +332,7 @@ const DemoPage = () => {
       {/* Hero Section - Conditional based on use_avatar_background */}
       {demoProfile.use_avatar_background && demoProfile.avatar_url ? (
         /* Background Hero Layout */
-        <div className="relative h-[60vh] w-full pt-20">
+        <div className="relative h-[80vh] w-full pt-20">
           {/* Background Image with Smooth Fade Overlay */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-fade-in"
