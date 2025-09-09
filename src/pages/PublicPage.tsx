@@ -178,7 +178,11 @@ const PublicPage = () => {
     const element = categoryRefs.current[categoryId];
     if (element) {
       setActiveCategory(categoryId); // Set active immediately when clicked
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start',
+        inline: 'nearest'
+      });
     }
   };
 
@@ -368,7 +372,7 @@ const PublicPage = () => {
                 <section 
                   key={category.id} 
                   ref={el => categoryRefs.current[category.id] = el}
-                  className="relative rounded-3xl overflow-hidden shadow-card"
+                  className="relative rounded-3xl overflow-hidden shadow-card scroll-mt-24"
                 >
                   <div className={`absolute inset-0 ${gradientClass} opacity-10`}></div>
                   <div className="relative px-6 py-12 space-y-8">
@@ -432,11 +436,11 @@ const PublicPage = () => {
              })}
 
              {/* Uncategorized Items */}
-             {uncategorizedItems.length > 0 && (
-               <section 
-                 ref={el => categoryRefs.current['uncategorized'] = el}
-                 className="space-y-8"
-               >
+              {uncategorizedItems.length > 0 && (
+                <section 
+                  ref={el => categoryRefs.current['uncategorized'] = el}
+                  className="space-y-8 scroll-mt-24"
+                >
                  {categories.length > 0 && (
                    <div className="text-center">
                      <h2 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
@@ -495,7 +499,7 @@ const PublicPage = () => {
 
 
         {/* Footer */}
-        <footer className="text-center pt-8 border-t border-border/50">
+        <footer id="page-footer" className="text-center pt-8 pb-20 border-t border-border/50">
           <p className="text-sm text-muted-foreground">
             Powered by{' '}
             <Link 
