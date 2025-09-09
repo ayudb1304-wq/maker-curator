@@ -5,7 +5,7 @@ import { ArrowRight, Users, Sparkles, Zap, Check, X, Loader2 } from "lucide-reac
 import { Link, useNavigate } from "react-router-dom";
 import { useUsernameCheck } from "@/hooks/useUsernameCheck";
 import { cn } from "@/lib/utils";
-import heroImage from "@/assets/hero-image.jpg";
+import HeroSlideshow from "@/components/HeroSlideshow";
 
 const Hero = () => {
   const [username, setUsername] = useState("");
@@ -131,15 +131,10 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Image */}
+          {/* Right Slideshow */}
           <div className="relative lg:order-2">
-            <div className="relative">
-              <img 
-                src={heroImage} 
-                alt="Beautiful curated product workspace showcasing various recommended items"
-                className="w-full h-auto rounded-2xl shadow-elegant transform hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent rounded-2xl"></div>
+            <div className="relative rounded-2xl overflow-hidden shadow-elegant transform hover:scale-105 transition-transform duration-500">
+              <HeroSlideshow />
             </div>
             
             {/* Floating elements */}
