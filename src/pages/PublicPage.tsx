@@ -47,6 +47,7 @@ const PublicPage = () => {
   
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const navRef = useRef<HTMLElement | null>(null);
+  const navScrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (username) {
@@ -312,32 +313,43 @@ const PublicPage = () => {
             className="bg-background/80 backdrop-blur-md border border-border/50 rounded-xl p-4 mb-8 transition-all duration-300 z-50"
             style={{ position: 'sticky', top: '1rem' }}
           >
-            <div className="flex flex-wrap gap-4 justify-center">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => scrollToCategory(category.id)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                    activeCategory === category.id
-                      ? 'bg-primary text-primary-foreground shadow-md'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                  }`}
-                >
-                  <span dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }} />
-                </button>
-              ))}
-              {getItemsByCategory(null).length > 0 && (
-                <button
-                  onClick={() => scrollToCategory('uncategorized')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                    activeCategory === 'uncategorized'
-                      ? 'bg-primary text-primary-foreground shadow-md'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                  }`}
-                >
-                  More Recommendations
-                </button>
-              )}
+            <div className="relative">
+              {/* Scroll indicators for mobile */}
+              <div className="md:hidden absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-background/80 to-transparent pointer-events-none z-10 rounded-l-lg"></div>
+              <div className="md:hidden absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background/80 to-transparent pointer-events-none z-10 rounded-r-lg"></div>
+              
+              <div 
+                ref={navScrollRef}
+                className="flex md:flex-wrap md:justify-center gap-4 overflow-x-auto md:overflow-x-visible scroll-smooth snap-x snap-mandatory scrollbar-hide px-2 md:px-0"
+              >
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    data-category={category.id}
+                    onClick={() => scrollToCategory(category.id)}
+                    className={`flex-shrink-0 px-6 py-3 rounded-lg font-medium transition-all duration-200 snap-center whitespace-nowrap ${
+                      activeCategory === category.id
+                        ? 'bg-primary text-primary-foreground shadow-md scale-105'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`}
+                  >
+                    <span dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }} />
+                  </button>
+                ))}
+                {getItemsByCategory(null).length > 0 && (
+                  <button
+                    data-category="uncategorized"
+                    onClick={() => scrollToCategory('uncategorized')}
+                    className={`flex-shrink-0 px-6 py-3 rounded-lg font-medium transition-all duration-200 snap-center whitespace-nowrap ${
+                      activeCategory === 'uncategorized'
+                        ? 'bg-primary text-primary-foreground shadow-md scale-105'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`}
+                  >
+                    More Recommendations
+                  </button>
+                )}
+              </div>
             </div>
           </nav>
         )}
