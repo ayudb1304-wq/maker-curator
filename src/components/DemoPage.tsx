@@ -6,6 +6,7 @@ import { ExternalLink } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { sanitizeText } from '@/lib/security';
 import { cn } from '@/lib/utils';
+import Header from '@/components/Header';
 
 interface DemoItem {
   id: string;
@@ -326,26 +327,7 @@ const DemoPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
-      {/* Header */}
-      <header className="bg-background/80 backdrop-blur-md border-b border-border/50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2">
-              <img 
-                src="/lovable-uploads/1edf8796-86e3-4b7a-8081-247f973203a3.png" 
-                alt="Curately Logo" 
-                className="w-8 h-8"
-              />
-              <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                Curately
-              </span>
-            </Link>
-            <div className="text-sm text-muted-foreground">
-              @{demoProfile.username} • Demo Page
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section - Conditional based on use_avatar_background */}
       {demoProfile.use_avatar_background && demoProfile.avatar_url ? (
