@@ -4,6 +4,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ExternalLink } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { sanitizeText } from '@/lib/security';
+import { cn } from '@/lib/utils';
 
 interface DemoItem {
   id: string;
@@ -27,6 +29,7 @@ interface DemoProfile {
   page_title: string;
   page_description: string;
   avatar_url: string;
+  use_avatar_background: boolean;
   user_id: string;
 }
 
@@ -36,6 +39,7 @@ const demoProfile: DemoProfile = {
   page_title: "Sushmitha's Curated Recommendations",
   page_description: "A carefully curated collection of my favorite tools, products, and resources that make life better.",
   avatar_url: "/lovable-uploads/262910fa-1906-4d6c-a25c-5ab0cbfe4267.png",
+  use_avatar_background: true,
   user_id: "demo-user"
 };
 
@@ -343,38 +347,88 @@ const DemoPage = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-12">
-        {/* Profile Header */}
-        <div className="relative mb-16 rounded-2xl border border-border/50 overflow-hidden shadow-card animate-fade-in">
-          <div className="relative px-6 py-10 text-center">
-            <div className="flex justify-center mb-6">
-              <Avatar className="w-32 h-32 border-4 border-background shadow-elegant">
-                <AvatarImage src={demoProfile.avatar_url} alt={demoProfile.display_name} />
-                <AvatarFallback className="text-3xl font-bold bg-gradient-primary text-primary-foreground">
-                  {getInitials(demoProfile.display_name)}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <h1 className="text-5xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
+      {/* Hero Section - Conditional based on use_avatar_background */}
+      {demoProfile.use_avatar_background && demoProfile.avatar_url ? (
+        /* Background Hero Layout */
+        <div className="relative h-[50vh] w-full -mt-16">
+          {/* Background Image with Smooth Fade Overlay */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-fade-in"
+            style={{ backgroundImage: `url(${demoProfile.avatar_url})` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-transparent" />
+            {/* Smooth transition to background */}
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
+          </div>
+          
+          {/* Content positioned at very bottom */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-6">
+            <div className="text-center animate-fade-in max-w-4xl mx-auto">
+              <div className="space-y-2">
+                <h1 
+                  className="text-xl md:text-2xl font-bold drop-shadow-lg text-white"
+                >
                   {demoProfile.display_name}
                 </h1>
-                <p className="text-lg text-muted-foreground font-mono">@{demoProfile.username}</p>
-              </div>
-              
-              <div className="max-w-3xl mx-auto">
-                <h2 className="text-2xl font-semibold mb-3">
+                <p 
+                  className="text-base md:text-lg font-mono drop-shadow-md text-gray-300"
+                >
+                  @{demoProfile.username}
+                </p>
+                <h2 
+                  className="text-lg md:text-xl font-semibold drop-shadow-md text-white"
+                >
                   {demoProfile.page_title}
                 </h2>
-                <p className="text-xl text-muted-foreground leading-relaxed">
+                <p 
+                  className="text-sm md:text-base leading-relaxed drop-shadow-md text-gray-300 max-w-2xl mx-auto"
+                >
                   {demoProfile.page_description}
                 </p>
               </div>
             </div>
           </div>
         </div>
+      ) : (
+        /* Standard Compact Layout */
+        <main className="container mx-auto px-6 py-6">
+          <div className="relative mb-8 rounded-xl border border-border/50 overflow-hidden shadow-card animate-fade-in">
+            <div className="relative px-4 py-6 text-center">
+              <div className="flex justify-center mb-4">
+                <Avatar className="w-16 h-16 border-2 border-background shadow-elegant">
+                  <AvatarImage src={demoProfile.avatar_url} alt={demoProfile.display_name} />
+                  <AvatarFallback className="text-lg font-bold bg-gradient-primary text-primary-foreground">
+                    {getInitials(demoProfile.display_name)}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+              
+              <div className="space-y-2">
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-bold mb-1">
+                    {demoProfile.display_name}
+                  </h1>
+                  <p className="text-sm font-mono text-muted-foreground">
+                    @{demoProfile.username}
+                  </p>
+                </div>
+                
+                <div className="max-w-2xl mx-auto">
+                  <h2 className="text-lg font-semibold mb-2">
+                    {demoProfile.page_title}
+                  </h2>
+                  <p className="text-base leading-relaxed text-muted-foreground">
+                    {demoProfile.page_description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      )}
+      
+      {/* Categories and Content Section */}
+      <main className={`px-6 py-6 ${demoProfile.use_avatar_background && demoProfile.avatar_url ? "container mx-auto" : ""}`}>
 
         {/* Sticky Category Navigation */}
         <nav 
@@ -430,20 +484,24 @@ const DemoPage = () => {
               <section 
                 key={category.id} 
                 ref={el => categoryRefs.current[category.id] = el}
-                className="relative rounded-3xl overflow-hidden shadow-card"
+                className="relative rounded-3xl overflow-hidden shadow-card animate-fade-in scroll-mt-24"
               >
                 <div className={`absolute inset-0 ${gradientClass} opacity-10`}></div>
                 <div className="relative px-6 py-12 space-y-8">
-                  <div className="text-center">
-                    <h2 className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent">
-                      {category.name}
-                    </h2>
-                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                      {category.description}
-                    </p>
+                  <div className="text-center animate-fade-in">
+                    <h2 
+                      className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent preserve-emoji-colors"
+                      dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }}
+                    />
+                    {category.description && (
+                      <p 
+                        className="text-lg text-muted-foreground max-w-2xl mx-auto preserve-emoji-colors"
+                        dangerouslySetInnerHTML={{ __html: sanitizeText(category.description) }}
+                      />
+                    )}
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-in">
                     {visibleCategoryItems.map((item) => (
                       <Card 
                         key={item.id} 
@@ -474,11 +532,11 @@ const DemoPage = () => {
                   
                   {/* Show More Button */}
                   {shouldShowMoreButton(category.id) && (
-                    <div className="text-center pt-6">
+                    <div className="text-center pt-6 animate-fade-in">
                       <Button
                         variant="outline"
                         onClick={() => handleShowMore(category.id)}
-                        className="px-8 py-2"
+                        className="px-8 py-2 hover-scale"
                       >
                         Show More ({categoryItems.length - (visibleItems[category.id] || 12)} more items)
                       </Button>
@@ -491,8 +549,8 @@ const DemoPage = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-16 pt-12 border-t border-border/50">
-          <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 max-w-2xl mx-auto">
+        <div className="text-center mt-16 pt-12 border-t border-border/50 animate-fade-in">
+          <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 max-w-2xl mx-auto animate-fade-in">{" "}
             <h3 className="text-2xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
               Create Your Own Curately Page
             </h3>
