@@ -381,6 +381,17 @@ const DemoPage = () => {
                 >
                   {demoProfile.page_description}
                 </p>
+                
+                {/* Demo-only Social Icons (no links) */}
+                <div className="flex justify-center gap-4 mt-4 text-foreground">
+                  <Youtube size={20} />
+                  <Twitter size={20} />
+                  <Linkedin size={20} />
+                  <Instagram size={20} />
+                  <Camera size={20} />
+                  <ExternalLink size={20} />
+                  <Camera size={20} />
+                </div>
               </div>
             </div>
           </div>
@@ -417,45 +428,17 @@ const DemoPage = () => {
                      {demoProfile.page_description}
                    </p>
                    
-                 {/* Social Media Links */}
-                 <div className="flex justify-center gap-4 mt-4">
-                   {demoProfile.youtube_url && (
-                     <a href={demoProfile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-red-600 transition-colors">
-                       <Youtube size={20} />
-                     </a>
-                   )}
-                   {demoProfile.twitter_url && (
-                     <a href={demoProfile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
-                       <Twitter size={20} />
-                     </a>
-                   )}
-                   {demoProfile.linkedin_url && (
-                     <a href={demoProfile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-600 transition-colors">
-                       <Linkedin size={20} />
-                     </a>
-                   )}
-                   {demoProfile.instagram_url && (
-                     <a href={demoProfile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-pink-600 transition-colors">
-                       <Instagram size={20} />
-                     </a>
-                   )}
-                   {demoProfile.tiktok_url && (
-                     <a href={demoProfile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
-                       <Camera size={20} />
-                     </a>
-                   )}
-                   {demoProfile.threads_url && (
-                     <a href={demoProfile.threads_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
-                       <ExternalLink size={20} />
-                     </a>
-                   )}
-                   {demoProfile.snapchat_url && (
-                     <a href={demoProfile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-yellow-500 transition-colors">
-                       <Camera size={20} />
-                     </a>
-                   )}
-                 </div>
-                 </div>
+                  {/* Demo-only Social Icons (no links) */}
+                  <div className="flex justify-center gap-4 mt-4 text-foreground">
+                    <Youtube size={20} />
+                    <Twitter size={20} />
+                    <Linkedin size={20} />
+                    <Instagram size={20} />
+                    <Camera size={20} />
+                    <ExternalLink size={20} />
+                    <Camera size={20} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
