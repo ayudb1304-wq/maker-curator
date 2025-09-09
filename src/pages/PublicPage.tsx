@@ -282,17 +282,17 @@ const PublicPage = () => {
             <div className="space-y-4">
               <div>
                 <h1 className="text-5xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
-                  {sanitizeText(profile.display_name || profile.username)}
+                  <span dangerouslySetInnerHTML={{ __html: sanitizeText(profile.display_name || profile.username) }} />
                 </h1>
                 <p className="text-lg text-muted-foreground font-mono">@{username}</p>
               </div>
               
               <div className="max-w-3xl mx-auto">
                 <h2 className="text-2xl font-semibold mb-3">
-                  {sanitizeText(profile.page_title)}
+                  <span dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_title) }} />
                 </h2>
                 <p className="text-xl text-muted-foreground leading-relaxed">
-                  {sanitizeText(profile.page_description)}
+                  <span dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_description) }} />
                 </p>
               </div>
             </div>
@@ -317,7 +317,7 @@ const PublicPage = () => {
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   }`}
                 >
-                  {sanitizeText(category.name)}
+                  <span dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }} />
                 </button>
               ))}
               {getItemsByCategory(null).length > 0 && (
@@ -372,13 +372,13 @@ const PublicPage = () => {
                   <div className="relative px-6 py-12 space-y-8">
                     <div className="text-center">
                        <h2 className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent">
-                         {sanitizeText(category.name)}
-                       </h2>
-                       {category.description && (
-                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                           {sanitizeText(category.description)}
-                         </p>
-                       )}
+                          <span dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }} />
+                        </h2>
+                        {category.description && (
+                          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                            <span dangerouslySetInnerHTML={{ __html: sanitizeText(category.description) }} />
+                          </p>
+                        )}
                     </div>
                     
                      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -397,16 +397,16 @@ const PublicPage = () => {
                           </div>
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-2">
-                              <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                                {sanitizeText(item.title)}
-                              </h3>
+                             <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                                <span dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }} />
+                             </h3>
                               <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
                             </div>
-                             {item.description && (
-                               <p className="text-muted-foreground leading-relaxed">
-                                 {sanitizeText(item.description)}
-                               </p>
-                             )}
+                              {item.description && (
+                                <p className="text-muted-foreground leading-relaxed">
+                                  <span dangerouslySetInnerHTML={{ __html: sanitizeText(item.description) }} />
+                                </p>
+                              )}
                           </CardContent>
                         </Card>
                        ))}
@@ -460,15 +460,15 @@ const PublicPage = () => {
                       <CardContent className="p-6">
                         <div className="flex items-start justify-between mb-2">
                            <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                             {sanitizeText(item.title)}
-                           </h3>
+                              <span dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }} />
+                            </h3>
                           <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
                         </div>
-                         {item.description && (
-                           <p className="text-muted-foreground leading-relaxed">
-                             {sanitizeText(item.description)}
-                           </p>
-                         )}
+                          {item.description && (
+                            <p className="text-muted-foreground leading-relaxed">
+                              <span dangerouslySetInnerHTML={{ __html: sanitizeText(item.description) }} />
+                            </p>
+                          )}
                       </CardContent>
                     </Card>
                    ))}

@@ -80,9 +80,15 @@ export function sanitizeText(text: string): string {
     return '';
   }
 
-  return text
+  const sanitized = text
     .replace(/[<>]/g, '') // Remove basic HTML tags
     .trim();
+    
+  // Preserve emoji colors by wrapping them in spans
+  return sanitized.replace(
+    /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji}\uFE0F?(?:\u200D\p{Emoji}\uFE0F?)*)/gu,
+    '<span class="emoji-native">$1</span>'
+  );
 }
 
 /**

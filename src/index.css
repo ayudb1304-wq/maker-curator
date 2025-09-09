@@ -133,6 +133,33 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Force emoji to use system colors and prevent gradient text from affecting them */
+  .preserve-emoji-colors,
+  .preserve-emoji-colors * {
+    font-variant-emoji: normal !important;
+  }
+  
+  /* Override gradient text effects for emoji characters */
+  h1 .emoji, h2 .emoji, h3 .emoji, h4 .emoji, h5 .emoji, h6 .emoji,
+  .bg-gradient-primary.bg-clip-text .emoji,
+  .text-transparent .emoji {
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: unset !important;
+    color: initial !important;
+    display: inline !important;
+  }
+
+  /* Create utility class for emoji preservation */
+  .emoji-native {
+    color: initial !important;
+    -webkit-text-fill-color: initial !important;
+    background: none !important;
+    background-clip: unset !important;
+    -webkit-background-clip: unset !important;
+    text-shadow: none !important;
+  }
 }
 
 .sticky-nav {
