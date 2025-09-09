@@ -78,14 +78,6 @@ const Features = () => {
           ))}
         </div>
 
-        <div className="text-center">
-          <Button variant="hero" size="lg" className="group" asChild>
-            <Link to="/auth">
-              Start Building Your Page
-              <Zap className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            </Link>
-          </Button>
-        </div>
       </div>
     </section>
   );
