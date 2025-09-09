@@ -137,7 +137,7 @@ All colors MUST be HSL.
   /* Force emoji to use system colors and prevent gradient text from affecting them */
   .preserve-emoji-colors,
   .preserve-emoji-colors * {
-    font-variant-emoji: normal !important;
+    font-variant-emoji: emoji !important;
   }
   
   /* Override gradient text effects for emoji characters */
@@ -152,14 +152,15 @@ All colors MUST be HSL.
   }
 
   /* Create utility class for emoji preservation */
-  .emoji-native {
-    color: initial !important;
-    -webkit-text-fill-color: initial !important;
-    background: none !important;
-    background-clip: unset !important;
-    -webkit-background-clip: unset !important;
-    text-shadow: none !important;
-  }
+.emoji-native {
+  color: revert !important;
+  -webkit-text-fill-color: initial !important;
+  background: none !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  text-shadow: none !important;
+  font-variant-emoji: emoji !important;
+}
 }
 
 .sticky-nav {

@@ -83,9 +83,12 @@ export function sanitizeText(text: string): string {
   const sanitized = text
     .replace(/[<>]/g, '') // Remove basic HTML tags
     .trim();
+  
+  // Enforce emoji presentation for ambiguous symbols (e.g., hearts) on iOS Safari
+  const withVs16 = sanitized.replace(/([\u2764\u2665\u2600-\u27BF])(?!\uFE0F)/g, '$1\uFE0F');
     
   // Preserve emoji colors by wrapping them in spans
-  return sanitized.replace(
+  return withVs16.replace(
     /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji}\uFE0F?(?:\u200D\p{Emoji}\uFE0F?)*)/gu,
     '<span class="emoji-native">$1</span>'
   );
