@@ -504,14 +504,13 @@ const PublicPage = () => {
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                           </div>
-                          <CardContent className="p-6">
-                             <div className="flex items-start justify-between mb-2">
-                              <h3 
-                                className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors"
-                                dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }}
-                              />
-                               <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
-                             </div>
+                           <CardContent className="p-6">
+                              <div className="mb-2">
+                               <h3 
+                                 className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors"
+                                 dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }}
+                               />
+                              </div>
                                {item.description && (
                                  <p 
                                    className="text-muted-foreground leading-relaxed preserve-emoji-colors"
@@ -568,14 +567,13 @@ const PublicPage = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
-                      <CardContent className="p-6">
-                         <div className="flex items-start justify-between mb-2">
-                            <h3 
-                              className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors"
-                              dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }}
-                            />
-                           <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
-                         </div>
+                       <CardContent className="p-6">
+                          <div className="mb-2">
+                             <h3 
+                               className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors"
+                               dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }}
+                             />
+                          </div>
                            {item.description && (
                              <p 
                                className="text-muted-foreground leading-relaxed preserve-emoji-colors"

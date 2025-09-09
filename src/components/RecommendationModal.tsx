@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import {
   Drawer,
   DrawerContent,
@@ -95,15 +95,18 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
       </div>
 
       {/* Action Button */}
-      <div className="pt-4">
-        <Button 
+      <div className="pt-4 flex justify-center">
+        <button 
           onClick={handleVisitLink}
-          className="w-full gap-2"
-          size="lg"
+          className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors"
         >
-          <ExternalLink className="w-4 h-4" />
-          Visit Link
-        </Button>
+          <img 
+            src="/lovable-uploads/1edf8796-86e3-4b7a-8081-247f973203a3.png" 
+            alt="Visit" 
+            className="w-5 h-5"
+          />
+          <span className="font-medium">Visit</span>
+        </button>
       </div>
     </>
   );
@@ -112,13 +115,16 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent className="max-h-[90vh]">
-          <DrawerHeader className="text-left">
-            <DrawerClose asChild>
-              <Button variant="ghost" size="sm" className="absolute right-4 top-4 p-2">
-                <X className="h-4 w-4" />
-              </Button>
-            </DrawerClose>
-          </DrawerHeader>
+          <div className="relative">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="absolute right-4 top-4 z-10 p-2"
+              onClick={() => onOpenChange(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
           <div className="px-4 pb-4 overflow-y-auto">
             {content}
           </div>
@@ -130,11 +136,14 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogClose asChild>
-          <Button variant="ghost" size="sm" className="absolute right-4 top-4 p-2">
-            <X className="h-4 w-4" />
-          </Button>
-        </DialogClose>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="absolute right-4 top-4 z-10 p-2"
+          onClick={() => onOpenChange(false)}
+        >
+          <X className="h-4 w-4" />
+        </Button>
         <div className="pt-6">
           {content}
         </div>
