@@ -39,7 +39,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-primary/5">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-primary/5 py-8 lg:py-0">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
       <div className="absolute top-20 left-4 lg:left-10 w-32 h-32 lg:w-72 lg:h-72 bg-primary-glow/20 rounded-full blur-3xl"></div>
@@ -48,7 +48,7 @@ const Hero = () => {
       <div className="container mx-auto px-4 lg:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
-          <div className="space-y-6 lg:space-y-8 text-center lg:text-left">
+          <div className="space-y-6 lg:space-y-8 text-center lg:text-left order-2 lg:order-1">
             <div className="space-y-3 lg:space-y-4">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-medium">
                 <Sparkles className="w-3 h-3 lg:w-4 lg:h-4" />
@@ -131,20 +131,20 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Slideshow */}
-          <div className="relative lg:order-2 hidden lg:block">
+          {/* Right Slideshow - Mobile optimized */}
+          <div className="relative lg:order-2 order-1">
             <div className="relative rounded-2xl overflow-hidden shadow-elegant transform hover:scale-105 transition-transform duration-500">
               <HeroSlideshow />
             </div>
             
-            {/* Floating elements */}
-            <div className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-card">
-              <div className="text-sm font-semibold text-primary">thecurately.com/you</div>
+            {/* Floating elements - Hidden on very small screens */}
+            <div className="absolute -top-3 -right-3 lg:-top-6 lg:-right-6 bg-white/90 backdrop-blur-sm p-2 lg:p-4 rounded-xl shadow-card hidden sm:block">
+              <div className="text-xs lg:text-sm font-semibold text-primary">thecurately.com/you</div>
               <div className="text-xs text-muted-foreground">Your unique URL</div>
             </div>
             
-            <div className="absolute -bottom-6 -left-6 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-card">
-              <div className="text-sm font-semibold text-foreground">Beautiful & Mobile</div>
+            <div className="absolute -bottom-3 -left-3 lg:-bottom-6 lg:-left-6 bg-white/90 backdrop-blur-sm p-2 lg:p-4 rounded-xl shadow-card hidden sm:block">
+              <div className="text-xs lg:text-sm font-semibold text-foreground">Beautiful & Mobile</div>
               <div className="text-xs text-muted-foreground">Optimized for sharing</div>
             </div>
           </div>

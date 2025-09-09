@@ -9,6 +9,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { Heart, BookOpen, Palette, ShoppingBag } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SlideItem {
   id: string;
@@ -141,6 +142,7 @@ const slidesData: Slide[] = [
 const HeroSlideshow = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!api) return;
@@ -152,16 +154,16 @@ const HeroSlideshow = () => {
     api.on("select", onSelect);
     onSelect();
 
-    // Auto-play functionality
+    // Auto-play functionality - slower on mobile
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 4000);
+    }, isMobile ? 5000 : 4000);
 
     return () => {
       clearInterval(interval);
       api.off("select", onSelect);
     };
-  }, [api]);
+  }, [api, isMobile]);
 
   return (
     <div className="relative w-full">
@@ -178,24 +180,24 @@ const HeroSlideshow = () => {
             <CarouselItem key={slide.id} className="pl-0">
               <div className="relative">
                 <Card className={`overflow-hidden border-0 bg-gradient-to-br ${slide.backgroundColor} backdrop-blur-sm shadow-elegant`}>
-                  <CardContent className="p-6 space-y-6">
+                  <CardContent className={`${isMobile ? 'p-4' : 'p-6'} space-y-4 lg:space-y-6`}>
                     {/* Slide Header */}
-                    <div className="text-center space-y-2">
-                      <div className="flex items-center justify-center gap-2 text-primary">
-                        <slide.icon className="w-6 h-6" />
-                        <h3 className="text-xl font-bold">{slide.title}</h3>
+                    <div className="text-center space-y-1 lg:space-y-2">
+                      <div className="flex items-center justify-center gap-1.5 lg:gap-2 text-primary">
+                        <slide.icon className={`${isMobile ? 'w-4 h-4' : 'w-6 h-6'}`} />
+                        <h3 className={`${isMobile ? 'text-base' : 'text-xl'} font-bold`}>{slide.title}</h3>
                       </div>
-                      <p className="text-sm text-muted-foreground">{slide.subtitle}</p>
+                      <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground`}>{slide.subtitle}</p>
                     </div>
 
-                    {/* Items Grid */}
-                    <div className="grid grid-cols-3 gap-4">
-                      {slide.items.map((item) => (
+                    {/* Items Grid - 2 columns on mobile, 3 on desktop */}
+                    <div className={`grid ${isMobile ? 'grid-cols-2 gap-2' : 'grid-cols-3 gap-4'}`}>
+                      {slide.items.slice(0, isMobile ? 4 : 3).map((item) => (
                         <div
                           key={item.id}
                           className="group cursor-pointer"
                         >
-                          <div className="bg-white/80 rounded-lg p-3 space-y-2 hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-sm">
+                          <div className={`bg-white/80 rounded-lg ${isMobile ? 'p-2' : 'p-3'} space-y-1.5 lg:space-y-2 hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-sm`}>
                             <div className="aspect-square overflow-hidden rounded-md">
                               <img
                                 src={item.image}
@@ -203,11 +205,11 @@ const HeroSlideshow = () => {
                                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                               />
                             </div>
-                            <div className="space-y-1">
-                              <h4 className="text-xs font-semibold text-foreground line-clamp-1">
+                            <div className="space-y-0.5 lg:space-y-1">
+                              <h4 className={`${isMobile ? 'text-xs' : 'text-xs'} font-semibold text-foreground line-clamp-1`}>
                                 {item.title}
                               </h4>
-                              <p className="text-xs text-muted-foreground line-clamp-2">
+                              <p className={`${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground line-clamp-2`}>
                                 {item.description}
                               </p>
                             </div>
@@ -221,17 +223,21 @@ const HeroSlideshow = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-2 bg-white/80 hover:bg-white" />
-        <CarouselNext className="right-2 bg-white/80 hover:bg-white" />
+        {!isMobile && (
+          <>
+            <CarouselPrevious className="left-2 bg-white/80 hover:bg-white" />
+            <CarouselNext className="right-2 bg-white/80 hover:bg-white" />
+          </>
+        )}
       </Carousel>
 
       {/* Slide Indicators */}
-      <div className="flex justify-center gap-2 mt-4">
+      <div className={`flex justify-center ${isMobile ? 'gap-1.5 mt-3' : 'gap-2 mt-4'}`}>
         {slidesData.map((_, index) => (
           <button
             key={index}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === current ? "bg-primary w-6" : "bg-primary/30"
+            className={`${isMobile ? 'w-1.5 h-1.5' : 'w-2 h-2'} rounded-full transition-all duration-300 ${
+              index === current ? `bg-primary ${isMobile ? 'w-4' : 'w-6'}` : "bg-primary/30"
             }`}
             onClick={() => api?.scrollTo(index)}
           />
