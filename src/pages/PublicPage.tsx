@@ -287,17 +287,18 @@ const PublicPage = () => {
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60" />
           </div>
           
-          {/* Content */}
-          <div className="relative z-10 flex items-center justify-center min-h-screen px-6">
-            <div className="text-center text-white animate-fade-in">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg preserve-emoji-colors">
-                @{username}
-              </h1>
-              <div className="max-w-2xl mx-auto space-y-4">
+          {/* Content positioned at bottom */}
+          <div className="relative z-10 flex items-end justify-center min-h-screen px-6 pb-16">
+            <div className="text-center text-white animate-fade-in max-w-4xl">
+              <div className="space-y-3">
+                <h1 className="text-3xl md:text-5xl font-bold drop-shadow-lg preserve-emoji-colors">
+                  <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.display_name || profile.username)) }} />
+                </h1>
+                <p className="text-lg md:text-xl text-white/90 font-mono drop-shadow-md">@{username}</p>
                 <h2 className="text-xl md:text-2xl font-semibold drop-shadow-md preserve-emoji-colors">
                   <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_title)) }} />
                 </h2>
-                <p className="text-lg md:text-xl text-white/90 leading-relaxed drop-shadow-md preserve-emoji-colors">
+                <p className="text-base md:text-lg text-white/90 leading-relaxed drop-shadow-md preserve-emoji-colors max-w-2xl mx-auto">
                   <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_description)) }} />
                 </p>
               </div>
