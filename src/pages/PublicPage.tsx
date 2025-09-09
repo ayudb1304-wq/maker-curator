@@ -363,37 +363,37 @@ const PublicPage = () => {
                  {/* Social Media Links */}
                  <div className="flex justify-center gap-4 mt-4">
                    {profile.youtube_url && (
-                     <a href={profile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                     <a href={profile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-red-600 transition-colors">
                        <Youtube size={20} />
                      </a>
                    )}
                    {profile.twitter_url && (
-                     <a href={profile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                     <a href={profile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
                        <Twitter size={20} />
                      </a>
                    )}
                    {profile.linkedin_url && (
-                     <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                     <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-600 transition-colors">
                        <Linkedin size={20} />
                      </a>
                    )}
                    {profile.instagram_url && (
-                     <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                     <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-pink-600 transition-colors">
                        <Instagram size={20} />
                      </a>
                    )}
                    {profile.tiktok_url && (
-                     <a href={profile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                     <a href={profile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
                        <Camera size={20} />
                      </a>
                    )}
                    {profile.threads_url && (
-                     <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                     <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
                        <ExternalLink size={20} />
                      </a>
                    )}
                    {profile.snapchat_url && (
-                     <a href={profile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                     <a href={profile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-yellow-500 transition-colors">
                        <Camera size={20} />
                      </a>
                    )}
@@ -446,37 +446,37 @@ const PublicPage = () => {
                    {/* Social Media Links */}
                    <div className="flex justify-center gap-4 mt-4">
                      {profile.youtube_url && (
-                       <a href={profile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-red-600 transition-colors">
+                       <a href={profile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-red-600 transition-colors">
                          <Youtube size={20} />
                        </a>
                      )}
                      {profile.twitter_url && (
-                       <a href={profile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition-colors">
+                       <a href={profile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
                          <Twitter size={20} />
                        </a>
                      )}
                      {profile.linkedin_url && (
-                       <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors">
+                       <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-600 transition-colors">
                          <Linkedin size={20} />
                        </a>
                      )}
                      {profile.instagram_url && (
-                       <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-pink-600 transition-colors">
+                       <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-pink-600 transition-colors">
                          <Instagram size={20} />
                        </a>
                      )}
                      {profile.tiktok_url && (
-                       <a href={profile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition-colors">
+                       <a href={profile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
                          <Camera size={20} />
                        </a>
                      )}
                      {profile.threads_url && (
-                       <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800 transition-colors">
+                       <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
                          <ExternalLink size={20} />
                        </a>
                      )}
                      {profile.snapchat_url && (
-                       <a href={profile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-yellow-500 transition-colors">
+                       <a href={profile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-yellow-500 transition-colors">
                          <Camera size={20} />
                        </a>
                      )}
