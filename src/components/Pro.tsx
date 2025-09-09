@@ -72,14 +72,6 @@ const Pro = () => {
           </Card>
         </div>
 
-        <div className="text-center mt-12">
-          <p className="text-muted-foreground">
-            Want to be notified when Pro launches?{" "}
-            <a href="#" className="text-accent hover:underline">
-              Join our waitlist
-            </a>
-          </p>
-        </div>
       </div>
     </section>
   );

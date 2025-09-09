@@ -31,10 +31,15 @@ const Login = () => {
   
   const usernameCheck = useUsernameCheck(username);
 
-  // Handle email verification callback
+  // Handle URL parameters
   useEffect(() => {
     const verified = searchParams.get('verified');
     const reset = searchParams.get('reset');
+    const usernameParam = searchParams.get('username');
+    
+    if (usernameParam) {
+      setUsername(usernameParam);
+    }
     
     if (verified === 'true') {
       toast({

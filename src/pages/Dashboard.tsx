@@ -649,7 +649,7 @@ const Dashboard = () => {
               {/* Avatar Section */}
               <div className="flex-shrink-0">
                 <div className="relative group">
-                  <Avatar className="w-20 h-20 sm:w-24 sm:h-24 border-2 border-border shadow-elegant hover-scale">
+                  <Avatar className="w-16 h-16 sm:w-20 sm:h-20 border-2 border-border shadow-elegant hover-scale">
                     <AvatarImage src={profile.avatar_url} alt={displayName} />
                     <AvatarFallback className="text-lg sm:text-xl font-semibold bg-gradient-primary text-primary-foreground">
                       {getInitials(displayName)}
@@ -668,14 +668,14 @@ const Dashboard = () => {
 
               {/* Profile Info & Actions */}
               <div className="flex-1 text-center sm:text-left space-y-4 min-w-0">
-                <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold mb-1">{displayName}</h1>
-                  <p className="text-muted-foreground font-mono text-sm">@{username}</p>
-                  <h2 className="text-lg sm:text-xl font-semibold mt-2 mb-1">{profile.page_title || 'My Recommendations'}</h2>
-                  <p className="text-muted-foreground text-sm">
-                    {profile.page_description || 'A curated list of my favorite products and tools.'}
-                  </p>
-                </div>
+                 <div>
+                   <h1 className="text-xl sm:text-2xl font-bold mb-1">{displayName}</h1>
+                   <p className="text-muted-foreground font-mono text-xs">@{username}</p>
+                   <h2 className="text-base sm:text-lg font-semibold mt-2 mb-1">{profile.page_title || 'My Recommendations'}</h2>
+                   <p className="text-muted-foreground text-xs">
+                     {profile.page_description || 'A curated list of my favorite products and tools.'}
+                   </p>
+                 </div>
 
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3">
