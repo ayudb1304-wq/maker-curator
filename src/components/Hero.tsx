@@ -94,7 +94,7 @@ const Hero = () => {
                   type="submit" 
                   size="lg" 
                   variant="default"
-                  className="h-12 px-6 group"
+                  className="h-12 px-6 group bg-primary text-primary-foreground hover:bg-primary/90"
                   disabled={!usernameCheck.available || username.length < 3 || usernameCheck.isChecking}
                 >
                   Claim It
@@ -111,7 +111,7 @@ const Hero = () => {
                 </p>
               )}
               
-              <Button variant="outline" size="lg" className="border-white/20 hover:border-white/40 text-white hover:bg-white/10 mx-auto lg:mx-0" asChild>
+              <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 hover:border-white/40 bg-transparent mx-auto lg:mx-0" asChild>
                 <Link to="/demo">
                   View Example
                 </Link>
