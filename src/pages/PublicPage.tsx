@@ -289,18 +289,20 @@ const PublicPage = () => {
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
           </div>
           
-          {/* Content positioned at bottom */}
-          <div className="relative z-10 flex items-end justify-center h-[50vh] px-6 pb-12">
-            <div className="text-center animate-fade-in max-w-4xl">
-              <div className="space-y-3">
-                <h1 className="text-3xl md:text-5xl font-bold drop-shadow-lg preserve-emoji-colors text-foreground">
-                  <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.display_name || profile.username)) }} />
-                </h1>
-                <p className="text-lg md:text-xl font-mono drop-shadow-md text-muted-foreground">@{username}</p>
-                <h2 className="text-xl md:text-2xl font-semibold drop-shadow-md preserve-emoji-colors text-foreground">
+          {/* Content positioned at very bottom */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-6">
+            <div className="text-center animate-fade-in max-w-4xl mx-auto">
+              <div className="space-y-2">
+                {profile.display_name && profile.display_name !== profile.username && (
+                  <h1 className="text-xl md:text-2xl font-bold drop-shadow-lg preserve-emoji-colors text-foreground">
+                    <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.display_name)) }} />
+                  </h1>
+                )}
+                <p className="text-base md:text-lg font-mono drop-shadow-md text-muted-foreground">@{username}</p>
+                <h2 className="text-lg md:text-xl font-semibold drop-shadow-md preserve-emoji-colors text-foreground">
                   <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_title)) }} />
                 </h2>
-                <p className="text-base md:text-lg leading-relaxed drop-shadow-md preserve-emoji-colors max-w-2xl mx-auto text-muted-foreground">
+                <p className="text-sm md:text-base leading-relaxed drop-shadow-md preserve-emoji-colors max-w-2xl mx-auto text-muted-foreground">
                   <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_description)) }} />
                 </p>
               </div>
