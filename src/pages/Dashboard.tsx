@@ -643,13 +643,13 @@ const Dashboard = () => {
         )}
         {/* Profile Header Section */}
         <Card className="mb-8 relative overflow-hidden border-border/50 shadow-elegant backdrop-blur-sm animate-fade-in">
-          <div className="absolute inset-0 bg-gradient-hero opacity-15"></div>
+          <div className="hidden" />
           <CardContent className="relative pt-6">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               {/* Avatar Section */}
               <div className="flex-shrink-0">
                 <div className="relative group">
-                  <Avatar className="w-16 h-16 sm:w-20 sm:h-20 border-2 border-border shadow-elegant hover-scale">
+                  <Avatar className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-border shadow-elegant hover-scale">
                     <AvatarImage src={profile.avatar_url} alt={displayName} />
                     <AvatarFallback className="text-lg sm:text-xl font-semibold bg-gradient-primary text-primary-foreground">
                       {getInitials(displayName)}
@@ -669,10 +669,10 @@ const Dashboard = () => {
               {/* Profile Info & Actions */}
               <div className="flex-1 text-center sm:text-left space-y-4 min-w-0">
                  <div>
-                   <h1 className="text-xl sm:text-2xl font-bold mb-1">{displayName}</h1>
+                   <h1 className="text-lg sm:text-2xl font-bold mb-1">{displayName}</h1>
                    <p className="text-muted-foreground font-mono text-xs">@{username}</p>
-                   <h2 className="text-base sm:text-lg font-semibold mt-2 mb-1">{profile.page_title || 'My Recommendations'}</h2>
-                   <p className="text-muted-foreground text-xs">
+                   <h2 className="hidden sm:block text-lg font-semibold mt-2 mb-1">{profile.page_title || 'My Recommendations'}</h2>
+                   <p className="hidden sm:block text-muted-foreground text-sm">
                      {profile.page_description || 'A curated list of my favorite products and tools.'}
                    </p>
                  </div>
@@ -693,7 +693,7 @@ const Dashboard = () => {
                       </a>
                     </Button>
                   </div>
-                  <Button onClick={() => setIsEditingProfile(true)} className="bg-gradient-primary hover:opacity-90 hover-scale transition-all duration-300 w-full sm:w-auto">
+                  <Button onClick={() => setIsEditingProfile(true)} size="sm" variant="outline" className="w-full sm:w-auto">
                     <Edit className="w-4 h-4 sm:mr-2" />
                     <span className="hidden sm:inline">Edit Profile</span>
                     <span className="sm:hidden">Edit</span>
@@ -701,14 +701,12 @@ const Dashboard = () => {
                 </div>
 
                 {/* Public URL Display */}
-                <div className="pt-2 border-t border-border/50">
-                  <p className="text-xs text-muted-foreground mb-2">Your public page:</p>
-                  <Input 
-                    value={publicUrl} 
-                    readOnly 
-                    className="font-mono text-xs bg-muted/50 border-border/50"
-                  />
-                </div>
+                 <div className="pt-2 border-t border-border/50">
+                   <p className="text-xs text-muted-foreground mb-2">Your public page:</p>
+                   <div className="font-mono text-xs bg-muted/50 border border-border/50 rounded-md p-2 break-all select-text">
+                     {publicUrl}
+                   </div>
+                 </div>
               </div>
             </div>
           </CardContent>
