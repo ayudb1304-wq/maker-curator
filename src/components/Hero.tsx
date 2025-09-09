@@ -81,7 +81,7 @@ const Hero = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
                     className={cn(
-                      "pl-[120px] pr-10 h-12 bg-white border-input text-foreground placeholder:text-muted-foreground",
+                      "pl-[120px] pr-10 h-12 bg-white border-2 border-primary text-foreground placeholder:text-muted-foreground focus:border-primary ring-2 ring-primary/20",
                       getInputStatus()
                     )}
                     maxLength={20}
@@ -111,7 +111,7 @@ const Hero = () => {
                 </p>
               )}
               
-              <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 hover:border-white/40 bg-transparent mx-auto lg:mx-0" asChild>
+              <Button variant="secondary" size="lg" className="bg-white/90 text-foreground hover:bg-white border-0 mx-auto lg:mx-0" asChild>
                 <Link to="/demo">
                   View Example
                 </Link>
