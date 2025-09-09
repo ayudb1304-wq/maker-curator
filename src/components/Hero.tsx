@@ -21,21 +21,21 @@ const Hero = () => {
 
   const getInputIcon = () => {
     if (usernameCheck.isChecking) {
-      return <Loader2 className="w-4 h-4 animate-spin text-white/60" />;
+      return <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />;
     }
     if (username.length >= 3) {
       return usernameCheck.available ? 
-        <Check className="w-4 h-4 text-green-400" /> : 
-        <X className="w-4 h-4 text-red-400" />;
+        <Check className="w-4 h-4 text-green-600" /> : 
+        <X className="w-4 h-4 text-destructive" />;
     }
     return null;
   };
 
   const getInputStatus = () => {
     if (!username.trim()) return "";
-    if (username.length < 3) return "border-white/20";
-    if (usernameCheck.isChecking) return "border-white/20";
-    return usernameCheck.available ? "border-green-400/50" : "border-red-400/50";
+    if (username.length < 3) return "border-border";
+    if (usernameCheck.isChecking) return "border-border";
+    return usernameCheck.available ? "border-green-600" : "border-destructive";
   };
 
   return (
@@ -72,7 +72,7 @@ const Hero = () => {
             <div className="space-y-4">
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto lg:mx-0">
                 <div className="relative flex-1">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-sm">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
                     thecurately.com/
                   </div>
                   <Input
@@ -81,7 +81,7 @@ const Hero = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
                     className={cn(
-                      "pl-[120px] pr-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/60",
+                      "pl-[120px] pr-10 h-12 bg-white border-input text-foreground placeholder:text-muted-foreground",
                       getInputStatus()
                     )}
                     maxLength={20}
@@ -93,7 +93,7 @@ const Hero = () => {
                 <Button 
                   type="submit" 
                   size="lg" 
-                  variant="hero"
+                  variant="default"
                   className="h-12 px-6 group"
                   disabled={!usernameCheck.available || username.length < 3 || usernameCheck.isChecking}
                 >
@@ -105,7 +105,7 @@ const Hero = () => {
               {usernameCheck.message && (
                 <p className={cn(
                   "text-sm text-center lg:text-left",
-                  usernameCheck.available ? "text-green-400" : "text-red-400"
+                  usernameCheck.available ? "text-green-600" : "text-destructive"
                 )}>
                   {usernameCheck.message}
                 </p>
