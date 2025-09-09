@@ -55,17 +55,24 @@ export type Database = {
           display_name: string | null
           display_name_color: string | null
           id: string
+          instagram_url: string | null
+          linkedin_url: string | null
           page_description: string | null
           page_description_color: string | null
           page_title: string | null
           page_title_color: string | null
           public_profile: boolean
+          snapchat_url: string | null
+          threads_url: string | null
+          tiktok_url: string | null
+          twitter_url: string | null
           updated_at: string
           use_avatar_background: boolean
           user_id: string
           username: string | null
           username_changed_at: string | null
           username_color: string | null
+          youtube_url: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -74,17 +81,24 @@ export type Database = {
           display_name?: string | null
           display_name_color?: string | null
           id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
           page_description?: string | null
           page_description_color?: string | null
           page_title?: string | null
           page_title_color?: string | null
           public_profile?: boolean
+          snapchat_url?: string | null
+          threads_url?: string | null
+          tiktok_url?: string | null
+          twitter_url?: string | null
           updated_at?: string
           use_avatar_background?: boolean
           user_id: string
           username?: string | null
           username_changed_at?: string | null
           username_color?: string | null
+          youtube_url?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -93,17 +107,24 @@ export type Database = {
           display_name?: string | null
           display_name_color?: string | null
           id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
           page_description?: string | null
           page_description_color?: string | null
           page_title?: string | null
           page_title_color?: string | null
           public_profile?: boolean
+          snapchat_url?: string | null
+          threads_url?: string | null
+          tiktok_url?: string | null
+          twitter_url?: string | null
           updated_at?: string
           use_avatar_background?: boolean
           user_id?: string
           username?: string | null
           username_changed_at?: string | null
           username_color?: string | null
+          youtube_url?: string | null
         }
         Relationships: []
       }

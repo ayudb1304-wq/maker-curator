@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Palette } from 'lucide-react';
+import { ExternalLink, Palette, Youtube, Twitter, Linkedin, Instagram, Camera } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { safeOpenUrl, sanitizeText } from '@/lib/security';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -39,6 +39,13 @@ interface Profile {
   username_color?: string;
   page_title_color?: string;
   page_description_color?: string;
+  youtube_url?: string;
+  twitter_url?: string;
+  linkedin_url?: string;
+  tiktok_url?: string;
+  instagram_url?: string;
+  threads_url?: string;
+  snapchat_url?: string;
 }
 
 const PublicPage = () => {
@@ -351,8 +358,47 @@ const PublicPage = () => {
                   className="text-sm md:text-base leading-relaxed drop-shadow-md preserve-emoji-colors max-w-2xl mx-auto"
                   style={{ color: profile.page_description_color || '#a1a1aa' }}
                   dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_description) }}
-                />
-              </div>
+                 />
+                 
+                 {/* Social Media Links */}
+                 <div className="flex justify-center gap-4 mt-4">
+                   {profile.youtube_url && (
+                     <a href={profile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                       <Youtube size={20} />
+                     </a>
+                   )}
+                   {profile.twitter_url && (
+                     <a href={profile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                       <Twitter size={20} />
+                     </a>
+                   )}
+                   {profile.linkedin_url && (
+                     <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                       <Linkedin size={20} />
+                     </a>
+                   )}
+                   {profile.instagram_url && (
+                     <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                       <Instagram size={20} />
+                     </a>
+                   )}
+                   {profile.tiktok_url && (
+                     <a href={profile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                       <Camera size={20} />
+                     </a>
+                   )}
+                   {profile.threads_url && (
+                     <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                       <ExternalLink size={20} />
+                     </a>
+                   )}
+                   {profile.snapchat_url && (
+                     <a href={profile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                       <Camera size={20} />
+                     </a>
+                   )}
+                 </div>
+               </div>
             </div>
           </div>
         </div>
@@ -395,8 +441,47 @@ const PublicPage = () => {
                     className="text-base leading-relaxed preserve-emoji-colors"
                     style={{ color: profile.page_description_color || '#a1a1aa' }}
                     dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_description) }}
-                  />
-                </div>
+                   />
+                   
+                   {/* Social Media Links */}
+                   <div className="flex justify-center gap-4 mt-4">
+                     {profile.youtube_url && (
+                       <a href={profile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                         <Youtube size={20} />
+                       </a>
+                     )}
+                     {profile.twitter_url && (
+                       <a href={profile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                         <Twitter size={20} />
+                       </a>
+                     )}
+                     {profile.linkedin_url && (
+                       <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                         <Linkedin size={20} />
+                       </a>
+                     )}
+                     {profile.instagram_url && (
+                       <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                         <Instagram size={20} />
+                       </a>
+                     )}
+                     {profile.tiktok_url && (
+                       <a href={profile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                         <Camera size={20} />
+                       </a>
+                     )}
+                     {profile.threads_url && (
+                       <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                         <ExternalLink size={20} />
+                       </a>
+                     )}
+                     {profile.snapchat_url && (
+                       <a href={profile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                         <Camera size={20} />
+                       </a>
+                     )}
+                   </div>
+                 </div>
               </div>
             </div>
           </div>
