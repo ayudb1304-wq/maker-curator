@@ -7,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { safeOpenUrl, sanitizeText } from '@/lib/security';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { wrapEmojisForPreservation } from '@/lib/emoji';
+import { cn } from '@/lib/utils';
 import PublicFloatingCTA from '@/components/PublicFloatingCTA';
 
 interface Item {
@@ -31,6 +32,7 @@ interface Profile {
   page_title: string;
   page_description: string;
   avatar_url: string;
+  use_avatar_background: boolean;
   user_id: string;
 }
 
@@ -123,7 +125,7 @@ const PublicPage = () => {
       // First get the profile - only public profiles are accessible
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, user_id')
+        .select('username, display_name, page_title, page_description, avatar_url, use_avatar_background, user_id')
         .eq('username', username)
         .eq('public_profile', true)
         .maybeSingle();
@@ -273,38 +275,76 @@ const PublicPage = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-6">
-        {/* Compact Profile Header */}
-        <div className="relative mb-8 rounded-xl border border-border/50 overflow-hidden shadow-card animate-fade-in">
-          <div className="relative px-4 py-6 text-center">
-            <div className="flex justify-center mb-4">
-              <Avatar className="w-16 h-16 border-2 border-background shadow-elegant">
-                <AvatarImage src={profile.avatar_url} alt={profile.display_name || profile.username} />
-                <AvatarFallback className="text-lg font-bold bg-gradient-primary text-primary-foreground">
-                  {getInitials(profile.display_name || profile.username)}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-            
-            <div className="space-y-2">
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold mb-1 preserve-emoji-colors">
-                  <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.display_name || profile.username)) }} />
-                </h1>
-                <p className="text-sm text-muted-foreground font-mono">@{username}</p>
-              </div>
-              
-              <div className="max-w-2xl mx-auto">
-                <h2 className="text-lg font-semibold mb-2 preserve-emoji-colors">
+      {/* Hero Section - Conditional based on use_avatar_background */}
+      {profile.use_avatar_background && profile.avatar_url ? (
+        /* Background Hero Layout */
+        <div className="relative min-h-screen w-full -mt-16 mb-8">
+          {/* Background Image with Overlay */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${profile.avatar_url})` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60" />
+          </div>
+          
+          {/* Content */}
+          <div className="relative z-10 flex items-center justify-center min-h-screen px-6">
+            <div className="text-center text-white animate-fade-in">
+              <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg preserve-emoji-colors">
+                @{username}
+              </h1>
+              <div className="max-w-2xl mx-auto space-y-4">
+                <h2 className="text-xl md:text-2xl font-semibold drop-shadow-md preserve-emoji-colors">
                   <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_title)) }} />
                 </h2>
-                <p className="text-base text-muted-foreground leading-relaxed preserve-emoji-colors">
+                <p className="text-lg md:text-xl text-white/90 leading-relaxed drop-shadow-md preserve-emoji-colors">
                   <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_description)) }} />
                 </p>
               </div>
             </div>
           </div>
         </div>
+      ) : (
+        /* Standard Compact Layout */
+        <main className="container mx-auto px-6 py-6">
+          <div className="relative mb-8 rounded-xl border border-border/50 overflow-hidden shadow-card animate-fade-in">
+            <div className="relative px-4 py-6 text-center">
+              <div className="flex justify-center mb-4">
+                <Avatar className="w-16 h-16 border-2 border-background shadow-elegant">
+                  <AvatarImage src={profile.avatar_url} alt={profile.display_name || profile.username} />
+                  <AvatarFallback className="text-lg font-bold bg-gradient-primary text-primary-foreground">
+                    {getInitials(profile.display_name || profile.username)}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+              
+              <div className="space-y-2">
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-bold mb-1 preserve-emoji-colors">
+                    <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.display_name || profile.username)) }} />
+                  </h1>
+                  <p className="text-sm text-muted-foreground font-mono">@{username}</p>
+                </div>
+                
+                <div className="max-w-2xl mx-auto">
+                  <h2 className="text-lg font-semibold mb-2 preserve-emoji-colors">
+                    <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_title)) }} />
+                  </h2>
+                  <p className="text-base text-muted-foreground leading-relaxed preserve-emoji-colors">
+                    <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_description)) }} />
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      )}
+      
+      {/* Categories and Content Section */}
+      <main className={cn(
+        "px-6 py-6",
+        profile.use_avatar_background && profile.avatar_url ? "container mx-auto" : ""
+      )}>
 
         {/* Sticky Category Navigation */}
         {categories.length > 0 && (
@@ -507,8 +547,7 @@ const PublicPage = () => {
                </section>
              )}
           </div>
-        )}
-
+         )}
 
         {/* Footer */}
         <footer id="page-footer" className="text-center pt-8 pb-20 border-t border-border/50">

@@ -58,6 +58,7 @@ export type Database = {
           page_title: string | null
           public_profile: boolean
           updated_at: string
+          use_avatar_background: boolean
           user_id: string
           username: string | null
           username_changed_at: string | null
@@ -72,6 +73,7 @@ export type Database = {
           page_title?: string | null
           public_profile?: boolean
           updated_at?: string
+          use_avatar_background?: boolean
           user_id: string
           username?: string | null
           username_changed_at?: string | null
@@ -86,6 +88,7 @@ export type Database = {
           page_title?: string | null
           public_profile?: boolean
           updated_at?: string
+          use_avatar_background?: boolean
           user_id?: string
           username?: string | null
           username_changed_at?: string | null

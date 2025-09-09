@@ -44,6 +44,7 @@ interface Profile {
   page_description: string;
   avatar_url: string;
   public_profile: boolean;
+  use_avatar_background: boolean;
   username_changed_at?: string;
 }
 
@@ -59,6 +60,7 @@ const Dashboard = () => {
     page_description: '',
     avatar_url: '',
     public_profile: false,
+    use_avatar_background: false,
     username_changed_at: undefined
   });
   const [isAddingItem, setIsAddingItem] = useState(false);
@@ -94,6 +96,7 @@ const Dashboard = () => {
     page_description: '',
     avatar_url: '',
     public_profile: false,
+    use_avatar_background: false,
     username_changed_at: undefined
   });
   
@@ -191,7 +194,7 @@ const Dashboard = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, public_profile, username_changed_at')
+        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at')
         .eq('user_id', user.id)
         .single();
 
@@ -204,6 +207,7 @@ const Dashboard = () => {
           page_description: data.page_description || '',
           avatar_url: data.avatar_url || '',
           public_profile: data.public_profile || false,
+          use_avatar_background: data.use_avatar_background || false,
           username_changed_at: data.username_changed_at
         };
         setProfile(profileData);
@@ -479,7 +483,8 @@ const Dashboard = () => {
         page_title: sanitizeText(profileData.page_title),
         page_description: sanitizeText(profileData.page_description),
         avatar_url: profileData.avatar_url,
-        public_profile: profileData.public_profile
+        public_profile: profileData.public_profile,
+        use_avatar_background: profileData.use_avatar_background
       };
 
       const { error: updateError } = await supabase
@@ -1421,6 +1426,26 @@ const Dashboard = () => {
                     </p>
                   </div>
                 </div>
+                
+                {profileData.avatar_url && (
+                  <div className="flex items-start space-x-2 sm:space-x-3 p-2 sm:p-3 border border-border rounded-lg">
+                    <input
+                      type="checkbox"
+                      id="use_avatar_background"
+                      checked={profileData.use_avatar_background}
+                      onChange={(e) => setProfileData({ ...profileData, use_avatar_background: e.target.checked })}
+                      className="mt-0.5 sm:mt-1 w-4 h-4 rounded border border-input"
+                    />
+                    <div className="flex-1">
+                      <Label htmlFor="use_avatar_background" className="text-xs sm:text-sm font-medium cursor-pointer">
+                        Use Profile Picture as Background?
+                      </Label>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        When enabled, your profile picture will be displayed as a beautiful background hero section on your public page.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
               <Button 
                 onClick={handleUpdateProfile} 
