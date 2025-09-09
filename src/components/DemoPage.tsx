@@ -204,6 +204,7 @@ const DemoPage = () => {
   
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const navRef = useRef<HTMLElement | null>(null);
+  const navScrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // Initialize visible items count for each category
@@ -257,6 +258,20 @@ const DemoPage = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Auto-scroll navigation to active category
+  useEffect(() => {
+    if (activeCategory && navScrollRef.current) {
+      const activeButton = navScrollRef.current.querySelector(`[data-category="${activeCategory}"]`) as HTMLElement;
+      if (activeButton) {
+        activeButton.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+    }
+  }, [activeCategory]);
 
   const getItemsByCategory = (categoryId: string | null) => {
     return demoItems.filter(item => item.category_id === categoryId);
@@ -367,20 +382,30 @@ const DemoPage = () => {
           className="bg-background/80 backdrop-blur-md border border-border/50 rounded-xl p-4 mb-8 transition-all duration-300 z-50"
           style={{ position: 'sticky', top: '1rem' }}
         >
-          <div className="flex md:flex-wrap md:justify-center gap-4 overflow-x-auto md:overflow-x-visible scroll-smooth snap-x snap-mandatory scrollbar-hide">
-            {demoCategories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => scrollToCategory(category.id)}
-                className={`flex-shrink-0 px-4 py-2 rounded-lg font-medium transition-all duration-200 snap-start ${
-                  activeCategory === category.id
-                    ? 'bg-primary text-primary-foreground shadow-md'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
-              >
-                {category.name}
-              </button>
-            ))}
+          <div className="relative">
+            {/* Scroll indicators for mobile */}
+            <div className="md:hidden absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-background/80 to-transparent pointer-events-none z-10 rounded-l-lg"></div>
+            <div className="md:hidden absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background/80 to-transparent pointer-events-none z-10 rounded-r-lg"></div>
+            
+            <div 
+              ref={navScrollRef}
+              className="flex md:flex-wrap md:justify-center gap-4 overflow-x-auto md:overflow-x-visible scroll-smooth snap-x snap-mandatory scrollbar-hide px-2 md:px-0"
+            >
+              {demoCategories.map((category) => (
+                <button
+                  key={category.id}
+                  data-category={category.id}
+                  onClick={() => scrollToCategory(category.id)}
+                  className={`flex-shrink-0 px-6 py-3 rounded-lg font-medium transition-all duration-200 snap-center whitespace-nowrap ${
+                    activeCategory === category.id
+                      ? 'bg-primary text-primary-foreground shadow-md scale-105'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  }`}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
           </div>
         </nav>
 
