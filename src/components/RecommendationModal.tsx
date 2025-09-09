@@ -112,15 +112,7 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent className="max-h-[90vh]">
-          <DrawerHeader className="text-left relative">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="absolute right-0 top-0 p-2"
-              onClick={() => onOpenChange(false)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
+          <DrawerHeader className="text-left">
           </DrawerHeader>
           <div className="px-4 pb-4 overflow-y-auto">
             {content}
@@ -133,15 +125,7 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader className="relative">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="absolute right-0 top-0 p-2"
-            onClick={() => onOpenChange(false)}
-          >
-            <X className="h-4 w-4" />
-          </Button>
+        <DialogHeader>
         </DialogHeader>
         <div className="pt-6">
           {content}
