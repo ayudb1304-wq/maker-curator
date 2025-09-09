@@ -52,7 +52,10 @@ const demoProfile: DemoProfile = {
   youtube_url: "https://youtube.com/@sushmitha",
   twitter_url: "https://twitter.com/sushmitha",
   linkedin_url: "https://linkedin.com/in/sushmitha",
-  instagram_url: "https://instagram.com/sushmitha"
+  instagram_url: "https://instagram.com/sushmitha",
+  tiktok_url: "https://tiktok.com/@sushmitha",
+  threads_url: "https://www.threads.net/@sushmitha",
+  snapchat_url: "https://snapchat.com/add/sushmitha"
 };
 
 const demoCategories: DemoCategory[] = [
@@ -417,37 +420,37 @@ const DemoPage = () => {
                    {/* Social Media Links */}
                    <div className="flex justify-center gap-4 mt-4">
                      {demoProfile.youtube_url && (
-                       <a href={demoProfile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                       <a href={demoProfile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-red-600 transition-colors">
                          <Youtube size={20} />
                        </a>
                      )}
                      {demoProfile.twitter_url && (
-                       <a href={demoProfile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                       <a href={demoProfile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition-colors">
                          <Twitter size={20} />
                        </a>
                      )}
                      {demoProfile.linkedin_url && (
-                       <a href={demoProfile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                       <a href={demoProfile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors">
                          <Linkedin size={20} />
                        </a>
                      )}
                      {demoProfile.instagram_url && (
-                       <a href={demoProfile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                       <a href={demoProfile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-pink-600 transition-colors">
                          <Instagram size={20} />
                        </a>
                      )}
                      {demoProfile.tiktok_url && (
-                       <a href={demoProfile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                       <a href={demoProfile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition-colors">
                          <Camera size={20} />
                        </a>
                      )}
                      {demoProfile.threads_url && (
-                       <a href={demoProfile.threads_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                       <a href={demoProfile.threads_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800 transition-colors">
                          <ExternalLink size={20} />
                        </a>
                      )}
                      {demoProfile.snapchat_url && (
-                       <a href={demoProfile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                       <a href={demoProfile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-yellow-500 transition-colors">
                          <Camera size={20} />
                        </a>
                      )}
@@ -550,37 +553,37 @@ const DemoPage = () => {
                  {/* Social Media Links */}
                  <div className="flex justify-center gap-4 mt-4">
                    {demoProfile.youtube_url && (
-                     <a href={demoProfile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                     <a href={demoProfile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-red-600 transition-colors">
                        <Youtube size={20} />
                      </a>
                    )}
                    {demoProfile.twitter_url && (
-                     <a href={demoProfile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                     <a href={demoProfile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition-colors">
                        <Twitter size={20} />
                      </a>
                    )}
                    {demoProfile.linkedin_url && (
-                     <a href={demoProfile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                     <a href={demoProfile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-600 transition-colors">
                        <Linkedin size={20} />
                      </a>
                    )}
                    {demoProfile.instagram_url && (
-                     <a href={demoProfile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                     <a href={demoProfile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-pink-600 transition-colors">
                        <Instagram size={20} />
                      </a>
                    )}
                    {demoProfile.tiktok_url && (
-                     <a href={demoProfile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                     <a href={demoProfile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition-colors">
                        <Camera size={20} />
                      </a>
                    )}
                    {demoProfile.threads_url && (
-                     <a href={demoProfile.threads_url} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                     <a href={demoProfile.threads_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800 transition-colors">
                        <ExternalLink size={20} />
                      </a>
                    )}
                    {demoProfile.snapchat_url && (
-                     <a href={demoProfile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                     <a href={demoProfile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-yellow-500 transition-colors">
                        <Camera size={20} />
                      </a>
                    )}
