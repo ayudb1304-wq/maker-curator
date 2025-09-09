@@ -388,9 +388,6 @@ const DemoPage = () => {
                   <Twitter size={20} />
                   <Linkedin size={20} />
                   <Instagram size={20} />
-                  <Camera size={20} />
-                  <ExternalLink size={20} />
-                  <Camera size={20} />
                 </div>
               </div>
             </div>
@@ -434,9 +431,6 @@ const DemoPage = () => {
                     <Twitter size={20} />
                     <Linkedin size={20} />
                     <Instagram size={20} />
-                    <Camera size={20} />
-                    <ExternalLink size={20} />
-                    <Camera size={20} />
                   </div>
                 </div>
               </div>
