@@ -491,8 +491,50 @@ const PublicPage = () => {
           </div>
         )}
 
+        {/* CTA Section */}
+        <section className="mt-20 mb-12">
+          <div className="relative rounded-3xl overflow-hidden shadow-card">
+            <div className="absolute inset-0 bg-gradient-primary opacity-10"></div>
+            <div className="relative px-8 py-16 text-center">
+              <div className="max-w-4xl mx-auto space-y-6">
+                <h2 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                  Ready to curate your own recommendations?
+                </h2>
+                <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                  Join thousands who are sharing their favorite tools, products, and discoveries. 
+                  Build your own beautiful recommendation page in minutes.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
+                  <Link to="/auth">
+                    <Button 
+                      size="lg" 
+                      className="px-8 py-4 text-lg font-semibold bg-gradient-primary hover:opacity-90 transition-opacity shadow-elegant"
+                    >
+                      Create Your Curately
+                    </Button>
+                  </Link>
+                  <Link to="/">
+                    <Button 
+                      variant="outline" 
+                      size="lg" 
+                      className="px-8 py-4 text-lg font-medium border-border/50"
+                    >
+                      Learn More
+                    </Button>
+                  </Link>
+                </div>
+                <div className="pt-4">
+                  <p className="text-sm text-muted-foreground">
+                    Free to start • No credit card required • Setup in 2 minutes
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Footer */}
-        <footer className="text-center mt-16 pt-8 border-t border-border/50">
+        <footer className="text-center pt-8 border-t border-border/50">
           <p className="text-sm text-muted-foreground">
             Powered by{' '}
             <Link 
