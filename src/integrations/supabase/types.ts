@@ -53,45 +53,57 @@ export type Database = {
           bio: string | null
           created_at: string
           display_name: string | null
+          display_name_color: string | null
           id: string
           page_description: string | null
+          page_description_color: string | null
           page_title: string | null
+          page_title_color: string | null
           public_profile: boolean
           updated_at: string
           use_avatar_background: boolean
           user_id: string
           username: string | null
           username_changed_at: string | null
+          username_color: string | null
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          display_name_color?: string | null
           id?: string
           page_description?: string | null
+          page_description_color?: string | null
           page_title?: string | null
+          page_title_color?: string | null
           public_profile?: boolean
           updated_at?: string
           use_avatar_background?: boolean
           user_id: string
           username?: string | null
           username_changed_at?: string | null
+          username_color?: string | null
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          display_name_color?: string | null
           id?: string
           page_description?: string | null
+          page_description_color?: string | null
           page_title?: string | null
+          page_title_color?: string | null
           public_profile?: boolean
           updated_at?: string
           use_avatar_background?: boolean
           user_id?: string
           username?: string | null
           username_changed_at?: string | null
+          username_color?: string | null
         }
         Relationships: []
       }

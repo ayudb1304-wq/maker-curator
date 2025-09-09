@@ -46,6 +46,10 @@ interface Profile {
   public_profile: boolean;
   use_avatar_background: boolean;
   username_changed_at?: string;
+  display_name_color?: string;
+  username_color?: string;
+  page_title_color?: string;
+  page_description_color?: string;
 }
 
 const Dashboard = () => {
@@ -61,7 +65,11 @@ const Dashboard = () => {
     avatar_url: '',
     public_profile: false,
     use_avatar_background: false,
-    username_changed_at: undefined
+    username_changed_at: undefined,
+    display_name_color: '#ffffff',
+    username_color: '#a1a1aa',
+    page_title_color: '#ffffff',
+    page_description_color: '#a1a1aa'
   });
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
@@ -97,7 +105,11 @@ const Dashboard = () => {
     avatar_url: '',
     public_profile: false,
     use_avatar_background: false,
-    username_changed_at: undefined
+    username_changed_at: undefined,
+    display_name_color: '#ffffff',
+    username_color: '#a1a1aa',
+    page_title_color: '#ffffff',
+    page_description_color: '#a1a1aa'
   });
   
   const usernameCheck = useUsernameCheck(profileData.username);
@@ -194,7 +206,7 @@ const Dashboard = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at')
+        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color')
         .eq('user_id', user.id)
         .single();
 
@@ -208,7 +220,11 @@ const Dashboard = () => {
           avatar_url: data.avatar_url || '',
           public_profile: data.public_profile || false,
           use_avatar_background: data.use_avatar_background || false,
-          username_changed_at: data.username_changed_at
+          username_changed_at: data.username_changed_at,
+          display_name_color: data.display_name_color || '#ffffff',
+          username_color: data.username_color || '#a1a1aa',
+          page_title_color: data.page_title_color || '#ffffff',
+          page_description_color: data.page_description_color || '#a1a1aa'
         };
         setProfile(profileData);
         setProfileData(profileData);
@@ -484,7 +500,11 @@ const Dashboard = () => {
         page_description: sanitizeText(profileData.page_description),
         avatar_url: profileData.avatar_url,
         public_profile: profileData.public_profile,
-        use_avatar_background: profileData.use_avatar_background
+        use_avatar_background: profileData.use_avatar_background,
+        display_name_color: profileData.display_name_color,
+        username_color: profileData.username_color,
+        page_title_color: profileData.page_title_color,
+        page_description_color: profileData.page_description_color
       };
 
       const { error: updateError } = await supabase
@@ -1338,6 +1358,91 @@ const Dashboard = () => {
                   rows={3}
                   className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
                 />
+              </div>
+              
+              {/* Text Color Customization */}
+              <div className="space-y-4 border border-border rounded-lg p-4">
+                <div className="flex items-center gap-2">
+                  <Palette className="w-4 h-4" />
+                  <Label className="text-sm sm:text-base font-medium">Text Colors</Label>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="display-name-color" className="text-xs sm:text-sm">Display Name Color</Label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        id="display-name-color"
+                        value={profileData.display_name_color}
+                        onChange={(e) => setProfileData({ ...profileData, display_name_color: e.target.value })}
+                        className="w-10 h-8 rounded border border-border cursor-pointer"
+                      />
+                      <Input
+                        value={profileData.display_name_color}
+                        onChange={(e) => setProfileData({ ...profileData, display_name_color: e.target.value })}
+                        placeholder="#ffffff"
+                        className="h-8 text-xs font-mono"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="username-color" className="text-xs sm:text-sm">Username Color</Label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        id="username-color"
+                        value={profileData.username_color}
+                        onChange={(e) => setProfileData({ ...profileData, username_color: e.target.value })}
+                        className="w-10 h-8 rounded border border-border cursor-pointer"
+                      />
+                      <Input
+                        value={profileData.username_color}
+                        onChange={(e) => setProfileData({ ...profileData, username_color: e.target.value })}
+                        placeholder="#a1a1aa"
+                        className="h-8 text-xs font-mono"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="page-title-color" className="text-xs sm:text-sm">Page Title Color</Label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        id="page-title-color"
+                        value={profileData.page_title_color}
+                        onChange={(e) => setProfileData({ ...profileData, page_title_color: e.target.value })}
+                        className="w-10 h-8 rounded border border-border cursor-pointer"
+                      />
+                      <Input
+                        value={profileData.page_title_color}
+                        onChange={(e) => setProfileData({ ...profileData, page_title_color: e.target.value })}
+                        placeholder="#ffffff"
+                        className="h-8 text-xs font-mono"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="page-description-color" className="text-xs sm:text-sm">Description Color</Label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        id="page-description-color"
+                        value={profileData.page_description_color}
+                        onChange={(e) => setProfileData({ ...profileData, page_description_color: e.target.value })}
+                        className="w-10 h-8 rounded border border-border cursor-pointer"
+                      />
+                      <Input
+                        value={profileData.page_description_color}
+                        onChange={(e) => setProfileData({ ...profileData, page_description_color: e.target.value })}
+                        placeholder="#a1a1aa"
+                        className="h-8 text-xs font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="space-y-2 sm:space-y-3">
                 <Label htmlFor="profile-username" className="text-sm sm:text-base">Username (URL)</Label>

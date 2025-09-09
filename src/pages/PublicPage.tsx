@@ -34,6 +34,10 @@ interface Profile {
   avatar_url: string;
   use_avatar_background: boolean;
   user_id: string;
+  display_name_color?: string;
+  username_color?: string;
+  page_title_color?: string;
+  page_description_color?: string;
 }
 
 const PublicPage = () => {
@@ -125,7 +129,7 @@ const PublicPage = () => {
       // First get the profile - only public profiles are accessible
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, use_avatar_background, user_id')
+        .select('username, display_name, page_title, page_description, avatar_url, use_avatar_background, user_id, display_name_color, username_color, page_title_color, page_description_color')
         .eq('username', username)
         .eq('public_profile', true)
         .maybeSingle();
@@ -294,15 +298,29 @@ const PublicPage = () => {
             <div className="text-center animate-fade-in max-w-4xl mx-auto">
               <div className="space-y-2">
                 {profile.display_name && profile.display_name !== profile.username && (
-                  <h1 className="text-xl md:text-2xl font-bold drop-shadow-lg preserve-emoji-colors text-foreground">
+                  <h1 
+                    className="text-xl md:text-2xl font-bold drop-shadow-lg preserve-emoji-colors"
+                    style={{ color: profile.display_name_color || '#ffffff' }}
+                  >
                     <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.display_name)) }} />
                   </h1>
                 )}
-                <p className="text-base md:text-lg font-mono drop-shadow-md text-muted-foreground">@{username}</p>
-                <h2 className="text-lg md:text-xl font-semibold drop-shadow-md preserve-emoji-colors text-foreground">
+                <p 
+                  className="text-base md:text-lg font-mono drop-shadow-md"
+                  style={{ color: profile.username_color || '#a1a1aa' }}
+                >
+                  @{username}
+                </p>
+                <h2 
+                  className="text-lg md:text-xl font-semibold drop-shadow-md preserve-emoji-colors"
+                  style={{ color: profile.page_title_color || '#ffffff' }}
+                >
                   <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_title)) }} />
                 </h2>
-                <p className="text-sm md:text-base leading-relaxed drop-shadow-md preserve-emoji-colors max-w-2xl mx-auto text-muted-foreground">
+                <p 
+                  className="text-sm md:text-base leading-relaxed drop-shadow-md preserve-emoji-colors max-w-2xl mx-auto"
+                  style={{ color: profile.page_description_color || '#a1a1aa' }}
+                >
                   <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_description)) }} />
                 </p>
               </div>
@@ -325,17 +343,31 @@ const PublicPage = () => {
               
               <div className="space-y-2">
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-bold mb-1 preserve-emoji-colors">
+                  <h1 
+                    className="text-2xl md:text-3xl font-bold mb-1 preserve-emoji-colors"
+                    style={{ color: profile.display_name_color || '#ffffff' }}
+                  >
                     <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.display_name || profile.username)) }} />
                   </h1>
-                  <p className="text-sm text-muted-foreground font-mono">@{username}</p>
+                  <p 
+                    className="text-sm font-mono"
+                    style={{ color: profile.username_color || '#a1a1aa' }}
+                  >
+                    @{username}
+                  </p>
                 </div>
                 
                 <div className="max-w-2xl mx-auto">
-                  <h2 className="text-lg font-semibold mb-2 preserve-emoji-colors">
+                  <h2 
+                    className="text-lg font-semibold mb-2 preserve-emoji-colors"
+                    style={{ color: profile.page_title_color || '#ffffff' }}
+                  >
                     <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_title)) }} />
                   </h2>
-                  <p className="text-base text-muted-foreground leading-relaxed preserve-emoji-colors">
+                  <p 
+                    className="text-base leading-relaxed preserve-emoji-colors"
+                    style={{ color: profile.page_description_color || '#a1a1aa' }}
+                  >
                     <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_description)) }} />
                   </p>
                 </div>
