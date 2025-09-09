@@ -367,12 +367,12 @@ const DemoPage = () => {
           className="bg-background/80 backdrop-blur-md border border-border/50 rounded-xl p-4 mb-8 transition-all duration-300 z-50"
           style={{ position: 'sticky', top: '1rem' }}
         >
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex md:flex-wrap md:justify-center gap-4 overflow-x-auto md:overflow-x-visible scroll-smooth snap-x snap-mandatory scrollbar-hide">
             {demoCategories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => scrollToCategory(category.id)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                className={`flex-shrink-0 px-4 py-2 rounded-lg font-medium transition-all duration-200 snap-start ${
                   activeCategory === category.id
                     ? 'bg-primary text-primary-foreground shadow-md'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted'

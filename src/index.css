@@ -177,6 +177,16 @@ All colors MUST be HSL.
 }
 }
 
+  /* Hide scrollbar for webkit browsers */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
 .sticky-nav {
   position: fixed !important;
   top: 1rem !important;
