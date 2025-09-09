@@ -1054,18 +1054,18 @@ const Dashboard = () => {
 
         {/* Add Item Dialog */}
         <Dialog open={isAddingItem} onOpenChange={setIsAddingItem}>
-          <DialogContent className="mx-2 sm:mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Add New Recommendation</DialogTitle>
               <DialogDescription>
                 Add a new item to your recommendation list
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-6 p-1">
-              <div className="space-y-2">
-                <Label htmlFor="category">Category (Optional)</Label>
+            <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="category" className="text-sm sm:text-base">Category (Optional)</Label>
                 <Select value={formData.category_id || 'none'} onValueChange={(value) => setFormData({ ...formData, category_id: value === 'none' ? '' : value })}>
-                  <SelectTrigger className="h-12 text-base">
+                  <SelectTrigger className="h-10 sm:h-12 text-sm sm:text-base">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -1078,48 +1078,48 @@ const Dashboard = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="title">Title *</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="title" className="text-sm sm:text-base">Title *</Label>
                 <Input
                   id="title"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="Product or service name"
                   required
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="image_url">Image *</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="image_url" className="text-sm sm:text-base">Image *</Label>
                 <ImageUpload
                   onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                   currentImageUrl={formData.image_url}
                   onRemoveImage={() => setFormData({ ...formData, image_url: '' })}
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="description">Description *</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="description" className="text-sm sm:text-base">Description *</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Why do you recommend this?"
-                  rows={4}
+                  rows={3}
                   required
-                  className="text-base min-h-[120px] resize-none"
+                  className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="target_url">Affiliate Link (Optional)</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="target_url" className="text-sm sm:text-base">Affiliate Link (Optional)</Label>
                 <Input
                   id="target_url"
                   value={formData.target_url}
                   onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
                   placeholder="https://your-affiliate-link.com"
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                 />
               </div>
-              <Button onClick={handleAddItem} className="w-full h-12 text-base mt-6">
+              <Button onClick={handleAddItem} className="w-full h-10 sm:h-12 text-sm sm:text-base mt-4 sm:mt-6">
                 Add Recommendation
               </Button>
             </div>
@@ -1128,36 +1128,36 @@ const Dashboard = () => {
 
         {/* Add Category Dialog */}
         <Dialog open={isAddingCategory} onOpenChange={setIsAddingCategory}>
-          <DialogContent className="mx-2 sm:mx-4 max-w-lg">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Add New Category</DialogTitle>
               <DialogDescription>
                 Create a category to organize your recommendations
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-6 p-1">
-              <div className="space-y-2">
-                <Label htmlFor="category-name">Category Name</Label>
+            <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="category-name" className="text-sm sm:text-base">Category Name</Label>
                 <Input
                   id="category-name"
                   value={categoryData.name}
                   onChange={(e) => setCategoryData({ ...categoryData, name: e.target.value })}
                   placeholder="e.g., Tech, Fitness, Books"
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="category-description">Description (Optional)</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="category-description" className="text-sm sm:text-base">Description (Optional)</Label>
                 <Textarea
                   id="category-description"
                   value={categoryData.description}
                   onChange={(e) => setCategoryData({ ...categoryData, description: e.target.value })}
                   placeholder="Brief description of this category"
-                  rows={4}
-                  className="text-base min-h-[120px] resize-none"
+                  rows={3}
+                  className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
                 />
               </div>
-              <Button onClick={handleAddCategory} className="w-full h-12 text-base mt-6">
+              <Button onClick={handleAddCategory} className="w-full h-10 sm:h-12 text-sm sm:text-base mt-4 sm:mt-6">
                 Create Category
               </Button>
             </div>
@@ -1171,18 +1171,18 @@ const Dashboard = () => {
             setFormData({ title: '', description: '', image_url: '', target_url: '', category_id: '' });
           }
         }}>
-          <DialogContent className="mx-2 sm:mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Edit Recommendation</DialogTitle>
               <DialogDescription>
                 Update your recommendation details
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-6 p-1">
-              <div className="space-y-2">
-                <Label htmlFor="edit-category">Category</Label>
+            <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="edit-category" className="text-sm sm:text-base">Category</Label>
                 <Select value={formData.category_id || 'none'} onValueChange={(value) => setFormData({ ...formData, category_id: value === 'none' ? '' : value })}>
-                  <SelectTrigger className="h-12 text-base">
+                  <SelectTrigger className="h-10 sm:h-12 text-sm sm:text-base">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -1195,46 +1195,46 @@ const Dashboard = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-title">Title *</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="edit-title" className="text-sm sm:text-base">Title *</Label>
                 <Input
                   id="edit-title"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   required
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-image_url">Image *</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="edit-image_url" className="text-sm sm:text-base">Image *</Label>
                 <ImageUpload
                   onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                   currentImageUrl={formData.image_url}
                   onRemoveImage={() => setFormData({ ...formData, image_url: '' })}
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-description">Description *</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="edit-description" className="text-sm sm:text-base">Description *</Label>
                 <Textarea
                   id="edit-description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={4}
+                  rows={3}
                   required
-                  className="text-base min-h-[120px] resize-none"
+                  className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-target_url">Affiliate Link (Optional)</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="edit-target_url" className="text-sm sm:text-base">Affiliate Link (Optional)</Label>
                 <Input
                   id="edit-target_url"
                   value={formData.target_url}
                   onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
                   placeholder="https://your-affiliate-link.com"
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                 />
               </div>
-              <Button onClick={handleEditItem} className="w-full h-12 text-base mt-6">
+              <Button onClick={handleEditItem} className="w-full h-10 sm:h-12 text-sm sm:text-base mt-4 sm:mt-6">
                 Update Recommendation
               </Button>
             </div>
@@ -1243,34 +1243,34 @@ const Dashboard = () => {
 
         {/* Edit Category Dialog */}
         <Dialog open={!!editingCategory} onOpenChange={() => setEditingCategory(null)}>
-          <DialogContent className="mx-2 sm:mx-4 max-w-lg">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Category</DialogTitle>
               <DialogDescription>
                 Update category details
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-6 p-1">
-              <div className="space-y-2">
-                <Label htmlFor="edit-category-name">Category Name</Label>
+            <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="edit-category-name" className="text-sm sm:text-base">Category Name</Label>
                 <Input
                   id="edit-category-name"
                   value={categoryData.name}
                   onChange={(e) => setCategoryData({ ...categoryData, name: e.target.value })}
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="edit-category-description">Description</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="edit-category-description" className="text-sm sm:text-base">Description</Label>
                 <Textarea
                   id="edit-category-description"
                   value={categoryData.description}
                   onChange={(e) => setCategoryData({ ...categoryData, description: e.target.value })}
-                  rows={4}
-                  className="text-base min-h-[120px] resize-none"
+                  rows={3}
+                  className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
                 />
               </div>
-              <Button onClick={handleEditCategory} className="w-full h-12 text-base mt-6">
+              <Button onClick={handleEditCategory} className="w-full h-10 sm:h-12 text-sm sm:text-base mt-4 sm:mt-6">
                 Update Category
               </Button>
             </div>
@@ -1279,20 +1279,20 @@ const Dashboard = () => {
 
         {/* Profile Settings Dialog */}
         <Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
-          <DialogContent className="mx-2 sm:mx-4 max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Edit Profile</DialogTitle>
               <DialogDescription>
                 Customize your profile picture, display name, page content, and URL
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-6 p-1">
-              <div className="space-y-2">
-                <Label htmlFor="profile-avatar">Profile Picture</Label>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                  <Avatar className="w-16 h-16 border-2 border-border">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="profile-avatar" className="text-sm sm:text-base">Profile Picture</Label>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                  <Avatar className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-border">
                     <AvatarImage src={profileData.avatar_url} alt={profileData.display_name} />
-                    <AvatarFallback className="text-lg font-semibold bg-gradient-primary text-primary-foreground">
+                    <AvatarFallback className="text-sm sm:text-lg font-semibold bg-gradient-primary text-primary-foreground">
                       {getInitials(profileData.display_name || 'User')}
                     </AvatarFallback>
                   </Avatar>
@@ -1305,43 +1305,43 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="profile-display-name">Display Name</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="profile-display-name" className="text-sm sm:text-base">Display Name</Label>
                 <Input
                   id="profile-display-name"
                   value={profileData.display_name}
                   onChange={(e) => setProfileData({ ...profileData, display_name: e.target.value })}
                   placeholder="Your Name"
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="profile-title">Page Title</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="profile-title" className="text-sm sm:text-base">Page Title</Label>
                 <Input
                   id="profile-title"
                   value={profileData.page_title}
                   onChange={(e) => setProfileData({ ...profileData, page_title: e.target.value })}
                   placeholder="My Favorite Tech Gear"
-                  className="h-12 text-base"
+                  className="h-10 sm:h-12 text-sm sm:text-base"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="profile-description">Page Description</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="profile-description" className="text-sm sm:text-base">Page Description</Label>
                 <Textarea
                   id="profile-description"
                   value={profileData.page_description}
                   onChange={(e) => setProfileData({ ...profileData, page_description: e.target.value })}
                   placeholder="A curated list of tools I use every day..."
-                  rows={4}
-                  className="text-base min-h-[120px] resize-none"
+                  rows={3}
+                  className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
                 />
               </div>
-              <div className="space-y-3">
-                <Label htmlFor="profile-username">Username (URL)</Label>
+              <div className="space-y-2 sm:space-y-3">
+                <Label htmlFor="profile-username" className="text-sm sm:text-base">Username (URL)</Label>
                 
                 {/* Subtle warning about 30-day restriction */}
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
-                  <p className="text-sm text-blue-800">
+                <div className="p-2 sm:p-3 bg-blue-50 border border-blue-200 rounded-md">
+                  <p className="text-xs sm:text-sm text-blue-800">
                     <span className="font-medium">Username Change Policy:</span> You can only change your username once every 30 days. Choose carefully!
                   </p>
                 </div>
@@ -1371,22 +1371,22 @@ const Dashboard = () => {
                     placeholder="your-username"
                     disabled={!cooldownInfo.canChange}
                     className={cn(
-                      "h-12 text-base pr-10",
+                      "h-10 sm:h-12 text-sm sm:text-base pr-8 sm:pr-10",
                       profileData.username.length >= 3 && profileData.username !== profile.username && !usernameCheck.isChecking && 
                       (usernameCheck.available ? "border-green-500" : "border-red-500")
                     )}
                   />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2">
                     {profileData.username.length >= 3 && profileData.username !== profile.username && cooldownInfo.canChange && (
                       <>
                         {usernameCheck.isChecking && (
-                          <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+                          <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-muted-foreground" />
                         )}
                         {!usernameCheck.isChecking && usernameCheck.available && (
-                          <CheckCircle className="w-5 h-5 text-green-500" />
+                          <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
                         )}
                         {!usernameCheck.isChecking && !usernameCheck.available && (
-                          <XCircle className="w-5 h-5 text-red-500" />
+                          <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
                         )}
                       </>
                     )}
@@ -1394,7 +1394,7 @@ const Dashboard = () => {
                 </div>
                 {profileData.username.length >= 3 && profileData.username !== profile.username && usernameCheck.message && cooldownInfo.canChange && (
                   <p className={cn(
-                    "text-sm px-1 py-1",
+                    "text-xs sm:text-sm px-1 py-1",
                     usernameCheck.available ? "text-green-600" : "text-red-600"
                   )}>
                     {usernameCheck.message}
@@ -1404,17 +1404,17 @@ const Dashboard = () => {
                   Your page will be available at: thecurately.com/{profileData.username}
                 </p>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-start space-x-3 p-3 border border-border rounded-lg">
+              <div className="space-y-2 sm:space-y-3">
+                <div className="flex items-start space-x-2 sm:space-x-3 p-2 sm:p-3 border border-border rounded-lg">
                   <input
                     type="checkbox"
                     id="public_profile"
                     checked={profileData.public_profile}
                     onChange={(e) => setProfileData({ ...profileData, public_profile: e.target.checked })}
-                    className="mt-1 w-4 h-4 rounded border border-input"
+                    className="mt-0.5 sm:mt-1 w-4 h-4 rounded border border-input"
                   />
                   <div className="flex-1">
-                    <Label htmlFor="public_profile" className="text-sm font-medium cursor-pointer">
+                    <Label htmlFor="public_profile" className="text-xs sm:text-sm font-medium cursor-pointer">
                       Make my page publicly visible
                     </Label>
                     <p className="text-xs text-muted-foreground mt-1">
@@ -1426,7 +1426,7 @@ const Dashboard = () => {
               </div>
               <Button 
                 onClick={handleUpdateProfile} 
-                className="w-full h-12 text-base mt-6"
+                className="w-full h-10 sm:h-12 text-sm sm:text-base mt-4 sm:mt-6"
                 disabled={
                   (profileData.username !== profile.username && !cooldownInfo.canChange) ||
                   (profileData.username !== profile.username && 
