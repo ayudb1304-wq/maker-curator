@@ -59,12 +59,12 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
   const content = (
     <>
       <div className="relative">
-        {/* Image */}
-        <div className="aspect-video w-full overflow-hidden rounded-lg mb-6">
+        {/* Image - Full image display */}
+        <div className="w-full overflow-hidden rounded-lg mb-6 max-h-96">
           <img 
             src={item.image_url} 
             alt={item.title}
-            className="w-full h-full object-cover"
+            className="w-full h-auto object-contain max-h-96"
           />
         </div>
 
