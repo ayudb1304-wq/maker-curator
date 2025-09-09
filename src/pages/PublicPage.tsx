@@ -6,7 +6,7 @@ import { ExternalLink, Palette } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { safeOpenUrl, sanitizeText } from '@/lib/security';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { wrapEmojisForPreservation } from '@/lib/emoji';
+
 import { cn } from '@/lib/utils';
 import PublicFloatingCTA from '@/components/PublicFloatingCTA';
 
@@ -301,9 +301,8 @@ const PublicPage = () => {
                   <h1 
                     className="text-xl md:text-2xl font-bold drop-shadow-lg preserve-emoji-colors"
                     style={{ color: profile.display_name_color || '#ffffff' }}
-                  >
-                    <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.display_name)) }} />
-                  </h1>
+                    dangerouslySetInnerHTML={{ __html: sanitizeText(profile.display_name) }}
+                  />
                 )}
                 <p 
                   className="text-base md:text-lg font-mono drop-shadow-md"
@@ -314,15 +313,13 @@ const PublicPage = () => {
                 <h2 
                   className="text-lg md:text-xl font-semibold drop-shadow-md preserve-emoji-colors"
                   style={{ color: profile.page_title_color || '#ffffff' }}
-                >
-                  <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_title)) }} />
-                </h2>
+                  dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_title) }}
+                />
                 <p 
                   className="text-sm md:text-base leading-relaxed drop-shadow-md preserve-emoji-colors max-w-2xl mx-auto"
                   style={{ color: profile.page_description_color || '#a1a1aa' }}
-                >
-                  <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_description)) }} />
-                </p>
+                  dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_description) }}
+                />
               </div>
             </div>
           </div>
@@ -346,9 +343,8 @@ const PublicPage = () => {
                   <h1 
                     className="text-2xl md:text-3xl font-bold mb-1 preserve-emoji-colors"
                     style={{ color: profile.display_name_color || '#ffffff' }}
-                  >
-                    <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.display_name || profile.username)) }} />
-                  </h1>
+                    dangerouslySetInnerHTML={{ __html: sanitizeText(profile.display_name || profile.username) }}
+                  />
                   <p 
                     className="text-sm font-mono"
                     style={{ color: profile.username_color || '#a1a1aa' }}
@@ -361,15 +357,13 @@ const PublicPage = () => {
                   <h2 
                     className="text-lg font-semibold mb-2 preserve-emoji-colors"
                     style={{ color: profile.page_title_color || '#ffffff' }}
-                  >
-                    <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_title)) }} />
-                  </h2>
+                    dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_title) }}
+                  />
                   <p 
                     className="text-base leading-relaxed preserve-emoji-colors"
                     style={{ color: profile.page_description_color || '#a1a1aa' }}
-                  >
-                    <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(profile.page_description)) }} />
-                  </p>
+                    dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_description) }}
+                  />
                 </div>
               </div>
             </div>
@@ -465,16 +459,18 @@ const PublicPage = () => {
                 >
                   <div className={`absolute inset-0 ${gradientClass} opacity-10`}></div>
                   <div className="relative px-6 py-12 space-y-8">
-                    <div className="text-center">
-                       <h2 className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent preserve-emoji-colors">
-                          <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(category.name)) }} />
-                        </h2>
+                     <div className="text-center">
+                        <h2 
+                          className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent preserve-emoji-colors"
+                          dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }}
+                        />
                         {category.description && (
-                          <p className="text-lg text-muted-foreground max-w-2xl mx-auto preserve-emoji-colors">
-                            <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(category.description)) }} />
-                          </p>
+                          <p 
+                            className="text-lg text-muted-foreground max-w-2xl mx-auto preserve-emoji-colors"
+                            dangerouslySetInnerHTML={{ __html: sanitizeText(category.description) }}
+                          />
                         )}
-                    </div>
+                     </div>
                     
                      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                        {visibleCategoryItems.map((item) => (
@@ -491,17 +487,19 @@ const PublicPage = () => {
                             />
                           </div>
                           <CardContent className="p-6">
-                            <div className="flex items-start justify-between mb-2">
-                             <h3 className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors">
-                                <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(item.title)) }} />
-                             </h3>
-                              <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
-                            </div>
-                              {item.description && (
-                                <p className="text-muted-foreground leading-relaxed preserve-emoji-colors">
-                                  <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(item.description)) }} />
-                                </p>
-                              )}
+                             <div className="flex items-start justify-between mb-2">
+                              <h3 
+                                className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors"
+                                dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }}
+                              />
+                               <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
+                             </div>
+                               {item.description && (
+                                 <p 
+                                   className="text-muted-foreground leading-relaxed preserve-emoji-colors"
+                                   dangerouslySetInnerHTML={{ __html: sanitizeText(item.description) }}
+                                 />
+                               )}
                           </CardContent>
                         </Card>
                        ))}
@@ -553,17 +551,19 @@ const PublicPage = () => {
                         />
                       </div>
                       <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-2">
-                           <h3 className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors">
-                              <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(item.title)) }} />
-                            </h3>
-                          <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
-                        </div>
-                          {item.description && (
-                            <p className="text-muted-foreground leading-relaxed preserve-emoji-colors">
-                              <span dangerouslySetInnerHTML={{ __html: wrapEmojisForPreservation(sanitizeText(item.description)) }} />
-                            </p>
-                          )}
+                         <div className="flex items-start justify-between mb-2">
+                            <h3 
+                              className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors"
+                              dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }}
+                            />
+                           <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
+                         </div>
+                           {item.description && (
+                             <p 
+                               className="text-muted-foreground leading-relaxed preserve-emoji-colors"
+                               dangerouslySetInnerHTML={{ __html: sanitizeText(item.description) }}
+                             />
+                           )}
                       </CardContent>
                     </Card>
                    ))}
