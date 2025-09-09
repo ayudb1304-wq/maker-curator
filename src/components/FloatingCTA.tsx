@@ -29,9 +29,11 @@ const FloatingCTA = () => {
     <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-40 animate-fade-in">
       <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-full shadow-elegant px-6 py-3 flex items-center gap-4 mx-4 max-w-sm">
         <div className="flex items-center gap-3 flex-1">
-          <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
-            <div className="w-4 h-4 bg-white rounded-full"></div>
-          </div>
+          <img 
+            src="/lovable-uploads/1edf8796-86e3-4b7a-8081-247f973203a3.png" 
+            alt="Curately Logo" 
+            className="w-6 h-6"
+          />
           <span className="text-sm font-medium text-foreground">Curately</span>
         </div>
         
