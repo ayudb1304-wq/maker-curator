@@ -314,7 +314,7 @@ const PublicPage = () => {
       {/* Hero Section - Conditional based on use_avatar_background */}
       {profile.use_avatar_background && profile.avatar_url ? (
         /* Background Hero Layout */
-        <div className="relative h-[50vh] w-full -mt-16">
+        <div className="relative h-[80vh] w-full -mt-16">
           {/* Background Image with Smooth Fade Overlay */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
