@@ -26,7 +26,7 @@ const FloatingCTA = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in">
+    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-40 animate-fade-in">
       <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-full shadow-elegant px-6 py-3 flex items-center gap-4 mx-4 max-w-sm">
         <div className="flex items-center gap-3 flex-1">
           <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
