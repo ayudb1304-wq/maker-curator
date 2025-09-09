@@ -278,13 +278,15 @@ const PublicPage = () => {
       {/* Hero Section - Conditional based on use_avatar_background */}
       {profile.use_avatar_background && profile.avatar_url ? (
         /* Background Hero Layout */
-        <div className="relative min-h-screen w-full -mt-16 mb-8">
-          {/* Background Image with Overlay */}
+        <div className="relative min-h-screen w-full -mt-16">
+          {/* Background Image with Smooth Fade Overlay */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${profile.avatar_url})` }}
           >
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60" />
+            {/* Smooth transition to white */}
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent" />
           </div>
           
           {/* Content positioned at bottom */}
