@@ -30,121 +30,109 @@ interface Slide {
 const slidesData: Slide[] = [
   {
     id: "wellness",
-    title: "Lifestyle & Wellness",
-    subtitle: "Curated wellness essentials for mind and body",
+    title: "My Wellness Essentials",
+    subtitle: "These have honestly changed my daily routine for the better ✨",
     icon: Heart,
     backgroundColor: "from-emerald-400/20 to-teal-500/20",
     items: [
       {
         id: "meditation-app",
-        title: "Meditation App",
-        description: "Daily mindfulness practice",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop&crop=center",
-        price: "Free"
+        title: "Headspace",
+        description: "I use this every morning - such a game changer for my anxiety!",
+        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop&crop=center"
       },
       {
         id: "yoga-mat",
-        title: "Premium Yoga Mat",
-        description: "Eco-friendly & non-slip",
-        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200&h=200&fit=crop&crop=center",
-        price: "$89"
+        title: "Manduka Yoga Mat",
+        description: "Best investment for my home workouts. So grippy and comfy!",
+        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200&h=200&fit=crop&crop=center"
       },
       {
         id: "wellness-tea",
-        title: "Wellness Tea Set",
-        description: "Organic herbal blends",
-        image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop&crop=center",
-        price: "$45"
+        title: "Traditional Medicinals Tea",
+        description: "My nightly ritual - the chamomile one is pure magic",
+        image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop&crop=center"
       }
     ]
   },
   {
     id: "creativity",
-    title: "Design & Creativity",
-    subtitle: "Tools and inspiration for creative minds",
+    title: "Creative Tools I Swear By",
+    subtitle: "Everything I use to bring my ideas to life 🎨",
     icon: Palette,
     backgroundColor: "from-purple-400/20 to-pink-500/20",
     items: [
       {
         id: "design-software",
-        title: "Design Software",
-        description: "Professional creative suite",
-        image: "https://images.unsplash.com/photo-1541462608143-67571c6738dd?w=200&h=200&fit=crop&crop=center",
-        price: "$20/mo"
+        title: "Figma",
+        description: "Where all my design magic happens - can't live without it!",
+        image: "https://images.unsplash.com/photo-1541462608143-67571c6738dd?w=200&h=200&fit=crop&crop=center"
       },
       {
         id: "sketchbook",
-        title: "Premium Sketchbook",
-        description: "High-quality paper for artists",
-        image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=200&h=200&fit=crop&crop=center",
-        price: "$35"
+        title: "Moleskine Sketchbook",
+        description: "Perfect for brainstorming and those random 3am ideas",
+        image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=200&h=200&fit=crop&crop=center"
       },
       {
         id: "drawing-tablet",
-        title: "Drawing Tablet",
-        description: "Digital art made easy",
-        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop&crop=center",
-        price: "$299"
+        title: "Wacom Intuos",
+        description: "Made digital art so much easier - total game changer!",
+        image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop&crop=center"
       }
     ]
   },
   {
     id: "fashion",
-    title: "Digital Closet",
-    subtitle: "Curated fashion picks from top influencers",
+    title: "Current Closet Favorites",
+    subtitle: "These pieces have been on repeat lately 💕",
     icon: ShoppingBag,
     backgroundColor: "from-rose-400/20 to-pink-500/20",
     items: [
       {
         id: "silk-blouse",
-        title: "Silk Blouse",
-        description: "Elegant everyday essential",
-        image: "https://images.unsplash.com/photo-1564584217132-2271339e5ebe?w=200&h=200&fit=crop&crop=center",
-        price: "$120"
+        title: "Everlane Silk Shirt",
+        description: "Goes with literally everything - so worth the splurge!",
+        image: "https://images.unsplash.com/photo-1564584217132-2271339e5ebe?w=200&h=200&fit=crop&crop=center"
       },
       {
         id: "denim-skirt",
-        title: "High-Waist Denim",
-        description: "Versatile mini skirt",
-        image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=200&h=200&fit=crop&crop=center",
-        price: "$85"
+        title: "Vintage Levi's Skirt",
+        description: "Found this gem thrifting - obsessed with the fit!",
+        image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=200&h=200&fit=crop&crop=center"
       },
       {
         id: "accessories",
-        title: "Statement Earrings",
-        description: "Gold-plated hoops",
-        image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=200&h=200&fit=crop&crop=center",
-        price: "$65"
+        title: "Mejuri Hoops",
+        description: "These elevate every outfit - wearing them right now!",
+        image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=200&h=200&fit=crop&crop=center"
       }
     ]
   },
   {
     id: "books",
-    title: "Books & Learning",
-    subtitle: "Essential reads for personal growth",
+    title: "Books That Blew My Mind",
+    subtitle: "Currently stacked on my nightstand 📚",
     icon: BookOpen,
     backgroundColor: "from-blue-400/20 to-indigo-500/20",
     items: [
       {
         id: "business-book",
-        title: "Startup Guide",
-        description: "From idea to success",
-        image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=200&fit=crop&crop=center",
-        price: "$25"
+        title: "The Lean Startup",
+        description: "Wish I'd read this before starting my business - so insightful!",
+        image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=200&fit=crop&crop=center"
       },
       {
         id: "design-book",
-        title: "Design Thinking",
-        description: "Creative problem solving",
-        image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=200&fit=crop&crop=center",
-        price: "$32"
+        title: "Don't Make Me Think",
+        description: "Changed how I approach design completely - mind blown!",
+        image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=200&fit=crop&crop=center"
       },
       {
         id: "course-platform",
-        title: "Online Course",
-        description: "Skill building platform",
-        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200&h=200&fit=crop&crop=center",
-        price: "$99"
+        title: "MasterClass",
+        description: "Been binge-watching the photography classes - so inspiring!",
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200&h=200&fit=crop&crop=center"
       }
     ]
   }
@@ -222,11 +210,6 @@ const HeroSlideshow = () => {
                               <p className="text-xs text-muted-foreground line-clamp-2">
                                 {item.description}
                               </p>
-                              {item.price && (
-                                <p className="text-xs font-bold text-primary">
-                                  {item.price}
-                                </p>
-                              )}
                             </div>
                           </div>
                         </div>
