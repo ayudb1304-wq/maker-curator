@@ -9,6 +9,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 import { cn } from '@/lib/utils';
 import PublicFloatingCTA from '@/components/PublicFloatingCTA';
+import { RecommendationModal } from '@/components/RecommendationModal';
 
 interface Item {
   id: string;
@@ -50,6 +51,8 @@ const PublicPage = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [visibleItems, setVisibleItems] = useState<Record<string, number>>({});
   const [showMoreClicked, setShowMoreClicked] = useState<Record<string, boolean>>({});
+  const [selectedRecommendation, setSelectedRecommendation] = useState<Item | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
   
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const navRef = useRef<HTMLElement | null>(null);
@@ -224,6 +227,21 @@ const PublicPage = () => {
     
     const visibleCount = visibleItems[categoryId] || 12;
     return categoryItems.slice(0, visibleCount);
+  };
+
+  const handleRecommendationClick = (item: Item) => {
+    setSelectedRecommendation(item);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedRecommendation(null);
+  };
+
+  const getSelectedCategory = () => {
+    if (!selectedRecommendation?.category_id) return null;
+    return categories.find(cat => cat.id === selectedRecommendation.category_id) || null;
   };
 
   if (loading) {
@@ -474,11 +492,11 @@ const PublicPage = () => {
                     
                      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                        {visibleCategoryItems.map((item) => (
-                        <Card 
-                          key={item.id} 
-                          className="overflow-hidden bg-gradient-card border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
-                          onClick={() => safeOpenUrl(item.target_url)}
-                        >
+                         <Card 
+                           key={item.id} 
+                           className="overflow-hidden bg-gradient-card border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+                           onClick={() => handleRecommendationClick(item)}
+                         >
                           <div className="aspect-video w-full overflow-hidden">
                             <img 
                               src={item.image_url} 
@@ -538,11 +556,11 @@ const PublicPage = () => {
                  
                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                    {getVisibleItems('uncategorized').map((item) => (
-                     <Card 
-                       key={item.id} 
-                        className="overflow-hidden bg-gradient-card border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
-                       onClick={() => safeOpenUrl(item.target_url)}
-                     >
+                      <Card 
+                        key={item.id} 
+                         className="overflow-hidden bg-gradient-card border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+                        onClick={() => handleRecommendationClick(item)}
+                      >
                       <div className="aspect-video w-full overflow-hidden">
                         <img 
                           src={item.image_url} 
@@ -600,6 +618,14 @@ const PublicPage = () => {
         </footer>
       </main>
       <PublicFloatingCTA />
+      
+      {/* Recommendation Modal */}
+      <RecommendationModal
+        item={selectedRecommendation}
+        category={getSelectedCategory()}
+        open={modalOpen}
+        onOpenChange={handleCloseModal}
+      />
     </div>
   );
 };
