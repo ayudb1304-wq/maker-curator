@@ -172,6 +172,7 @@ const Login = () => {
                   onChange={(e) => setResetEmail(e.target.value)}
                   placeholder="Enter your email address"
                   required
+                  className="h-12 text-base"
                 />
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
@@ -243,6 +244,7 @@ const Login = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     required
+                    className="h-12 text-base"
                   />
                 </div>
                 <div className="space-y-2">
@@ -254,6 +256,7 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     required
+                    className="h-12 text-base"
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
@@ -283,7 +286,7 @@ const Login = () => {
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <Input
@@ -293,6 +296,7 @@ const Login = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
                       required
+                      className="h-12 text-base"
                     />
                   </div>
                   <div className="space-y-2">
@@ -305,23 +309,23 @@ const Login = () => {
                         onChange={(e) => setUsername(e.target.value.toLowerCase())}
                         placeholder="Choose username"
                         className={cn(
-                          "pr-8",
+                          "h-12 text-base pr-10",
                           username.length >= 3 && !usernameCheck.isChecking && 
                           (usernameCheck.available ? "border-green-500" : "border-red-500")
                         )}
                         required
                       />
-                      <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
                         {username.length >= 3 && (
                           <>
                             {usernameCheck.isChecking && (
-                              <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                              <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
                             )}
                             {!usernameCheck.isChecking && usernameCheck.available && (
-                              <CheckCircle className="w-4 h-4 text-green-500" />
+                              <CheckCircle className="w-5 h-5 text-green-500" />
                             )}
                             {!usernameCheck.isChecking && !usernameCheck.available && (
-                              <XCircle className="w-4 h-4 text-red-500" />
+                              <XCircle className="w-5 h-5 text-red-500" />
                             )}
                           </>
                         )}
@@ -329,7 +333,7 @@ const Login = () => {
                     </div>
                     {username.length >= 3 && usernameCheck.message && (
                       <p className={cn(
-                        "text-sm",
+                        "text-sm px-1 py-1",
                         usernameCheck.available ? "text-green-600" : "text-red-600"
                       )}>
                         {usernameCheck.message}
@@ -346,23 +350,25 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Create a password"
                     required
+                    className="h-12 text-base"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="occupation">Occupation</Label>
+                    <Label htmlFor="occupation">Occupation (Optional)</Label>
                     <Input
                       id="occupation"
                       type="text"
                       value={occupation}
                       onChange={(e) => setOccupation(e.target.value)}
                       placeholder="Your profession"
+                      className="h-12 text-base"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="gender">Gender</Label>
+                    <Label htmlFor="gender">Gender (Optional)</Label>
                     <Select value={gender} onValueChange={setGender}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-12 text-base">
                         <SelectValue placeholder="Select gender" />
                       </SelectTrigger>
                       <SelectContent>

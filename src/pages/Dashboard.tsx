@@ -1061,11 +1061,11 @@ const Dashboard = () => {
                 Add a new item to your recommendation list
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
+            <div className="space-y-6 p-1">
+              <div className="space-y-2">
                 <Label htmlFor="category">Category (Optional)</Label>
                 <Select value={formData.category_id || 'none'} onValueChange={(value) => setFormData({ ...formData, category_id: value === 'none' ? '' : value })}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12 text-base">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -1078,7 +1078,7 @@ const Dashboard = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="title">Title *</Label>
                 <Input
                   id="title"
@@ -1086,9 +1086,10 @@ const Dashboard = () => {
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="Product or service name"
                   required
+                  className="h-12 text-base"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="image_url">Image *</Label>
                 <ImageUpload
                   onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
@@ -1096,27 +1097,29 @@ const Dashboard = () => {
                   onRemoveImage={() => setFormData({ ...formData, image_url: '' })}
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="description">Description *</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Why do you recommend this?"
-                  rows={3}
+                  rows={4}
                   required
+                  className="text-base min-h-[120px] resize-none"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="target_url">Affiliate Link (Optional)</Label>
                 <Input
                   id="target_url"
                   value={formData.target_url}
                   onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
                   placeholder="https://your-affiliate-link.com"
+                  className="h-12 text-base"
                 />
               </div>
-              <Button onClick={handleAddItem} className="w-full">
+              <Button onClick={handleAddItem} className="w-full h-12 text-base mt-6">
                 Add Recommendation
               </Button>
             </div>
@@ -1132,27 +1135,29 @@ const Dashboard = () => {
                 Create a category to organize your recommendations
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
+            <div className="space-y-6 p-1">
+              <div className="space-y-2">
                 <Label htmlFor="category-name">Category Name</Label>
                 <Input
                   id="category-name"
                   value={categoryData.name}
                   onChange={(e) => setCategoryData({ ...categoryData, name: e.target.value })}
                   placeholder="e.g., Tech, Fitness, Books"
+                  className="h-12 text-base"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="category-description">Description (Optional)</Label>
                 <Textarea
                   id="category-description"
                   value={categoryData.description}
                   onChange={(e) => setCategoryData({ ...categoryData, description: e.target.value })}
                   placeholder="Brief description of this category"
-                  rows={3}
+                  rows={4}
+                  className="text-base min-h-[120px] resize-none"
                 />
               </div>
-              <Button onClick={handleAddCategory} className="w-full">
+              <Button onClick={handleAddCategory} className="w-full h-12 text-base mt-6">
                 Create Category
               </Button>
             </div>
@@ -1173,11 +1178,11 @@ const Dashboard = () => {
                 Update your recommendation details
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
+            <div className="space-y-6 p-1">
+              <div className="space-y-2">
                 <Label htmlFor="edit-category">Category</Label>
                 <Select value={formData.category_id || 'none'} onValueChange={(value) => setFormData({ ...formData, category_id: value === 'none' ? '' : value })}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12 text-base">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -1190,16 +1195,17 @@ const Dashboard = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="edit-title">Title *</Label>
                 <Input
                   id="edit-title"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   required
+                  className="h-12 text-base"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="edit-image_url">Image *</Label>
                 <ImageUpload
                   onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
@@ -1207,26 +1213,28 @@ const Dashboard = () => {
                   onRemoveImage={() => setFormData({ ...formData, image_url: '' })}
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="edit-description">Description *</Label>
                 <Textarea
                   id="edit-description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
+                  rows={4}
                   required
+                  className="text-base min-h-[120px] resize-none"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="edit-target_url">Affiliate Link (Optional)</Label>
                 <Input
                   id="edit-target_url"
                   value={formData.target_url}
                   onChange={(e) => setFormData({ ...formData, target_url: e.target.value })}
                   placeholder="https://your-affiliate-link.com"
+                  className="h-12 text-base"
                 />
               </div>
-              <Button onClick={handleEditItem} className="w-full">
+              <Button onClick={handleEditItem} className="w-full h-12 text-base mt-6">
                 Update Recommendation
               </Button>
             </div>
@@ -1242,25 +1250,27 @@ const Dashboard = () => {
                 Update category details
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
+            <div className="space-y-6 p-1">
+              <div className="space-y-2">
                 <Label htmlFor="edit-category-name">Category Name</Label>
                 <Input
                   id="edit-category-name"
                   value={categoryData.name}
                   onChange={(e) => setCategoryData({ ...categoryData, name: e.target.value })}
+                  className="h-12 text-base"
                 />
               </div>
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="edit-category-description">Description</Label>
                 <Textarea
                   id="edit-category-description"
                   value={categoryData.description}
                   onChange={(e) => setCategoryData({ ...categoryData, description: e.target.value })}
-                  rows={3}
+                  rows={4}
+                  className="text-base min-h-[120px] resize-none"
                 />
               </div>
-              <Button onClick={handleEditCategory} className="w-full">
+              <Button onClick={handleEditCategory} className="w-full h-12 text-base mt-6">
                 Update Category
               </Button>
             </div>
@@ -1276,52 +1286,57 @@ const Dashboard = () => {
                 Customize your profile picture, display name, page content, and URL
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-6">
-              <div className="grid gap-2">
+            <div className="space-y-6 p-1">
+              <div className="space-y-2">
                 <Label htmlFor="profile-avatar">Profile Picture</Label>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   <Avatar className="w-16 h-16 border-2 border-border">
                     <AvatarImage src={profileData.avatar_url} alt={profileData.display_name} />
                     <AvatarFallback className="text-lg font-semibold bg-gradient-primary text-primary-foreground">
                       {getInitials(profileData.display_name || 'User')}
                     </AvatarFallback>
                   </Avatar>
-                  <ImageUpload
-                    onImageUploaded={(url) => setProfileData({ ...profileData, avatar_url: url })}
-                    currentImageUrl={profileData.avatar_url}
-                    onRemoveImage={() => setProfileData({ ...profileData, avatar_url: '' })}
-                  />
+                  <div className="w-full">
+                    <ImageUpload
+                      onImageUploaded={(url) => setProfileData({ ...profileData, avatar_url: url })}
+                      currentImageUrl={profileData.avatar_url}
+                      onRemoveImage={() => setProfileData({ ...profileData, avatar_url: '' })}
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="grid gap-2">
+              <div className="space-y-2">
                 <Label htmlFor="profile-display-name">Display Name</Label>
                 <Input
                   id="profile-display-name"
                   value={profileData.display_name}
                   onChange={(e) => setProfileData({ ...profileData, display_name: e.target.value })}
                   placeholder="Your Name"
+                  className="h-12 text-base"
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="space-y-2">
                 <Label htmlFor="profile-title">Page Title</Label>
                 <Input
                   id="profile-title"
                   value={profileData.page_title}
                   onChange={(e) => setProfileData({ ...profileData, page_title: e.target.value })}
                   placeholder="My Favorite Tech Gear"
+                  className="h-12 text-base"
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="space-y-2">
                 <Label htmlFor="profile-description">Page Description</Label>
                 <Textarea
                   id="profile-description"
                   value={profileData.page_description}
                   onChange={(e) => setProfileData({ ...profileData, page_description: e.target.value })}
                   placeholder="A curated list of tools I use every day..."
-                  rows={3}
+                  rows={4}
+                  className="text-base min-h-[120px] resize-none"
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="space-y-3">
                 <Label htmlFor="profile-username">Username (URL)</Label>
                 
                 {/* Subtle warning about 30-day restriction */}
@@ -1356,22 +1371,22 @@ const Dashboard = () => {
                     placeholder="your-username"
                     disabled={!cooldownInfo.canChange}
                     className={cn(
-                      "pr-8",
+                      "h-12 text-base pr-10",
                       profileData.username.length >= 3 && profileData.username !== profile.username && !usernameCheck.isChecking && 
                       (usernameCheck.available ? "border-green-500" : "border-red-500")
                     )}
                   />
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
                     {profileData.username.length >= 3 && profileData.username !== profile.username && cooldownInfo.canChange && (
                       <>
                         {usernameCheck.isChecking && (
-                          <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                          <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
                         )}
                         {!usernameCheck.isChecking && usernameCheck.available && (
-                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          <CheckCircle className="w-5 h-5 text-green-500" />
                         )}
                         {!usernameCheck.isChecking && !usernameCheck.available && (
-                          <XCircle className="w-4 h-4 text-red-500" />
+                          <XCircle className="w-5 h-5 text-red-500" />
                         )}
                       </>
                     )}
@@ -1379,37 +1394,39 @@ const Dashboard = () => {
                 </div>
                 {profileData.username.length >= 3 && profileData.username !== profile.username && usernameCheck.message && cooldownInfo.canChange && (
                   <p className={cn(
-                    "text-sm mt-1",
+                    "text-sm px-1 py-1",
                     usernameCheck.available ? "text-green-600" : "text-red-600"
                   )}>
                     {usernameCheck.message}
                   </p>
                 )}
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground px-1">
                   Your page will be available at: thecurately.com/{profileData.username}
                 </p>
               </div>
-              <div className="grid gap-2">
-                <div className="flex items-center space-x-2">
+              <div className="space-y-3">
+                <div className="flex items-start space-x-3 p-3 border border-border rounded-lg">
                   <input
                     type="checkbox"
                     id="public_profile"
                     checked={profileData.public_profile}
                     onChange={(e) => setProfileData({ ...profileData, public_profile: e.target.checked })}
-                    className="rounded border border-input"
+                    className="mt-1 w-4 h-4 rounded border border-input"
                   />
-                  <Label htmlFor="public_profile" className="text-sm font-medium">
-                    Make my page publicly visible
-                  </Label>
+                  <div className="flex-1">
+                    <Label htmlFor="public_profile" className="text-sm font-medium cursor-pointer">
+                      Make my page publicly visible
+                    </Label>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      When enabled, your recommendations page will be visible to everyone at the public URL above.
+                      When disabled, only you can access your recommendations.
+                    </p>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  When enabled, your recommendations page will be visible to everyone at the public URL above.
-                  When disabled, only you can access your recommendations.
-                </p>
               </div>
-                <Button 
+              <Button 
                 onClick={handleUpdateProfile} 
-                className="w-full"
+                className="w-full h-12 text-base mt-6"
                 disabled={
                   (profileData.username !== profile.username && !cooldownInfo.canChange) ||
                   (profileData.username !== profile.username && 
