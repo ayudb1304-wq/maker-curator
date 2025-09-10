@@ -25,7 +25,15 @@ interface AuthHookPayload {
 
 function buildEmail(payload: AuthHookPayload) {
   const { email_data } = payload;
-  const confirmUrl = `${email_data.site_url}/auth/v1/verify?token=${email_data.token_hash}&type=${email_data.email_action_type}&redirect_to=${encodeURIComponent(email_data.redirect_to)}`;
+  const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+  const baseUrl = `${email_data.site_url}/auth/v1/verify`;
+  const params = new URLSearchParams({
+    token: email_data.token_hash,
+    type: email_data.email_action_type,
+    redirect_to: email_data.redirect_to,
+  });
+  if (ANON_KEY) params.append("apikey", ANON_KEY);
+  const confirmUrl = `${baseUrl}?${params.toString()}`;
 
   let subject = "Curately - Authentication";
   let html = `

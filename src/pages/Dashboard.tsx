@@ -225,40 +225,69 @@ const Dashboard = () => {
 
   const fetchProfile = async () => {
     try {
+      // Try to get existing profile
       const { data, error } = await supabase
         .from('profiles')
         .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
-      if (data) {
+
+      let profileRow = data;
+      // If no profile, create one using user metadata
+      if (!profileRow) {
+        const username = (user.user_metadata as any)?.username || user.email?.split('@')[0] || '';
+        const display_name = (user.user_metadata as any)?.display_name || username;
+        const occupation = (user.user_metadata as any)?.occupation;
+        const gender = (user.user_metadata as any)?.gender;
+        const bio = occupation && gender ? `${occupation} • ${gender}` : occupation || gender || null;
+
+        const insertData = {
+          user_id: user.id,
+          username: username.toLowerCase().trim(),
+          display_name,
+          bio,
+        } as const;
+
+        const { data: created, error: insertError } = await supabase
+          .from('profiles')
+          .insert([insertData])
+          .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
+          .single();
+
+        if (insertError) throw insertError;
+        profileRow = created;
+        toast({ description: 'Profile created successfully!' });
+      }
+
+      if (profileRow) {
         const profileData = {
-          username: data.username || '',
-          display_name: data.display_name || '',
-          page_title: data.page_title || '',
-          page_description: data.page_description || '',
-          avatar_url: data.avatar_url || '',
-          public_profile: data.public_profile || false,
-          use_avatar_background: data.use_avatar_background || false,
-          username_changed_at: data.username_changed_at,
-          display_name_color: data.display_name_color || '#ffffff',
-          username_color: data.username_color || '#a1a1aa',
-          page_title_color: data.page_title_color || '#ffffff',
-          page_description_color: data.page_description_color || '#a1a1aa',
-          youtube_url: data.youtube_url || '',
-          twitter_url: data.twitter_url || '',
-          linkedin_url: data.linkedin_url || '',
-          tiktok_url: data.tiktok_url || '',
-          instagram_url: data.instagram_url || '',
-          threads_url: data.threads_url || '',
-          snapchat_url: data.snapchat_url || ''
+          username: profileRow.username || '',
+          display_name: profileRow.display_name || '',
+          page_title: profileRow.page_title || '',
+          page_description: profileRow.page_description || '',
+          avatar_url: profileRow.avatar_url || '',
+          public_profile: profileRow.public_profile || false,
+          use_avatar_background: profileRow.use_avatar_background || false,
+          username_changed_at: profileRow.username_changed_at,
+          display_name_color: profileRow.display_name_color || '#ffffff',
+          username_color: profileRow.username_color || '#a1a1aa',
+          page_title_color: profileRow.page_title_color || '#ffffff',
+          page_description_color: profileRow.page_description_color || '#a1a1aa',
+          youtube_url: profileRow.youtube_url || '',
+          twitter_url: profileRow.twitter_url || '',
+          linkedin_url: profileRow.linkedin_url || '',
+          tiktok_url: profileRow.tiktok_url || '',
+          instagram_url: profileRow.instagram_url || '',
+          threads_url: profileRow.threads_url || '',
+          snapchat_url: profileRow.snapchat_url || ''
         };
         setProfile(profileData);
         setProfileData(profileData);
       }
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error('Error fetching/creating profile:', error);
       toast({ description: 'Failed to load profile', variant: 'destructive' });
     }
   };
