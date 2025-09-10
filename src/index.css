@@ -234,6 +234,17 @@ All colors MUST be HSL.
   }
 }
 
+/* Preserve native emoji rendering and prevent gradient text effects from interfering with emojis */
+@layer utilities {
+  .emoji-native * {
+    background: none !important;
+    background-clip: unset !important;
+    -webkit-background-clip: unset !important;
+    color: inherit !important;
+    text-shadow: none !important;
+    font-variant-emoji: emoji !important;
+  }
+
   /* Hide scrollbar for webkit browsers */
   .scrollbar-hide {
     -ms-overflow-style: none;  /* IE and Edge */
@@ -244,52 +255,56 @@ All colors MUST be HSL.
     display: none;
   }
 
-.sticky-nav {
-  position: fixed !important;
-  top: 1rem !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: calc(100% - 3rem) !important;
-  max-width: 1200px !important;
-  z-index: 50 !important;
-}
+  .sticky-nav {
+    position: fixed !important;
+    top: 1rem !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 3rem) !important;
+    max-width: 1200px !important;
+    z-index: 50 !important;
+  }
 
-/* Mobile safe areas and viewport optimizations */
-@supports (padding: env(safe-area-inset-top)) {
-  .safe-top {
-    padding-top: env(safe-area-inset-top);
+  /* Mobile safe areas and viewport optimizations */
+  @supports (padding: env(safe-area-inset-top)) {
+    .safe-top {
+      padding-top: env(safe-area-inset-top);
+    }
+    
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .safe-left {
+      padding-left: env(safe-area-inset-left);
+    }
+    
+    .safe-right {
+      padding-right: env(safe-area-inset-right);
+    }
   }
-  
-  .safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-  
-  .safe-left {
-    padding-left: env(safe-area-inset-left);
-  }
-  
-  .safe-right {
-    padding-right: env(safe-area-inset-right);
-  }
-}
 
-/* Enhanced mobile touch targets */
-@media (max-width: 768px) {
-  /* Ensure minimum touch target sizes */
-  .touch-target {
-    min-height: 48px;
-    min-width: 48px;
+  /* Enhanced mobile touch targets */
+  @media (max-width: 768px) {
+    .touch-target {
+      min-height: 48px;
+      min-width: 48px;
+    }
+    
+    .mobile-form-spacing > * + * {
+      margin-top: 1.5rem;
+    }
+    
+    .mobile-enhanced-button {
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
   }
-  
-  /* Better spacing for mobile forms */
-  .mobile-form-spacing > * + * {
-    margin-top: 1.5rem;
-  }
-  
-  /* Enhanced button padding for mobile */
-  .mobile-enhanced-button {
-    padding: 0.875rem 1.5rem;
-    font-size: 1rem;
-    line-height: 1.5;
+
+  /* Toast progress bar animation */
+  @keyframes shrink {
+    from { width: 100%; }
+    to { width: 0%; }
   }
 }
