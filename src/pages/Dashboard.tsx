@@ -98,7 +98,7 @@ const Dashboard = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [visibleItems, setVisibleItems] = useState<Record<string, number>>({});
   const [showMoreClicked, setShowMoreClicked] = useState<Record<string, boolean>>({});
-  const [activeTab, setActiveTab] = useState<'recommendations' | 'categories' | 'profile'>('recommendations');
+  const [activeTab, setActiveTab] = useState<'recommendations' | 'categories' | 'profile'>('profile');
   
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const navRef = useRef<HTMLElement | null>(null);
@@ -784,76 +784,78 @@ const Dashboard = () => {
             </AlertDescription>
           </Alert>
         )}
-        {/* Profile Header Section */}
-        <Card className="mb-8 relative overflow-hidden border-border/50 shadow-elegant backdrop-blur-sm animate-fade-in">
-          <div className="hidden" />
-          <CardContent className="relative pt-6">
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-              {/* Avatar Section */}
-              <div className="flex-shrink-0">
-                <div className="relative group">
-                  <Avatar className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-border shadow-elegant hover-scale">
-                    <AvatarImage src={profile.avatar_url} alt={displayName} />
-                    <AvatarFallback className="text-lg sm:text-xl font-semibold bg-gradient-primary text-primary-foreground">
-                      {getInitials(displayName)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsEditingProfile(true)}
-                    className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-background border-border shadow-lg hover-scale"
-                  >
-                    <Camera className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* Profile Info & Actions */}
-              <div className="flex-1 text-center sm:text-left space-y-4 min-w-0">
-                 <div>
-                   <h1 className="text-lg sm:text-2xl font-bold mb-1">{displayName}</h1>
-                   <p className="text-muted-foreground font-mono text-xs">@{username}</p>
-                   <h2 className="hidden sm:block text-lg font-semibold mt-2 mb-1">{profile.page_title || 'My Recommendations'}</h2>
-                   <p className="hidden sm:block text-muted-foreground text-sm">
-                     {profile.page_description || 'A curated list of my favorite products and tools.'}
-                   </p>
-                 </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <div className="flex gap-2 flex-1">
-                    <Button variant="outline" onClick={copyPublicUrl} className="hover:shadow-elegant transition-all duration-300 hover-scale flex-1 sm:flex-initial">
-                      <Copy className="w-4 h-4 sm:mr-2" />
-                      <span className="hidden sm:inline">Copy URL</span>
-                      <span className="sm:hidden">Copy</span>
-                    </Button>
-                    <Button variant="outline" asChild className="hover:shadow-elegant transition-all duration-300 hover-scale flex-1 sm:flex-initial">
-                      <a href={`/${username}`} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="w-4 h-4 sm:mr-2" />
-                        <span className="hidden sm:inline">View Page</span>
-                        <span className="sm:hidden">View</span>
-                      </a>
+        {/* Profile Header Section - Hidden when profile tab is active */}
+        {activeTab !== 'profile' && (
+          <Card className="mb-8 relative overflow-hidden border-border/50 shadow-elegant backdrop-blur-sm animate-fade-in">
+            <div className="hidden" />
+            <CardContent className="relative pt-6">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                {/* Avatar Section */}
+                <div className="flex-shrink-0">
+                  <div className="relative group">
+                    <Avatar className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-border shadow-elegant hover-scale">
+                      <AvatarImage src={profile.avatar_url} alt={displayName} />
+                      <AvatarFallback className="text-lg sm:text-xl font-semibold bg-gradient-primary text-primary-foreground">
+                        {getInitials(displayName)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsEditingProfile(true)}
+                      className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-background border-border shadow-lg hover-scale"
+                    >
+                      <Camera className="w-4 h-4" />
                     </Button>
                   </div>
-                  <Button onClick={() => setIsEditingProfile(true)} size="sm" variant="outline" className="w-full sm:w-auto">
-                    <Edit className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">Edit Profile</span>
-                    <span className="sm:hidden">Edit</span>
-                  </Button>
                 </div>
 
-                {/* Public URL Display */}
-                 <div className="pt-2 border-t border-border/50">
-                   <p className="text-xs text-muted-foreground mb-2">Your public page:</p>
-                   <div className="font-mono text-xs bg-muted/50 border border-border/50 rounded-md p-2 break-all select-text">
-                     {publicUrl}
+                {/* Profile Info & Actions */}
+                <div className="flex-1 text-center sm:text-left space-y-4 min-w-0">
+                   <div>
+                     <h1 className="text-lg sm:text-2xl font-bold mb-1">{displayName}</h1>
+                     <p className="text-muted-foreground font-mono text-xs">@{username}</p>
+                     <h2 className="hidden sm:block text-lg font-semibold mt-2 mb-1">{profile.page_title || 'My Recommendations'}</h2>
+                     <p className="hidden sm:block text-muted-foreground text-sm">
+                       {profile.page_description || 'A curated list of my favorite products and tools.'}
+                     </p>
                    </div>
-                 </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex gap-2 flex-1">
+                      <Button variant="outline" onClick={copyPublicUrl} className="hover:shadow-elegant transition-all duration-300 hover-scale flex-1 sm:flex-initial">
+                        <Copy className="w-4 h-4 sm:mr-2" />
+                        <span className="hidden sm:inline">Copy URL</span>
+                        <span className="sm:hidden">Copy</span>
+                      </Button>
+                      <Button variant="outline" asChild className="hover:shadow-elegant transition-all duration-300 hover-scale flex-1 sm:flex-initial">
+                        <a href={`/${username}`} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="w-4 h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">View Page</span>
+                          <span className="sm:hidden">View</span>
+                        </a>
+                      </Button>
+                    </div>
+                    <Button onClick={() => setIsEditingProfile(true)} size="sm" variant="outline" className="w-full sm:w-auto">
+                      <Edit className="w-4 h-4 sm:mr-2" />
+                      <span className="hidden sm:inline">Edit Profile</span>
+                      <span className="sm:hidden">Edit</span>
+                    </Button>
+                  </div>
+
+                  {/* Public URL Display */}
+                   <div className="pt-2 border-t border-border/50">
+                     <p className="text-xs text-muted-foreground mb-2">Your public page:</p>
+                     <div className="font-mono text-xs bg-muted/50 border border-border/50 rounded-md p-2 break-all select-text">
+                       {publicUrl}
+                     </div>
+                   </div>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Visual Separator */}
         <div className="mb-8">
@@ -1194,87 +1196,176 @@ const Dashboard = () => {
             )}
           </TabsContent>
 
-          {/* Profile Tab Content */}
-          <TabsContent value="profile" className="space-y-6 animate-fade-in">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">Profile Settings</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => safeOpenUrl(`/${profile.username}`)}
-                className="flex items-center gap-2"
-              >
-                <ExternalLink className="w-4 h-4" />
-                View Public Page
-              </Button>
+          {/* Profile Tab Content - Enhanced Dashboard Home */}
+          <TabsContent value="profile" className="space-y-4 sm:space-y-6 animate-fade-in">
+            {/* Welcome Section */}
+            <div className="bg-gradient-to-br from-primary/5 to-accent/5 border border-border/50 rounded-xl p-4 sm:p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <Avatar className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-primary/20 shadow-elegant">
+                  <AvatarImage src={profile.avatar_url} alt={profile.display_name || profile.username} />
+                  <AvatarFallback className="text-lg font-bold bg-gradient-primary text-primary-foreground">
+                    {getInitials(profile.display_name || profile.username)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-lg sm:text-2xl font-bold text-foreground mb-1">
+                    Welcome back, {profile.display_name || profile.username}!
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                    Manage your recommendations and grow your audience
+                  </p>
+                </div>
+              </div>
+              
+              {/* Quick Actions */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => safeOpenUrl(`/${profile.username}`)}
+                  className="h-10 sm:h-12 text-xs sm:text-sm bg-background/50 border-border/50 hover:bg-background hover:shadow-md transition-all"
+                >
+                  <ExternalLink className="w-4 h-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">View Page</span>
+                  <span className="sm:hidden">View</span>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={copyPublicUrl}
+                  className="h-10 sm:h-12 text-xs sm:text-sm bg-background/50 border-border/50 hover:bg-background hover:shadow-md transition-all"
+                >
+                  <Copy className="w-4 h-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Copy URL</span>
+                  <span className="sm:hidden">Copy</span>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setIsEditingProfile(true)}
+                  className="h-10 sm:h-12 text-xs sm:text-sm bg-background/50 border-border/50 hover:bg-background hover:shadow-md transition-all col-span-2 sm:col-span-1"
+                >
+                  <Settings className="w-4 h-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Edit Profile</span>
+                  <span className="sm:hidden">Edit</span>
+                </Button>
+              </div>
             </div>
 
-            {/* Profile Info Card */}
-            <Card className="border-border/50 shadow-card bg-gradient-to-br from-background to-muted/30">
-              <CardHeader className="pb-4">
-                <div className="flex items-center gap-4">
-                  <Avatar className="w-16 h-16 border-2 border-background shadow-elegant">
-                    <AvatarImage src={profile.avatar_url} alt={profile.display_name || profile.username} />
-                    <AvatarFallback className="text-lg font-bold bg-gradient-primary text-primary-foreground">
-                      {getInitials(profile.display_name || profile.username)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-xl font-bold text-foreground truncate">
-                      {profile.display_name || profile.username}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">@{profile.username}</p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {profile.public_profile ? "Public Profile" : "Private Profile"}
-                    </p>
-                  </div>
-                </div>
+            {/* Profile Overview */}
+            <Card className="border-border/50 shadow-card">
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                  <User className="w-5 h-5 text-primary" />
+                  Profile Overview
+                </CardTitle>
               </CardHeader>
-              <CardContent className="pt-0">
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-2">{profile.page_title}</h4>
-                    <p className="text-sm text-muted-foreground">{profile.page_description}</p>
+              <CardContent className="pt-0 space-y-3 sm:space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="p-3 sm:p-4 bg-muted/30 rounded-lg border border-border/50">
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-1">Username</p>
+                    <p className="font-mono text-sm sm:text-base font-medium">@{profile.username}</p>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <Button 
-                      onClick={() => setIsEditingProfile(true)} 
-                      className="bg-gradient-primary hover:opacity-90 hover-scale transition-all duration-300"
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Edit Profile
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      onClick={() => {
-                        navigator.clipboard.writeText(`https://thecurately.com/${profile.username}`);
-                        toast({ description: 'Public URL copied to clipboard!' });
-                      }}
-                      className="border-border/50"
-                    >
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copy Public URL
-                    </Button>
+                  <div className="p-3 sm:p-4 bg-muted/30 rounded-lg border border-border/50">
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-1">Status</p>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${profile.public_profile ? 'bg-green-500' : 'bg-orange-500'}`} />
+                      <p className="text-sm sm:text-base font-medium">
+                        {profile.public_profile ? "Public" : "Private"}
+                      </p>
+                    </div>
                   </div>
                 </div>
+                
+                {(profile.page_title || profile.page_description) && (
+                  <div className="p-3 sm:p-4 bg-muted/30 rounded-lg border border-border/50">
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-2">Page Info</p>
+                    {profile.page_title && (
+                      <h4 className="font-semibold text-sm sm:text-base text-foreground mb-1">
+                        {profile.page_title}
+                      </h4>
+                    )}
+                    {profile.page_description && (
+                      <p className="text-xs sm:text-sm text-muted-foreground">
+                        {profile.page_description}
+                      </p>
+                    )}
+                  </div>
+                )}
               </CardContent>
             </Card>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-4">
-              <Card className="border-border/50 shadow-card">
-                <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-bold text-primary">{categories.length}</div>
-                  <div className="text-sm text-muted-foreground">Categories</div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              <Card className="border-border/50 shadow-card hover:shadow-lg transition-shadow">
+                <CardContent className="p-3 sm:p-4 text-center">
+                  <div className="text-xl sm:text-2xl font-bold text-primary mb-1">{categories.length}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Categories</div>
                 </CardContent>
               </Card>
-              <Card className="border-border/50 shadow-card">
-                <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-bold text-primary">{items.length}</div>
-                  <div className="text-sm text-muted-foreground">Recommendations</div>
+              <Card className="border-border/50 shadow-card hover:shadow-lg transition-shadow">
+                <CardContent className="p-3 sm:p-4 text-center">
+                  <div className="text-xl sm:text-2xl font-bold text-primary mb-1">{items.length}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Recommendations</div>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 shadow-card hover:shadow-lg transition-shadow">
+                <CardContent className="p-3 sm:p-4 text-center">
+                  <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1">
+                    {items.filter(item => item.target_url).length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">With Links</div>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 shadow-card hover:shadow-lg transition-shadow">
+                <CardContent className="p-3 sm:p-4 text-center">
+                  <div className="text-xl sm:text-2xl font-bold text-blue-600 mb-1">
+                    {items.filter(item => !item.category_id).length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Uncategorized</div>
                 </CardContent>
               </Card>
             </div>
+
+            {/* Quick Actions Card */}
+            <Card className="border-border/50 shadow-card">
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-base sm:text-lg">Quick Actions</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
+                  Get started with common tasks
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setActiveTab('recommendations')}
+                    className="h-12 sm:h-14 justify-start text-left p-4 bg-gradient-to-r from-primary/5 to-transparent border-primary/20 hover:border-primary/40 hover:shadow-md transition-all"
+                  >
+                    <div className="flex items-center gap-3 w-full">
+                      <Grid className="w-5 h-5 text-primary flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm sm:text-base">Add Recommendation</p>
+                        <p className="text-xs text-muted-foreground">Share your favorite products</p>
+                      </div>
+                    </div>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setActiveTab('categories')}
+                    className="h-12 sm:h-14 justify-start text-left p-4 bg-gradient-to-r from-accent/5 to-transparent border-accent/20 hover:border-accent/40 hover:shadow-md transition-all"
+                  >
+                    <div className="flex items-center gap-3 w-full">
+                      <Folder className="w-5 h-5 text-accent flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm sm:text-base">Organize Categories</p>
+                        <p className="text-xs text-muted-foreground">Group your recommendations</p>
+                      </div>
+                    </div>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
 
@@ -1860,37 +1951,54 @@ const Dashboard = () => {
         </Dialog>
       </div>
 
-      {/* Mobile Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border/50 z-50 sm:hidden">
-        <div className="flex items-center justify-around py-2 px-4">
+      {/* Mobile Bottom Navigation - Premium Design */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background/98 backdrop-blur-lg border-t border-border/50 z-50 sm:hidden shadow-2xl">
+        <div className="flex items-center justify-around py-3 px-6 max-w-sm mx-auto">
           <Button 
-            variant={activeTab === 'recommendations' ? 'default' : 'ghost'} 
+            variant="ghost"
             size="sm" 
             onClick={() => setActiveTab('recommendations')}
-            className="flex flex-col items-center gap-1 min-h-[56px] px-3 transition-all duration-200"
+            className={cn(
+              "flex flex-col items-center gap-1.5 min-h-[60px] px-4 py-2 rounded-2xl transition-all duration-300 hover:scale-105",
+              activeTab === 'recommendations' 
+                ? "bg-gradient-primary text-primary-foreground shadow-lg scale-105" 
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            )}
           >
-            <Grid className="w-5 h-5" />
+            <Grid className={cn("w-5 h-5 transition-all duration-300", activeTab === 'recommendations' ? "scale-110" : "")} />
             <span className="text-xs font-medium">Items</span>
           </Button>
           <Button 
-            variant={activeTab === 'categories' ? 'default' : 'ghost'} 
+            variant="ghost"
             size="sm" 
             onClick={() => setActiveTab('categories')}
-            className="flex flex-col items-center gap-1 min-h-[56px] px-3 transition-all duration-200"
+            className={cn(
+              "flex flex-col items-center gap-1.5 min-h-[60px] px-4 py-2 rounded-2xl transition-all duration-300 hover:scale-105",
+              activeTab === 'categories' 
+                ? "bg-gradient-primary text-primary-foreground shadow-lg scale-105" 
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            )}
           >
-            <Folder className="w-5 h-5" />
+            <Folder className={cn("w-5 h-5 transition-all duration-300", activeTab === 'categories' ? "scale-110" : "")} />
             <span className="text-xs font-medium">Categories</span>
           </Button>
           <Button 
-            variant={activeTab === 'profile' ? 'default' : 'ghost'} 
+            variant="ghost"
             size="sm" 
             onClick={() => setActiveTab('profile')}
-            className="flex flex-col items-center gap-1 min-h-[56px] px-3 transition-all duration-200"
+            className={cn(
+              "flex flex-col items-center gap-1.5 min-h-[60px] px-4 py-2 rounded-2xl transition-all duration-300 hover:scale-105",
+              activeTab === 'profile' 
+                ? "bg-gradient-primary text-primary-foreground shadow-lg scale-105" 
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            )}
           >
-            <User className="w-5 h-5" />
+            <User className={cn("w-5 h-5 transition-all duration-300", activeTab === 'profile' ? "scale-110" : "")} />
             <span className="text-xs font-medium">Profile</span>
           </Button>
         </div>
+        {/* Bottom safe area for devices with home indicator */}
+        <div className="h-safe-area-inset-bottom" />
       </div>
     </div>
   );
