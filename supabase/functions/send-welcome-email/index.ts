@@ -106,25 +106,6 @@ const handler = async (req: Request): Promise<Response> => {
               </ul>
             </div>
             
-            <!-- CTA -->
-            <div style="text-align: center; margin: 50px 0;">
-              <a href="${Deno.env.get('SUPABASE_URL') || 'https://your-app.com'}/dashboard" 
-                 style="background: linear-gradient(135deg, #FF6F61, #FF8A80); 
-                        color: #ffffff; 
-                        padding: 18px 40px; 
-                        text-decoration: none; 
-                        border-radius: 10px; 
-                        display: inline-block; 
-                        font-weight: 700; 
-                        font-size: 18px; 
-                        box-shadow: 0 6px 20px rgba(255, 111, 97, 0.4);
-                        transition: all 0.3s ease;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;">
-                ✨ Start Curating Now
-              </a>
-            </div>
-            
             <!-- Community -->
             <div style="text-align: center; padding: 30px; background: #F7F8FA; border-radius: 12px; margin-top: 40px;">
               <h3 style="color: #3B4A6A; margin: 0 0 15px; font-size: 20px; font-weight: 600;">Join Our Community 🌟</h3>
