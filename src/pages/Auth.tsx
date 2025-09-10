@@ -208,19 +208,22 @@ const Login = () => {
                 <Input
                   id="reset-email"
                   type="email"
+                  inputMode="email"
+                  autoComplete="email"
                   value={resetEmail}
                   onChange={(e) => setResetEmail(e.target.value)}
                   placeholder="Enter your email address"
                   required
-                  className="h-12 text-base"
+                  className="h-14 text-base min-h-[56px]"
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" size="mobile" className="w-full" disabled={isLoading}>
                 {isLoading ? 'Sending...' : 'Send Reset Link'}
               </Button>
               <Button
                 type="button"
                 variant="outline"
+                size="mobile"
                 className="w-full"
                 onClick={() => setShowResetForm(false)}
               >
@@ -289,11 +292,13 @@ const Login = () => {
                   <Input
                     id="signin-email"
                     type="email"
+                    inputMode="email"
+                    autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     required
-                    className="h-12 text-base"
+                    className="h-14 text-base min-h-[56px]"
                   />
                 </div>
                 <div className="space-y-2">
@@ -301,14 +306,15 @@ const Login = () => {
                   <Input
                     id="signin-password"
                     type="password"
+                    autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     required
-                    className="h-12 text-base"
+                    className="h-14 text-base min-h-[56px]"
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" size="mobile" className="w-full" disabled={isLoading}>
                   {isLoading ? 'Signing in...' : 'Sign In'}
                 </Button>
                 <button
@@ -351,11 +357,13 @@ const Login = () => {
                     <Input
                       id="signup-email"
                       type="email"
+                      inputMode="email"
+                      autoComplete="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
                       required
-                      className="h-12 text-base"
+                      className="h-14 text-base min-h-[56px]"
                     />
                   </div>
                   <div className="space-y-2">
@@ -364,11 +372,13 @@ const Login = () => {
                       <Input
                         id="signup-username"
                         type="text"
+                        inputMode="text"
+                        autoComplete="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value.toLowerCase())}
                         placeholder="Choose username"
                         className={cn(
-                          "h-12 text-base pr-10",
+                          "h-14 text-base pr-12 min-h-[56px]",
                           username.length >= 3 && !usernameCheck.isChecking && 
                           (usernameCheck.available ? "border-green-500" : "border-red-500")
                         )}
@@ -405,11 +415,12 @@ const Login = () => {
                   <Input
                     id="signup-password"
                     type="password"
+                    autoComplete="new-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Create a password"
                     required
-                    className="h-12 text-base"
+                    className="h-14 text-base min-h-[56px]"
                   />
                 </div>
                 <div className="space-y-4">
@@ -418,16 +429,18 @@ const Login = () => {
                     <Input
                       id="occupation"
                       type="text"
+                      inputMode="text"
+                      autoComplete="organization-title"
                       value={occupation}
                       onChange={(e) => setOccupation(e.target.value)}
                       placeholder="Your profession"
-                      className="h-12 text-base"
+                      className="h-14 text-base min-h-[56px]"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="gender">Gender (Optional)</Label>
                     <Select value={gender} onValueChange={setGender}>
-                      <SelectTrigger className="h-12 text-base">
+                      <SelectTrigger className="h-14 text-base min-h-[56px]">
                         <SelectValue placeholder="Select gender" />
                       </SelectTrigger>
                       <SelectContent>
@@ -441,6 +454,7 @@ const Login = () => {
                 </div>
                 <Button 
                   type="submit" 
+                  size="mobile"
                   className="w-full" 
                   disabled={isLoading}
                 >

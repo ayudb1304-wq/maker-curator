@@ -196,3 +196,43 @@ All colors MUST be HSL.
   max-width: 1200px !important;
   z-index: 50 !important;
 }
+
+/* Mobile safe areas and viewport optimizations */
+@supports (padding: env(safe-area-inset-top)) {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Enhanced mobile touch targets */
+@media (max-width: 768px) {
+  /* Ensure minimum touch target sizes */
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Better spacing for mobile forms */
+  .mobile-form-spacing > * + * {
+    margin-top: 1.5rem;
+  }
+  
+  /* Enhanced button padding for mobile */
+  .mobile-enhanced-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}

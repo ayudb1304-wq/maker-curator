@@ -1937,7 +1937,8 @@ const Dashboard = () => {
               </div>
               <Button 
                 onClick={handleUpdateProfile} 
-                className="w-full h-10 sm:h-12 text-sm sm:text-base mt-4 sm:mt-6"
+                size="mobile"
+                className="w-full h-14 text-base mt-4 sm:mt-6 sm:h-12 sm:text-sm min-h-[56px]"
                 disabled={
                   (profileData.username !== profile.username && !cooldownInfo.canChange) ||
                   (profileData.username !== profile.username && 
@@ -1951,54 +1952,54 @@ const Dashboard = () => {
         </Dialog>
       </div>
 
-      {/* Mobile Bottom Navigation - Premium Design */}
+      {/* Mobile Bottom Navigation - Enhanced Touch Targets */}
       <div className="fixed bottom-0 left-0 right-0 bg-background/98 backdrop-blur-lg border-t border-border/50 z-50 sm:hidden shadow-2xl">
-        <div className="flex items-center justify-around py-3 px-6 max-w-sm mx-auto">
+        <div className="flex items-center justify-around py-4 px-4 max-w-sm mx-auto">
           <Button 
             variant="ghost"
-            size="sm" 
+            size="icon" 
             onClick={() => setActiveTab('recommendations')}
             className={cn(
-              "flex flex-col items-center gap-1.5 min-h-[60px] px-4 py-2 rounded-2xl transition-all duration-300 hover:scale-105",
+              "flex flex-col items-center gap-2 min-h-[72px] min-w-[72px] px-3 py-3 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95",
               activeTab === 'recommendations' 
                 ? "bg-gradient-primary text-primary-foreground shadow-lg scale-105" 
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
             )}
           >
-            <Grid className={cn("w-5 h-5 transition-all duration-300", activeTab === 'recommendations' ? "scale-110" : "")} />
+            <Grid className={cn("w-6 h-6 transition-all duration-300", activeTab === 'recommendations' ? "scale-110" : "")} />
             <span className="text-xs font-medium">Items</span>
           </Button>
           <Button 
             variant="ghost"
-            size="sm" 
+            size="icon" 
             onClick={() => setActiveTab('categories')}
             className={cn(
-              "flex flex-col items-center gap-1.5 min-h-[60px] px-4 py-2 rounded-2xl transition-all duration-300 hover:scale-105",
+              "flex flex-col items-center gap-2 min-h-[72px] min-w-[72px] px-3 py-3 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95",
               activeTab === 'categories' 
                 ? "bg-gradient-primary text-primary-foreground shadow-lg scale-105" 
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
             )}
           >
-            <Folder className={cn("w-5 h-5 transition-all duration-300", activeTab === 'categories' ? "scale-110" : "")} />
+            <Folder className={cn("w-6 h-6 transition-all duration-300", activeTab === 'categories' ? "scale-110" : "")} />
             <span className="text-xs font-medium">Categories</span>
           </Button>
           <Button 
             variant="ghost"
-            size="sm" 
+            size="icon" 
             onClick={() => setActiveTab('profile')}
             className={cn(
-              "flex flex-col items-center gap-1.5 min-h-[60px] px-4 py-2 rounded-2xl transition-all duration-300 hover:scale-105",
+              "flex flex-col items-center gap-2 min-h-[72px] min-w-[72px] px-3 py-3 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95",
               activeTab === 'profile' 
                 ? "bg-gradient-primary text-primary-foreground shadow-lg scale-105" 
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
             )}
           >
-            <User className={cn("w-5 h-5 transition-all duration-300", activeTab === 'profile' ? "scale-110" : "")} />
+            <User className={cn("w-6 h-6 transition-all duration-300", activeTab === 'profile' ? "scale-110" : "")} />
             <span className="text-xs font-medium">Profile</span>
           </Button>
         </div>
         {/* Bottom safe area for devices with home indicator */}
-        <div className="h-safe-area-inset-bottom" />
+        <div className="h-[env(safe-area-inset-bottom,16px)]" />
       </div>
     </div>
   );

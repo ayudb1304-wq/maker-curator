@@ -62,19 +62,20 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
   const content = (
     <>
       <div className="relative">
-        {/* Image - Full image display */}
-        <div className="w-full overflow-hidden rounded-lg mb-6 max-h-96">
+        {/* Image - Enhanced mobile display */}
+        <div className={`w-full overflow-hidden rounded-lg mb-6 ${isMobile ? 'max-h-72' : 'max-h-96'}`}>
           <img 
             src={item.image_url} 
             alt={item.title}
-            className="w-full h-auto object-contain max-h-96"
+            className={`w-full h-auto object-contain ${isMobile ? 'max-h-72' : 'max-h-96'}`}
+            loading="lazy"
           />
         </div>
 
         {/* Category Badge */}
         {category && (
           <div className="mb-4">
-            <Badge variant="secondary" className="text-sm">
+            <Badge variant="secondary" className={`${isMobile ? 'text-base px-4 py-2' : 'text-sm'}`}>
               <PreserveEmojiText>{category.name}</PreserveEmojiText>
             </Badge>
           </div>
@@ -83,7 +84,7 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
         {/* Title */}
         <PreserveEmojiText
           as="h2"
-          className="text-2xl font-bold mb-4"
+          className={`font-bold mb-4 ${isMobile ? 'text-3xl' : 'text-2xl'}`}
         >
           {item.title}
         </PreserveEmojiText>
@@ -93,7 +94,7 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
           <div className="mb-6">
             <PreserveEmojiText
               as="p"
-              className="text-muted-foreground leading-relaxed"
+              className={`text-muted-foreground leading-relaxed ${isMobile ? 'text-base' : 'text-sm'}`}
             >
               {item.long_description || item.description}
             </PreserveEmojiText>
@@ -101,14 +102,14 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
         )}
       </div>
 
-      {/* Action Button */}
+      {/* Action Button - Enhanced for mobile */}
       <div className="pt-4">
         <Button 
           onClick={handleVisitLink}
-          className="w-full gap-2"
-          size="lg"
+          className="w-full gap-3 font-medium bg-gradient-primary text-white hover:shadow-glow transition-all duration-300"
+          size={isMobile ? "mobile" : "lg"}
         >
-          <ExternalLink className="w-4 h-4" />
+          <ExternalLink className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`} />
           Visit Link
         </Button>
       </div>
@@ -118,12 +119,15 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="max-h-[90vh]">
-          <DrawerHeader className="text-left">
+        <DrawerContent className="max-h-[95vh] overflow-y-auto">
+          <DrawerHeader className="text-left px-6 pt-6 pb-2">
+            <DrawerTitle className="sr-only">Recommendation Details</DrawerTitle>
           </DrawerHeader>
-          <div className="px-4 pb-4 overflow-y-auto">
+          <div className="px-6 pb-8 pt-2">
             {content}
           </div>
+          {/* Safe area for devices with home indicator */}
+          <div className="h-[env(safe-area-inset-bottom,16px)]" />
         </DrawerContent>
       </Drawer>
     );

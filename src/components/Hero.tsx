@@ -82,11 +82,13 @@ const Hero = () => {
                   </div>
                   <Input
                     type="text"
+                    inputMode="text"
+                    autoComplete="username"
                     placeholder="yourname"
                     value={username}
                     onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
                     className={cn(
-                      "pl-[130px] pr-10 h-12 bg-white border-2 border-primary text-foreground placeholder:text-muted-foreground focus:border-primary ring-2 ring-primary/20",
+                      "pl-[130px] pr-12 h-14 bg-white border-2 border-primary text-foreground placeholder:text-muted-foreground focus:border-primary ring-2 ring-primary/20 text-base min-h-[56px]",
                       getInputStatus()
                     )}
                     maxLength={20}
@@ -97,9 +99,9 @@ const Hero = () => {
                 </div>
                 <Button 
                   type="submit" 
-                  size="lg" 
+                  size="mobile" 
                   variant="default"
-                  className="h-12 px-6 group bg-primary text-primary-foreground hover:bg-primary/90"
+                  className="h-14 px-8 group bg-primary text-primary-foreground hover:bg-primary/90 min-h-[56px]"
                   disabled={!usernameCheck.available || username.length < 3 || usernameCheck.isChecking}
                 >
                   Claim It
@@ -116,7 +118,7 @@ const Hero = () => {
                 </p>
               )}
               
-              <Button variant="secondary" size="lg" className="bg-white/90 text-foreground hover:bg-white border-0 mx-auto lg:mx-0" asChild>
+              <Button variant="secondary" size="mobile" className="bg-white/90 text-foreground hover:bg-white border-0 mx-auto lg:mx-0 min-h-[56px]" asChild>
                 <Link to="/demo">
                   View Example
                 </Link>
