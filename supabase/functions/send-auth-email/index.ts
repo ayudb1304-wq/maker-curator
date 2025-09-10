@@ -184,13 +184,13 @@ serve(async (req: Request): Promise<Response> => {
     // Respond immediately so GoTrue hook doesn't time out
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
+      headers: { "Content-Type": "application/json; charset=utf-8", ...corsHeaders },
     });
   } catch (error: any) {
     console.error("send-auth-email error:", error?.message || error);
     return new Response(JSON.stringify({ error: error?.message || "Unknown error" }), {
       status: 400,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
+      headers: { "Content-Type": "application/json; charset=utf-8", ...corsHeaders },
     });
   }
 });

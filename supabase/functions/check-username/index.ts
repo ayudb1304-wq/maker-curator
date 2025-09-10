@@ -24,7 +24,7 @@ const handler = async (req: Request): Promise<Response> => {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders },
     });
   }
 
@@ -37,7 +37,7 @@ const handler = async (req: Request): Promise<Response> => {
         message: 'Username must be at least 3 characters long' 
       }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders },
       });
     }
 
@@ -49,7 +49,7 @@ const handler = async (req: Request): Promise<Response> => {
         message: 'Username can only contain letters, numbers, underscores, and hyphens' 
       }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders },
       });
     }
 
@@ -67,7 +67,7 @@ const handler = async (req: Request): Promise<Response> => {
         message: 'Error checking username availability' 
       }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders },
       });
     }
 
@@ -75,7 +75,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     return new Response(JSON.stringify({ available: isAvailable, message }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders },
     });
 
   } catch (error) {
@@ -85,7 +85,7 @@ const handler = async (req: Request): Promise<Response> => {
       message: 'Internal server error' 
     }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders },
     });
   }
 };
