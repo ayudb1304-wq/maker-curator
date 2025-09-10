@@ -1222,15 +1222,7 @@ const Dashboard = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  type="button"
-                  onClick={() => {
-                    try {
-                      window.open(`/${profile.username}`, '_blank', 'noopener,noreferrer');
-                    } catch (error) {
-                      console.error('Failed to open public page:', error);
-                      window.location.href = `/${profile.username}`;
-                    }
-                  }}
+                  onClick={() => safeOpenUrl(`/${profile.username}`)}
                   className="h-10 sm:h-12 text-xs sm:text-sm bg-background/50 border-border/50 hover:bg-background hover:shadow-md transition-all"
                 >
                   <ExternalLink className="w-4 h-4 mr-1 sm:mr-2" />
