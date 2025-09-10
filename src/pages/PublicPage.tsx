@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Palette, Youtube, Twitter, Linkedin, Instagram, Camera } from 'lucide-react';
+import { ExternalLink, Palette, Youtube, Twitter, Linkedin, Instagram, Camera, AtSign } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { safeOpenUrl, sanitizeText } from '@/lib/security';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -150,11 +150,10 @@ const PublicPage = () => {
       setLoading(true);
       setError(null);
 
-      // First get the profile - only public profiles are accessible
-      // For security, we only query safe public columns to prevent exposure of sensitive data
+      // First get the profile - public profiles with social media links are accessible
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, use_avatar_background, user_id, display_name_color, username_color, page_title_color, page_description_color')
+        .select('username, display_name, page_title, page_description, avatar_url, use_avatar_background, user_id, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
         .eq('username', username)
         .eq('public_profile', true)
         .maybeSingle();
@@ -389,8 +388,8 @@ const PublicPage = () => {
                       </a>
                     )}
                     {profile.threads_url && (
-                      <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-foreground transition-colors">
-                        <ExternalLink size={20} />
+                      <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                        <AtSign size={20} />
                       </a>
                     )}
                     {profile.snapchat_url && (
@@ -473,7 +472,7 @@ const PublicPage = () => {
                       )}
                       {profile.threads_url && (
                         <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
-                          <ExternalLink size={20} />
+                          <AtSign size={20} />
                         </a>
                       )}
                       {profile.snapchat_url && (

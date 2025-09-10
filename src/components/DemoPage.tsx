@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Youtube, Twitter, Linkedin, Instagram, Camera } from 'lucide-react';
+import { ExternalLink, Youtube, Twitter, Linkedin, Instagram, Camera, AtSign } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { sanitizeText } from '@/lib/security';
 import { cn } from '@/lib/utils';
@@ -383,11 +383,13 @@ const DemoPage = () => {
                 </p>
                 
                 {/* Demo-only Social Icons (no links) */}
-                <div className="flex justify-center gap-4 mt-4 text-foreground">
+                <div className="flex justify-center gap-4 mt-4 text-white/80">
                   <Youtube size={20} />
                   <Twitter size={20} />
                   <Linkedin size={20} />
                   <Instagram size={20} />
+                  <Camera size={20} />
+                  <AtSign size={20} />
                 </div>
               </div>
             </div>
@@ -426,11 +428,13 @@ const DemoPage = () => {
                    </p>
                    
                   {/* Demo-only Social Icons (no links) */}
-                  <div className="flex justify-center gap-4 mt-4 text-foreground">
+                  <div className="flex justify-center gap-4 mt-4 text-muted-foreground">
                     <Youtube size={20} />
                     <Twitter size={20} />
                     <Linkedin size={20} />
                     <Instagram size={20} />
+                    <Camera size={20} />
+                    <AtSign size={20} />
                   </div>
                 </div>
               </div>
