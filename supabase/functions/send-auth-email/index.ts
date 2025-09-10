@@ -1,8 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
+// Resend is imported dynamically inside sendEmail to avoid cold start time
+// import { Resend } from "npm:resend@2.0.0";
 
-// Secrets
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+// Secrets (lightweight reads only)
 const FROM_EMAIL = Deno.env.get("FROM_EMAIL") || "Curately <noreply@resend.dev>";
 
 // CORS
@@ -25,15 +25,15 @@ interface AuthHookPayload {
 
 function buildEmail(payload: AuthHookPayload) {
   const { email_data } = payload;
+  const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
   const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
-  const baseUrl = `${email_data.site_url}/auth/v1/verify`;
-  const params = new URLSearchParams({
-    token: email_data.token_hash,
-    type: email_data.email_action_type,
-    redirect_to: email_data.redirect_to,
-  });
-  if (ANON_KEY) params.append("apikey", ANON_KEY);
-  const confirmUrl = `${baseUrl}?${params.toString()}`;
+
+  const url = new URL(`${SUPABASE_URL}/auth/v1/verify`);
+  url.searchParams.set("token", email_data.token_hash);
+  url.searchParams.set("type", email_data.email_action_type);
+  url.searchParams.set("redirect_to", email_data.redirect_to);
+  if (ANON_KEY) url.searchParams.set("apikey", ANON_KEY);
+  const confirmUrl = url.toString();
 
   let subject = "Curately - Authentication";
   let html = "";
@@ -143,6 +143,10 @@ function buildEmail(payload: AuthHookPayload) {
 async function sendEmail(payload: AuthHookPayload) {
   const { user } = payload;
   const { subject, html } = buildEmail(payload);
+
+  // Dynamic import to avoid cold start costs before responding to hook
+  const { Resend } = await import("npm:resend@2.0.0");
+  const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
 
   const res = await resend.emails.send({
     from: FROM_EMAIL,
