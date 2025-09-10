@@ -32,7 +32,13 @@ interface DemoProfile {
   avatar_url: string;
   use_avatar_background: boolean;
   user_id: string;
-  // Social media URLs removed for security in public demo
+  youtube_url?: string;
+  twitter_url?: string;
+  linkedin_url?: string;
+  tiktok_url?: string;
+  instagram_url?: string;
+  threads_url?: string;
+  snapchat_url?: string;
 }
 
 const demoProfile: DemoProfile = {
@@ -42,7 +48,14 @@ const demoProfile: DemoProfile = {
   page_description: "A carefully curated collection of my favorite tools, products, and resources that make life better.",
   avatar_url: "/lovable-uploads/262910fa-1906-4d6c-a25c-5ab0cbfe4267.png",
   use_avatar_background: true,
-  user_id: "demo-user"
+  user_id: "demo-user",
+  youtube_url: "https://youtube.com/@sushmitha",
+  twitter_url: "https://twitter.com/sushmitha",
+  linkedin_url: "https://linkedin.com/in/sushmitha",
+  instagram_url: "https://instagram.com/sushmitha",
+  tiktok_url: "https://tiktok.com/@sushmitha",
+  threads_url: "https://www.threads.net/@sushmitha",
+  snapchat_url: "https://snapchat.com/add/sushmitha"
 };
 
 const demoCategories: DemoCategory[] = [
@@ -511,11 +524,9 @@ const DemoPage = () => {
                           <img 
                             src={item.image_url} 
                             alt={item.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                 />
-                 
-                    {/* Note: Social media links hidden for security in this demo */}
-                 </div>
+                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                           />
+                         </div>
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between mb-2">
                             <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
