@@ -56,17 +56,25 @@ export function sanitizeUrl(url: string): string {
  * Safely opens an external URL with security checks
  */
 export function safeOpenUrl(url: string): void {
-  const sanitizedUrl = sanitizeUrl(url);
-  
+  let sanitizedUrl = sanitizeUrl(url).trim();
+
+  if (!sanitizedUrl) {
+    console.warn('Attempted to open empty URL');
+    return;
+  }
+
+  // Auto-prefix protocol if missing (assume https)
+  const hasProtocol = /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(sanitizedUrl);
+  if (!hasProtocol) {
+    sanitizedUrl = `https://${sanitizedUrl}`;
+  }
+
   if (!isValidUrl(sanitizedUrl)) {
     console.warn('Attempted to open invalid URL:', url);
     return;
   }
 
-  // Open with security attributes
   const newWindow = window.open(sanitizedUrl, '_blank', 'noopener,noreferrer');
-  
-  // Ensure the new window doesn't have access to the opener
   if (newWindow) {
     newWindow.opener = null;
   }
