@@ -534,7 +534,7 @@ const PublicPage = () => {
                         : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }`}
                   >
-                    <span dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }} />
+                    <PreserveEmojiText>{category.name}</PreserveEmojiText>
                   </button>
                 ))}
                 {getItemsByCategory(null).length > 0 && (
@@ -590,15 +590,19 @@ const PublicPage = () => {
                   <div className={`absolute inset-0 ${gradientClass} opacity-10`}></div>
                   <div className="relative px-6 py-12 space-y-8">
                      <div className="text-center">
-                        <h2 
-                          className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent preserve-emoji-colors"
-                          dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }}
-                        />
+                        <PreserveEmojiText
+                          as="h2"
+                          className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent"
+                        >
+                          {category.name}
+                        </PreserveEmojiText>
                         {category.description && (
-                          <p 
-                            className="text-lg text-muted-foreground max-w-2xl mx-auto preserve-emoji-colors"
-                            dangerouslySetInnerHTML={{ __html: sanitizeText(category.description) }}
-                          />
+                          <PreserveEmojiText
+                            as="p"
+                            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+                          >
+                            {category.description}
+                          </PreserveEmojiText>
                         )}
                      </div>
                     
@@ -618,16 +622,20 @@ const PublicPage = () => {
                           </div>
                            <CardContent className="p-6">
                               <div className="mb-2">
-                               <h3 
-                                 className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors"
-                                 dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }}
-                               />
+                               <PreserveEmojiText
+                                 as="h3"
+                                 className="font-semibold text-lg group-hover:text-primary transition-colors"
+                               >
+                                 {item.title}
+                               </PreserveEmojiText>
                               </div>
                                {item.description && (
-                                 <p 
-                                   className="text-muted-foreground leading-relaxed preserve-emoji-colors"
-                                   dangerouslySetInnerHTML={{ __html: sanitizeText(item.description) }}
-                                 />
+                                 <PreserveEmojiText
+                                   as="p"
+                                   className="text-muted-foreground leading-relaxed"
+                                 >
+                                   {item.description}
+                                 </PreserveEmojiText>
                                )}
                           </CardContent>
                         </Card>
@@ -681,16 +689,20 @@ const PublicPage = () => {
                       </div>
                        <CardContent className="p-6">
                           <div className="mb-2">
-                             <h3 
-                               className="font-semibold text-lg group-hover:text-primary transition-colors preserve-emoji-colors"
-                               dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }}
-                             />
+                             <PreserveEmojiText
+                               as="h3"
+                               className="font-semibold text-lg group-hover:text-primary transition-colors"
+                             >
+                               {item.title}
+                             </PreserveEmojiText>
                           </div>
                            {item.description && (
-                             <p 
-                               className="text-muted-foreground leading-relaxed preserve-emoji-colors"
-                               dangerouslySetInnerHTML={{ __html: sanitizeText(item.description) }}
-                             />
+                             <PreserveEmojiText
+                               as="p"
+                               className="text-muted-foreground leading-relaxed"
+                             >
+                               {item.description}
+                             </PreserveEmojiText>
                            )}
                       </CardContent>
                     </Card>

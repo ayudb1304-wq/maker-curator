@@ -1,4 +1,5 @@
 import React from 'react';
+import { PreserveEmojiText } from '@/lib/emoji';
 import { ExternalLink, X } from 'lucide-react';
 import {
   Drawer,
@@ -72,24 +73,28 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
         {category && (
           <div className="mb-4">
             <Badge variant="secondary" className="text-sm">
-              <span dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }} />
+              <PreserveEmojiText>{category.name}</PreserveEmojiText>
             </Badge>
           </div>
         )}
 
         {/* Title */}
-        <h2 
-          className="text-2xl font-bold mb-4 preserve-emoji-colors"
-          dangerouslySetInnerHTML={{ __html: sanitizeText(item.title) }}
-        />
+        <PreserveEmojiText
+          as="h2"
+          className="text-2xl font-bold mb-4"
+        >
+          {item.title}
+        </PreserveEmojiText>
 
         {/* Description */}
         {item.description && (
           <div className="mb-6">
-            <p 
-              className="text-muted-foreground leading-relaxed preserve-emoji-colors"
-              dangerouslySetInnerHTML={{ __html: sanitizeText(item.description) }}
-            />
+            <PreserveEmojiText
+              as="p"
+              className="text-muted-foreground leading-relaxed"
+            >
+              {item.description}
+            </PreserveEmojiText>
           </div>
         )}
       </div>

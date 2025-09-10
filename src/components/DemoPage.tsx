@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { PreserveEmojiText } from '@/lib/emoji';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -505,15 +506,19 @@ const DemoPage = () => {
                 <div className={`absolute inset-0 ${gradientClass} opacity-10`}></div>
                 <div className="relative px-6 py-12 space-y-8">
                   <div className="text-center animate-fade-in">
-                    <h2 
-                      className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent preserve-emoji-colors"
-                      dangerouslySetInnerHTML={{ __html: sanitizeText(category.name) }}
-                    />
+                    <PreserveEmojiText
+                      as="h2"
+                      className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent"
+                    >
+                      {category.name}
+                    </PreserveEmojiText>
                     {category.description && (
-                      <p 
-                        className="text-lg text-muted-foreground max-w-2xl mx-auto preserve-emoji-colors"
-                        dangerouslySetInnerHTML={{ __html: sanitizeText(category.description) }}
-                      />
+                      <PreserveEmojiText
+                        as="p"
+                        className="text-lg text-muted-foreground max-w-2xl mx-auto"
+                      >
+                        {category.description}
+                      </PreserveEmojiText>
                     )}
                   </div>
                   
