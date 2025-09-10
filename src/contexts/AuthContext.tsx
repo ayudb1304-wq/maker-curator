@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signUp = async (email: string, password: string, metadata?: any) => {
     // Use the current domain to prevent phishing warnings
     const currentOrigin = window.location.origin;
-    const redirectUrl = `${currentOrigin}/auth?verified=true`;
+    const redirectUrl = `${currentOrigin}/dashboard`; // Redirect to dashboard after verification
     
     const { error } = await supabase.auth.signUp({
       email,
