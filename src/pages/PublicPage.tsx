@@ -39,13 +39,7 @@ interface Profile {
   username_color?: string;
   page_title_color?: string;
   page_description_color?: string;
-  youtube_url?: string;
-  twitter_url?: string;
-  linkedin_url?: string;
-  tiktok_url?: string;
-  instagram_url?: string;
-  threads_url?: string;
-  snapchat_url?: string;
+  // Social media URLs are now protected and not available in public view
 }
 
 const PublicPage = () => {
