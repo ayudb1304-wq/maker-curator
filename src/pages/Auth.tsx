@@ -28,15 +28,27 @@ const Login = () => {
   const [resetEmail, setResetEmail] = useState('');
   const [showResetForm, setShowResetForm] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    // Determine initial tab based on URL parameters
+    const urlTab = searchParams.get('tab');
+    const urlUsername = searchParams.get('username');
+    if (urlUsername || urlTab === 'signup') return 'signup';
+    return 'signin';
+  });
   
   const usernameCheck = useUsernameCheck(username);
 
-  // Handle URL parameters
+  // Handle URL parameters and initialize tab state
   useEffect(() => {
     const verified = searchParams.get('verified');
     const reset = searchParams.get('reset');
     const usernameParam = searchParams.get('username');
     const tabParam = searchParams.get('tab');
+    
+    // Set initial tab based on URL parameters
+    if (usernameParam || tabParam === 'signup') {
+      setActiveTab('signup');
+    }
     
     if (usernameParam) {
       setUsername(usernameParam);
@@ -127,6 +139,7 @@ const Login = () => {
         setError(error.message);
       } else {
         setSignupSuccess(true);
+        setActiveTab('signin'); // Switch to signin tab after successful signup
         // Clear the form but stay on the auth page
         setEmail('');
         setPassword('');
@@ -242,7 +255,7 @@ const Login = () => {
           </Link>
         </CardHeader>
         <CardContent>
-          <Tabs value={signupSuccess ? "signin" : (searchParams.get('username') || searchParams.get('tab') === 'signup' ? "signup" : "signin")} className="w-full">
+          <Tabs value={signupSuccess ? "signin" : activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -301,10 +314,20 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowResetForm(true)}
-                  className="w-full text-sm text-primary hover:underline"
+                  className="w-full text-sm text-primary hover:underline mb-2"
                 >
                   Forgot your password?
                 </button>
+                <p className="text-center text-sm text-muted-foreground">
+                  Don't have an account?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('signup')}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Sign up here
+                  </button>
+                </p>
               </form>
             </TabsContent>
             
@@ -423,6 +446,17 @@ const Login = () => {
                 >
                   {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
+                
+                <p className="text-center text-sm text-muted-foreground mt-4">
+                  Already have an account?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('signin')}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Sign in here
+                  </button>
+                </p>
                 
               </form>
             </TabsContent>
