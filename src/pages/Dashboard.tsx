@@ -139,6 +139,32 @@ const Dashboard = () => {
     snapchat_url: ''
   });
   
+  const draftKey = user ? `profileDraft:${user.id}` : null;
+
+  // Restore unsaved profile draft when reopening the dialog
+  useEffect(() => {
+    if (!isEditingProfile || !draftKey) return;
+    try {
+      const draft = localStorage.getItem(draftKey);
+      if (draft) {
+        const parsed = JSON.parse(draft);
+        setProfileData(prev => ({ ...prev, ...parsed }));
+      }
+    } catch (e) {
+      console.warn('Failed to load profile draft', e);
+    }
+  }, [isEditingProfile, draftKey]);
+
+  // Autosave profile edits while the dialog is open
+  useEffect(() => {
+    if (!isEditingProfile || !draftKey) return;
+    try {
+      localStorage.setItem(draftKey, JSON.stringify(profileData));
+    } catch {
+      // ignore write errors
+    }
+  }, [profileData, isEditingProfile, draftKey]);
+  
   const usernameCheck = useUsernameCheck(profileData.username);
   
   // Calculate username cooldown info
@@ -595,6 +621,8 @@ const Dashboard = () => {
 
       // Fetch fresh profile data
       await fetchProfile();
+      // Clear draft after successful save
+      if (draftKey) { try { localStorage.removeItem(draftKey); } catch {} }
       setIsEditingProfile(false);
       toast({ description: 'Profile updated successfully!' });
     } catch (error) {
