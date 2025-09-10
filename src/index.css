@@ -219,6 +219,7 @@ All colors MUST be HSL.
 
 /* Preserve native emoji rendering and prevent gradient text effects from interfering with emojis */
 @layer utilities {
+  .emoji-native * {
     background: none !important;
     background-clip: unset !important;
     -webkit-background-clip: unset !important;
