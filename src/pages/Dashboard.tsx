@@ -1264,11 +1264,11 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent className="pt-0 space-y-3 sm:space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <div className="p-3 sm:p-4 bg-muted/30 rounded-lg border border-border/50">
+                  <div className="p-3 sm:p-4 bg-muted/30 rounded-lg border border-border/50 hover:bg-muted/40 hover:shadow-md transition-all duration-300 cursor-pointer">
                     <p className="text-xs sm:text-sm text-muted-foreground mb-1">Username</p>
                     <p className="font-mono text-sm sm:text-base font-medium">@{profile.username}</p>
                   </div>
-                  <div className="p-3 sm:p-4 bg-muted/30 rounded-lg border border-border/50">
+                  <div className="p-3 sm:p-4 bg-muted/30 rounded-lg border border-border/50 hover:bg-muted/40 hover:shadow-md transition-all duration-300 cursor-pointer">
                     <p className="text-xs sm:text-sm text-muted-foreground mb-1">Status</p>
                     <div className="flex items-center gap-2">
                       <div className={`w-2 h-2 rounded-full ${profile.public_profile ? 'bg-green-500' : 'bg-orange-500'}`} />
@@ -1280,7 +1280,7 @@ const Dashboard = () => {
                 </div>
                 
                 {(profile.page_title || profile.page_description) && (
-                  <div className="p-3 sm:p-4 bg-muted/30 rounded-lg border border-border/50">
+                  <div className="p-3 sm:p-4 bg-muted/30 rounded-lg border border-border/50 hover:bg-muted/40 hover:shadow-md transition-all duration-300 cursor-pointer">
                     <p className="text-xs sm:text-sm text-muted-foreground mb-2">Page Info</p>
                     {profile.page_title && (
                       <h4 className="font-semibold text-sm sm:text-base text-foreground mb-1">
