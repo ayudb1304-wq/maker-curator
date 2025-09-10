@@ -383,7 +383,7 @@ const DemoPage = () => {
                 </p>
                 
                 {/* Demo-only Social Icons (no links) */}
-                <div className="flex justify-center gap-4 mt-4 text-white/80">
+                <div className="flex justify-center gap-4 mt-4 text-black">
                   <Youtube size={20} />
                   <Twitter size={20} />
                   <Linkedin size={20} />
@@ -428,7 +428,7 @@ const DemoPage = () => {
                    </p>
                    
                   {/* Demo-only Social Icons (no links) */}
-                  <div className="flex justify-center gap-4 mt-4 text-muted-foreground">
+                  <div className="flex justify-center gap-4 mt-4 text-black">
                     <Youtube size={20} />
                     <Twitter size={20} />
                     <Linkedin size={20} />

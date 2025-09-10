@@ -27,35 +27,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const maybeSendWelcomeEmail = async (user: any) => {
-    try {
-      // Check if user has a profile and if welcome email was already sent
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('username, display_name, welcome_email_sent')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (profile && !profile.welcome_email_sent) {
-        // Send welcome email
-        await supabase.functions.invoke('send-welcome-email', {
-          body: { 
-            email: user.email, 
-            username: profile.username, 
-            displayName: profile.display_name 
-          },
-        });
-
-        // Mark welcome email as sent
-        await supabase
-          .from('profiles')
-          .update({ welcome_email_sent: true })
-          .eq('user_id', user.id);
-      }
-    } catch (error) {
-      console.error('Welcome email error:', error);
-    }
-  };
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -64,13 +35,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
-        
-        // Send welcome email on first login after verification
-        if (event === 'SIGNED_IN' && session?.user) {
-          setTimeout(async () => {
-            await maybeSendWelcomeEmail(session.user);
-          }, 0);
-        }
       }
     );
 
