@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings, FolderPlus, Mail, CheckCircle, XCircle, Loader2, User, Camera } from 'lucide-react';
+import { Plus, Edit, Trash2, Copy, ExternalLink, Palette, LogOut, Settings, FolderPlus, Mail, CheckCircle, XCircle, Loader2, User, Camera, Grid, Folder } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useUsernameCheck } from '@/hooks/useUsernameCheck';
@@ -98,6 +98,7 @@ const Dashboard = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [visibleItems, setVisibleItems] = useState<Record<string, number>>({});
   const [showMoreClicked, setShowMoreClicked] = useState<Record<string, boolean>>({});
+  const [activeTab, setActiveTab] = useState<'recommendations' | 'categories' | 'profile'>('recommendations');
   
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const navRef = useRef<HTMLElement | null>(null);
@@ -738,7 +739,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">{/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background pb-20 sm:pb-0">{/* Header */}
       {/* Header */}
       <header className="border-b border-border/50 bg-background/80 backdrop-blur-md shadow-card">
         <div className="container mx-auto px-4 py-3">
@@ -859,10 +860,12 @@ const Dashboard = () => {
           <Separator className="bg-gradient-to-r from-transparent via-border to-transparent" />
         </div>
 
-        <Tabs defaultValue="categories" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-muted/50 to-muted/80 border border-border/50">
-            <TabsTrigger value="categories" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Categories</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="w-full">
+          {/* Desktop tabs - hidden on mobile */}
+          <TabsList className="hidden sm:grid w-full grid-cols-3 bg-gradient-to-r from-muted/50 to-muted/80 border border-border/50 mb-6">
             <TabsTrigger value="recommendations" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Recommendations</TabsTrigger>
+            <TabsTrigger value="categories" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Categories</TabsTrigger>
+            <TabsTrigger value="profile" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Profile</TabsTrigger>
           </TabsList>
           
           <TabsContent value="categories" className="space-y-6 animate-fade-in">
@@ -1189,6 +1192,89 @@ const Dashboard = () => {
                 )}
               </div>
             )}
+          </TabsContent>
+
+          {/* Profile Tab Content */}
+          <TabsContent value="profile" className="space-y-6 animate-fade-in">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">Profile Settings</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => safeOpenUrl(`/${profile.username}`)}
+                className="flex items-center gap-2"
+              >
+                <ExternalLink className="w-4 h-4" />
+                View Public Page
+              </Button>
+            </div>
+
+            {/* Profile Info Card */}
+            <Card className="border-border/50 shadow-card bg-gradient-to-br from-background to-muted/30">
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-4">
+                  <Avatar className="w-16 h-16 border-2 border-background shadow-elegant">
+                    <AvatarImage src={profile.avatar_url} alt={profile.display_name || profile.username} />
+                    <AvatarFallback className="text-lg font-bold bg-gradient-primary text-primary-foreground">
+                      {getInitials(profile.display_name || profile.username)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-xl font-bold text-foreground truncate">
+                      {profile.display_name || profile.username}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">@{profile.username}</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {profile.public_profile ? "Public Profile" : "Private Profile"}
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-2">{profile.page_title}</h4>
+                    <p className="text-sm text-muted-foreground">{profile.page_description}</p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button 
+                      onClick={() => setIsEditingProfile(true)} 
+                      className="bg-gradient-primary hover:opacity-90 hover-scale transition-all duration-300"
+                    >
+                      <Settings className="w-4 h-4 mr-2" />
+                      Edit Profile
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        navigator.clipboard.writeText(`https://thecurately.com/${profile.username}`);
+                        toast({ description: 'Public URL copied to clipboard!' });
+                      }}
+                      className="border-border/50"
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      Copy Public URL
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="border-border/50 shadow-card">
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold text-primary">{categories.length}</div>
+                  <div className="text-sm text-muted-foreground">Categories</div>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 shadow-card">
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold text-primary">{items.length}</div>
+                  <div className="text-sm text-muted-foreground">Recommendations</div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
 
@@ -1772,6 +1858,39 @@ const Dashboard = () => {
             </div>
           </DialogContent>
         </Dialog>
+      </div>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border/50 z-50 sm:hidden">
+        <div className="flex items-center justify-around py-2 px-4">
+          <Button 
+            variant={activeTab === 'recommendations' ? 'default' : 'ghost'} 
+            size="sm" 
+            onClick={() => setActiveTab('recommendations')}
+            className="flex flex-col items-center gap-1 min-h-[56px] px-3 transition-all duration-200"
+          >
+            <Grid className="w-5 h-5" />
+            <span className="text-xs font-medium">Items</span>
+          </Button>
+          <Button 
+            variant={activeTab === 'categories' ? 'default' : 'ghost'} 
+            size="sm" 
+            onClick={() => setActiveTab('categories')}
+            className="flex flex-col items-center gap-1 min-h-[56px] px-3 transition-all duration-200"
+          >
+            <Folder className="w-5 h-5" />
+            <span className="text-xs font-medium">Categories</span>
+          </Button>
+          <Button 
+            variant={activeTab === 'profile' ? 'default' : 'ghost'} 
+            size="sm" 
+            onClick={() => setActiveTab('profile')}
+            className="flex flex-col items-center gap-1 min-h-[56px] px-3 transition-all duration-200"
+          >
+            <User className="w-5 h-5" />
+            <span className="text-xs font-medium">Profile</span>
+          </Button>
+        </div>
       </div>
     </div>
   );
