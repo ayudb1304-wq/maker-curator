@@ -141,7 +141,7 @@ function buildEmail(payload: AuthHookPayload) {
 }
 
 async function sendEmail(payload: AuthHookPayload) {
-  const { user, email_data } = payload;
+  const { user } = payload;
   const { subject, html } = buildEmail(payload);
 
   const res = await resend.emails.send({
@@ -150,37 +150,7 @@ async function sendEmail(payload: AuthHookPayload) {
     subject,
     html,
   });
-  console.log("Email sent successfully:", res);
-
-  // Send welcome email for signup confirmations
-  if (email_data.email_action_type === "signup") {
-    try {
-      await sendWelcomeEmail(user.email, payload.user as any);
-      console.log("Welcome email queued for:", user.email);
-    } catch (welcomeError) {
-      console.error("Failed to send welcome email:", welcomeError);
-    }
-  }
-}
-
-async function sendWelcomeEmail(email: string, user: any) {
-  const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-  const welcomeResponse = await fetch(`${SUPABASE_URL}/functions/v1/send-welcome-email`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
-    },
-    body: JSON.stringify({
-      email,
-      username: user.user_metadata?.username,
-      displayName: user.user_metadata?.display_name,
-    }),
-  });
-  
-  if (!welcomeResponse.ok) {
-    throw new Error(`Welcome email failed: ${welcomeResponse.status}`);
-  }
+  console.log("Auth email dispatched:", res);
 }
 
 serve(async (req: Request): Promise<Response> => {
