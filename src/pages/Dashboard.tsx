@@ -1222,12 +1222,14 @@ const Dashboard = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => safeOpenUrl(`/${profile.username}`)}
+                  asChild
                   className="h-10 sm:h-12 text-xs sm:text-sm bg-background/50 border-border/50 hover:bg-background hover:shadow-md transition-all"
                 >
-                  <ExternalLink className="w-4 h-4 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">View Page</span>
-                  <span className="sm:hidden">View</span>
+                  <a href={`/${profile.username}`} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="w-4 h-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">View Page</span>
+                    <span className="sm:hidden">View</span>
+                  </a>
                 </Button>
                 <Button 
                   variant="outline" 
