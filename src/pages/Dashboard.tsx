@@ -20,6 +20,7 @@ import { isValidUrl, isValidLength, sanitizeText, safeOpenUrl } from '@/lib/secu
 import { ImageUpload } from '@/components/ImageUpload';
 import { countWords, validateWordLimit, getWordCountText, getWordCountColor } from '@/lib/textUtils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { stripEmojiSpans } from '@/lib/emoji';
 
 interface Item {
   id: string;
@@ -270,9 +271,9 @@ const Dashboard = () => {
       if (profileRow) {
         const profileData = {
           username: profileRow.username || '',
-          display_name: profileRow.display_name || '',
-          page_title: profileRow.page_title || '',
-          page_description: profileRow.page_description || '',
+          display_name: stripEmojiSpans(profileRow.display_name || ''),
+          page_title: stripEmojiSpans(profileRow.page_title || ''),
+          page_description: stripEmojiSpans(profileRow.page_description || ''),
           avatar_url: profileRow.avatar_url || '',
           public_profile: profileRow.public_profile || false,
           use_avatar_background: profileRow.use_avatar_background || false,
@@ -1017,8 +1018,8 @@ const Dashboard = () => {
                               </div>
                               <CardContent className="p-4">
                                 <h4 className="font-semibold mb-2">{item.title}</h4>
-                                {item.description && (
-                                  <p className="text-sm text-muted-foreground mb-4">{item.description}</p>
+                                {(item.short_description || item.description) && (
+                                  <p className="text-sm text-muted-foreground mb-4">{item.short_description || item.description}</p>
                                 )}
                                 <div className="flex gap-2">
                                   <Button 
@@ -1098,8 +1099,8 @@ const Dashboard = () => {
                           </div>
                           <CardContent className="p-4">
                             <h4 className="font-semibold mb-2">{item.title}</h4>
-                            {item.description && (
-                              <p className="text-sm text-muted-foreground mb-4">{item.description}</p>
+                            {(item.short_description || item.description) && (
+                              <p className="text-sm text-muted-foreground mb-4">{item.short_description || item.description}</p>
                             )}
                             <div className="flex gap-2">
                               <Button 

@@ -5,8 +5,9 @@ import React from 'react';
 export const wrapEmojisForPreservation = (text: string): string => {
   // Regex to match emoji characters including variants, modifiers, and zwj sequences
   const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji}\uFE0F?(?:\u200D\p{Emoji}\uFE0F?)*)/gu;
-  
-  return text.replace(emojiRegex, '<span class="emoji-native">$1</span>');
+  // Remove any pre-existing wrappers to avoid nesting
+  const cleaned = text.replace(/<span\s+class=['"]emoji-native['"]>/g, '').replace(/<\/span>/g, '');
+  return cleaned.replace(emojiRegex, '<span class="emoji-native">$1</span>');
 };
 
 export const isEmojiOnly = (text: string): boolean => {
@@ -14,8 +15,13 @@ export const isEmojiOnly = (text: string): boolean => {
   return emojiRegex.test(text);
 };
 
+export const stripEmojiSpans = (text: string): string => {
+  if (!text) return '';
+  return text.replace(/<span\s+class=['"]emoji-native['"]>/g, '').replace(/<\/span>/g, '');
+};
+
 // React component to wrap text with emoji preservation
-export const PreserveEmojiText: React.FC<{ 
+export const PreserveEmojiText: React.FC<{
   children: string; 
   className?: string;
   style?: React.CSSProperties;
