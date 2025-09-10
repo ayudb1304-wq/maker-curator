@@ -24,6 +24,8 @@ interface Item {
   id: string;
   title: string;
   description: string;
+  short_description?: string;
+  long_description?: string;
   image_url: string;
   target_url: string;
   position: number;
@@ -101,6 +103,8 @@ const Dashboard = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    short_description: '',
+    long_description: '',
     image_url: '',
     target_url: '',
     category_id: ''
@@ -420,8 +424,8 @@ const Dashboard = () => {
       return;
     }
     
-    if (!formData.description.trim()) {
-      toast({ description: 'Description is required', variant: 'destructive' });
+    if (!formData.short_description.trim()) {
+      toast({ description: 'Short description is required', variant: 'destructive' });
       return;
     }
     
@@ -431,8 +435,13 @@ const Dashboard = () => {
       return;
     }
     
-    if (!isValidLength(formData.description, 1000)) {
-      toast({ description: 'Description is too long (max 1000 characters)', variant: 'destructive' });
+    if (!isValidLength(formData.short_description, 150)) {
+      toast({ description: 'Short description is too long (max 150 characters)', variant: 'destructive' });
+      return;
+    }
+    
+    if (formData.long_description.trim() && !isValidLength(formData.long_description, 1000)) {
+      toast({ description: 'Long description is too long (max 1000 characters)', variant: 'destructive' });
       return;
     }
     
@@ -449,7 +458,9 @@ const Dashboard = () => {
     try {
       const itemData = {
         title: sanitizeText(formData.title),
-        description: sanitizeText(formData.description),
+        description: formData.description, // Keep old field for backward compatibility
+        short_description: sanitizeText(formData.short_description),
+        long_description: formData.long_description ? sanitizeText(formData.long_description) : null,
         image_url: formData.image_url,
         target_url: formData.target_url,
         user_id: user.id,
@@ -466,7 +477,7 @@ const Dashboard = () => {
       if (error) throw error;
       
       setItems([...items, data]);
-      setFormData({ title: '', description: '', image_url: '', target_url: '', category_id: '' });
+      setFormData({ title: '', description: '', short_description: '', long_description: '', image_url: '', target_url: '', category_id: '' });
       setIsAddingItem(false);
       toast({ description: 'Item added successfully!' });
     } catch (error) {
@@ -491,7 +502,7 @@ const Dashboard = () => {
       setItems(items.map(item => 
         item.id === editingItem.id ? data : item
       ));
-      setFormData({ title: '', description: '', image_url: '', target_url: '', category_id: '' });
+      setFormData({ title: '', description: '', short_description: '', long_description: '', image_url: '', target_url: '', category_id: '' });
       setEditingItem(null);
       toast({ description: 'Item updated successfully!' });
     } catch (error) {
@@ -595,6 +606,8 @@ const Dashboard = () => {
     setFormData({
       title: item.title,
       description: item.description,
+      short_description: item.short_description || '',
+      long_description: item.long_description || '',
       image_url: item.image_url,
       target_url: item.target_url,
       category_id: item.category_id || ''
@@ -1187,14 +1200,30 @@ const Dashboard = () => {
                 />
               </div>
               <div className="space-y-1.5 sm:space-y-2">
-                <Label htmlFor="description" className="text-sm sm:text-base">Description *</Label>
+                <Label htmlFor="short_description" className="text-sm sm:text-base">Short Description *</Label>
+                <div className="relative">
+                  <Input
+                    id="short_description"
+                    value={formData.short_description}
+                    onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
+                    placeholder="Brief description for the grid view (max 150 chars)"
+                    required
+                    maxLength={150}
+                    className="h-10 sm:h-12 text-sm sm:text-base pr-16"
+                  />
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-muted-foreground">
+                    {formData.short_description.length}/150
+                  </span>
+                </div>
+              </div>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="long_description" className="text-sm sm:text-base">Long Description (Optional)</Label>
                 <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Why do you recommend this?"
+                  id="long_description"
+                  value={formData.long_description}
+                  onChange={(e) => setFormData({ ...formData, long_description: e.target.value })}
+                  placeholder="Detailed description for the modal view"
                   rows={3}
-                  required
                   className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
                 />
               </div>
@@ -1257,7 +1286,7 @@ const Dashboard = () => {
         <Dialog open={!!editingItem} onOpenChange={(open) => {
           if (!open) {
             setEditingItem(null);
-            setFormData({ title: '', description: '', image_url: '', target_url: '', category_id: '' });
+            setFormData({ title: '', description: '', short_description: '', long_description: '', image_url: '', target_url: '', category_id: '' });
           }
         }}>
           <DialogContent className="max-h-[90vh] overflow-y-auto">
@@ -1303,13 +1332,30 @@ const Dashboard = () => {
                 />
               </div>
               <div className="space-y-1.5 sm:space-y-2">
-                <Label htmlFor="edit-description" className="text-sm sm:text-base">Description *</Label>
+                <Label htmlFor="edit-short_description" className="text-sm sm:text-base">Short Description *</Label>
+                <div className="relative">
+                  <Input
+                    id="edit-short_description"
+                    value={formData.short_description}
+                    onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
+                    placeholder="Brief description for the grid view (max 150 chars)"
+                    required
+                    maxLength={150}
+                    className="h-10 sm:h-12 text-sm sm:text-base pr-16"
+                  />
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-muted-foreground">
+                    {formData.short_description.length}/150
+                  </span>
+                </div>
+              </div>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="edit-long_description" className="text-sm sm:text-base">Long Description (Optional)</Label>
                 <Textarea
-                  id="edit-description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  id="edit-long_description"
+                  value={formData.long_description}
+                  onChange={(e) => setFormData({ ...formData, long_description: e.target.value })}
+                  placeholder="Detailed description for the modal view"
                   rows={3}
-                  required
                   className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
                 />
               </div>

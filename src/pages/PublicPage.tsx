@@ -16,6 +16,8 @@ interface Item {
   id: string;
   title: string;
   description: string;
+  short_description?: string;
+  long_description?: string;
   image_url: string;
   target_url: string;
   category_id?: string;
@@ -629,14 +631,14 @@ const PublicPage = () => {
                                  {item.title}
                                </PreserveEmojiText>
                               </div>
-                               {item.description && (
-                                 <PreserveEmojiText
-                                   as="p"
-                                   className="text-muted-foreground leading-relaxed"
-                                 >
-                                   {item.description}
-                                 </PreserveEmojiText>
-                               )}
+                                {(item.short_description || item.description) && (
+                                  <PreserveEmojiText
+                                    as="p"
+                                    className="text-muted-foreground leading-relaxed"
+                                  >
+                                    {item.short_description || item.description}
+                                  </PreserveEmojiText>
+                                )}
                           </CardContent>
                         </Card>
                        ))}
@@ -696,14 +698,14 @@ const PublicPage = () => {
                                {item.title}
                              </PreserveEmojiText>
                           </div>
-                           {item.description && (
-                             <PreserveEmojiText
-                               as="p"
-                               className="text-muted-foreground leading-relaxed"
-                             >
-                               {item.description}
-                             </PreserveEmojiText>
-                           )}
+                            {(item.short_description || item.description) && (
+                              <PreserveEmojiText
+                                as="p"
+                                className="text-muted-foreground leading-relaxed"
+                              >
+                                {item.short_description || item.description}
+                              </PreserveEmojiText>
+                            )}
                       </CardContent>
                     </Card>
                    ))}

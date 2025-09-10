@@ -28,6 +28,8 @@ interface Item {
   id: string;
   title: string;
   description: string;
+  short_description?: string;
+  long_description?: string;
   image_url: string;
   target_url: string;
   category_id?: string;
@@ -87,13 +89,13 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
         </PreserveEmojiText>
 
         {/* Description */}
-        {item.description && (
+        {(item.long_description || item.description) && (
           <div className="mb-6">
             <PreserveEmojiText
               as="p"
               className="text-muted-foreground leading-relaxed"
             >
-              {item.description}
+              {item.long_description || item.description}
             </PreserveEmojiText>
           </div>
         )}
