@@ -11,6 +11,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 26% 14%;
     --primary: 219 29% 33%;
+    --primary-rgb: 60, 80, 109;
     --primary-foreground: 0 0% 100%;
     --primary-glow: 219 29% 45%;
     --primary-deep: 219 32% 25%;
@@ -60,6 +61,7 @@
     --popover: 218 23% 10%;
     --popover-foreground: 220 14% 95%;
     --primary: 219 29% 55%;
+    --primary-rgb: 115, 131, 165;
     --primary-foreground: 218 23% 7%;
     --primary-glow: 219 29% 65%;
     --primary-deep: 219 32% 45%;
@@ -167,7 +169,7 @@
   }
 
   ::selection {
-    background-color: hsl(var(--primary) / 0.2);
+    background-color: rgba(var(--primary-rgb), 0.2);
     color: hsl(var(--primary-foreground));
   }
 }
