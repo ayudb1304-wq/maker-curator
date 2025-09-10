@@ -60,8 +60,8 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
   };
 
   const content = (
-    <>
-      <div className="relative">
+    <div className="flex flex-col h-full">
+      <div className="relative flex-shrink-0">
         {/* Image - Enhanced mobile display */}
         <div className={`w-full overflow-hidden rounded-lg mb-6 ${isMobile ? 'max-h-72' : 'max-h-96'}`}>
           <img 
@@ -91,10 +91,10 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
 
         {/* Description */}
         {(item.long_description || item.description) && (
-          <div className="mb-6">
+          <div className="mb-6 flex-1 min-h-0">
             <PreserveEmojiText
               as="p"
-              className={`text-muted-foreground leading-relaxed ${isMobile ? 'text-base' : 'text-sm'}`}
+              className={`text-muted-foreground leading-relaxed ${isMobile ? 'text-base' : 'text-sm'} whitespace-pre-wrap`}
             >
               {item.long_description || item.description}
             </PreserveEmojiText>
@@ -103,7 +103,7 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
       </div>
 
       {/* Action Button - Enhanced for mobile */}
-      <div className="pt-4">
+      <div className="pt-4 flex-shrink-0">
         <Button 
           onClick={handleVisitLink}
           className="w-full gap-3 font-medium bg-gradient-primary text-white hover:shadow-glow transition-all duration-300"
@@ -113,21 +113,21 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
           Visit Link
         </Button>
       </div>
-    </>
+    </div>
   );
 
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="max-h-[95vh] overflow-y-auto">
-          <DrawerHeader className="text-left px-6 pt-6 pb-2">
+        <DrawerContent className="max-h-[95vh] flex flex-col">
+          <DrawerHeader className="text-left px-6 pt-6 pb-2 flex-shrink-0">
             <DrawerTitle className="sr-only">Recommendation Details</DrawerTitle>
           </DrawerHeader>
-          <div className="px-6 pb-8 pt-2">
+          <div className="px-6 pb-8 pt-2 overflow-y-auto flex-1">
             {content}
           </div>
           {/* Safe area for devices with home indicator */}
-          <div className="h-[env(safe-area-inset-bottom,16px)]" />
+          <div className="h-[env(safe-area-inset-bottom,16px)] flex-shrink-0" />
         </DrawerContent>
       </Drawer>
     );
@@ -135,10 +135,10 @@ export function RecommendationModal({ item, category, open, onOpenChange }: Reco
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
         </DialogHeader>
-        <div className="pt-6">
+        <div className="pt-6 overflow-y-auto flex-1">
           {content}
         </div>
       </DialogContent>
