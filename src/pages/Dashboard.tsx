@@ -1222,7 +1222,7 @@ const Dashboard = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => safeOpenUrl(`/${profile.username}`)}
+                  onClick={() => window.open(`/${profile.username}`, '_blank', 'noopener,noreferrer')}
                   className="h-10 sm:h-12 text-xs sm:text-sm bg-background/50 border-border/50 hover:bg-background hover:shadow-md transition-all"
                 >
                   <ExternalLink className="w-4 h-4 mr-1 sm:mr-2" />
