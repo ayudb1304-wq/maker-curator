@@ -316,8 +316,16 @@ const Dashboard = () => {
           threads_url: profileRow.threads_url || '',
           snapchat_url: profileRow.snapchat_url || ''
         };
-        setProfile(profileData);
-        setProfileData(profileData);
+        // Merge with any unsaved draft from localStorage to prevent losing edits after tab switch/reload
+        let merged = profileData;
+        try {
+          const draft = localStorage.getItem(`profileDraft:${user.id}`);
+          if (draft) {
+            merged = { ...merged, ...JSON.parse(draft) };
+          }
+        } catch {}
+        setProfile(merged);
+        setProfileData(merged);
         
       }
     } catch (error) {
