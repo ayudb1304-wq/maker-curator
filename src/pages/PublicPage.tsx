@@ -349,21 +349,21 @@ const PublicPage = () => {
                   </PreserveEmojiText>
                 )}
                 <p 
-                  className="text-base md:text-lg font-mono drop-shadow-md"
+                  className="text-base md:text-lg font-mono drop-shadow-md font-medium"
                   style={{ color: profile.username_color || '#a1a1aa' }}
                 >
                   @{username}
                 </p>
                 <PreserveEmojiText
                   as="h2"
-                  className="text-lg md:text-xl font-semibold drop-shadow-md"
+                  className="text-lg md:text-xl font-bold drop-shadow-md"
                   style={{ color: profile.page_title_color || '#ffffff' }}
                 >
                   {profile.page_title}
                 </PreserveEmojiText>
                 <PreserveEmojiText
                   as="p"
-                  className="text-sm md:text-base leading-relaxed drop-shadow-md max-w-2xl mx-auto"
+                  className="text-sm md:text-base leading-relaxed drop-shadow-md max-w-2xl mx-auto font-medium"
                   style={{ color: profile.page_description_color || '#a1a1aa' }}
                 >
                   {profile.page_description}
@@ -435,7 +435,7 @@ const PublicPage = () => {
                     {profile.display_name || profile.username}
                   </PreserveEmojiText>
                   <p 
-                    className="text-sm font-mono"
+                    className="text-sm font-mono font-medium"
                     style={{ color: profile.username_color || '#a1a1aa' }}
                   >
                     @{username}
@@ -445,14 +445,14 @@ const PublicPage = () => {
                 <div className="max-w-2xl mx-auto">
                   <PreserveEmojiText
                     as="h2"
-                    className="text-lg font-semibold mb-2"
+                    className="text-lg font-bold mb-2"
                     style={{ color: profile.page_title_color || '#ffffff' }}
                   >
                     {profile.page_title}
                   </PreserveEmojiText>
                   <PreserveEmojiText
                     as="p"
-                    className="text-base leading-relaxed"
+                    className="text-base leading-relaxed font-medium"
                     style={{ color: profile.page_description_color || '#a1a1aa' }}
                   >
                     {profile.page_description}
@@ -560,8 +560,8 @@ const PublicPage = () => {
         {/* Categories with Items */}
         {categories.length === 0 && items.length === 0 ? (
           <div className="text-center py-12">
-            <h3 className="text-lg font-medium mb-2">No recommendations yet</h3>
-            <p className="text-muted-foreground">
+            <h3 className="text-lg font-bold mb-2">No recommendations yet</h3>
+            <p className="text-muted-foreground font-medium">
               {profile.username} hasn't added any recommendations yet.
             </p>
           </div>
@@ -626,19 +626,19 @@ const PublicPage = () => {
                               <div className="mb-2">
                                <PreserveEmojiText
                                  as="h3"
-                                 className="font-semibold text-lg group-hover:text-primary transition-colors"
+                                 className="font-bold text-lg group-hover:text-primary transition-colors"
                                >
                                  {item.title}
                                </PreserveEmojiText>
                               </div>
-                                {(item.short_description || item.description) && (
-                                  <PreserveEmojiText
-                                    as="p"
-                                    className="text-muted-foreground leading-relaxed"
-                                  >
-                                    {item.short_description || item.description}
-                                  </PreserveEmojiText>
-                                )}
+                                 {(item.short_description || item.description) && (
+                                   <PreserveEmojiText
+                                     as="p"
+                                     className="text-muted-foreground leading-relaxed font-medium"
+                                   >
+                                     {item.short_description || item.description}
+                                   </PreserveEmojiText>
+                                 )}
                           </CardContent>
                         </Card>
                        ))}
@@ -693,19 +693,19 @@ const PublicPage = () => {
                           <div className="mb-2">
                              <PreserveEmojiText
                                as="h3"
-                               className="font-semibold text-lg group-hover:text-primary transition-colors"
+                               className="font-bold text-lg group-hover:text-primary transition-colors"
                              >
                                {item.title}
                              </PreserveEmojiText>
                           </div>
-                            {(item.short_description || item.description) && (
-                              <PreserveEmojiText
-                                as="p"
-                                className="text-muted-foreground leading-relaxed"
-                              >
-                                {item.short_description || item.description}
-                              </PreserveEmojiText>
-                            )}
+                             {(item.short_description || item.description) && (
+                               <PreserveEmojiText
+                                 as="p"
+                                 className="text-muted-foreground leading-relaxed font-medium"
+                               >
+                                 {item.short_description || item.description}
+                               </PreserveEmojiText>
+                             )}
                       </CardContent>
                     </Card>
                    ))}
