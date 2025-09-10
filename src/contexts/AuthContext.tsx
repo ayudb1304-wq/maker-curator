@@ -30,10 +30,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
+        
+        // Send welcome email on first login after verification
+        if (event === 'SIGNED_IN' && session?.user) {
+          setTimeout(async () => {
+            await maybeSendWelcomeEmail(session.user);
+          }, 0);
+        }
       }
     );
 
@@ -46,6 +53,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const maybesendWelcomeEmail = async (user: any) => {
+    try {
+      // Check if user has a profile and if welcome email was already sent
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('username, display_name, welcome_email_sent')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (profile && !profile.welcome_email_sent) {
+        // Send welcome email
+        await supabase.functions.invoke('send-welcome-email', {
+          body: { 
+            email: user.email, 
+            username: profile.username, 
+            displayName: profile.display_name 
+          },
+        });
+
+        // Mark welcome email as sent
+        await supabase
+          .from('profiles')
+          .update({ welcome_email_sent: true })
+          .eq('user_id', user.id);
+      }
+    } catch (error) {
+      console.error('Welcome email error:', error);
+    }
+  };
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
