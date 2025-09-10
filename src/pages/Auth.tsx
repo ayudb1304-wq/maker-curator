@@ -85,6 +85,7 @@ const Login = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSignupSuccess(false); // Reset success state
     
     // Validate username availability before proceeding
     if (!usernameCheck.available) {
@@ -108,10 +109,15 @@ const Login = () => {
         setSignupSuccess(true);
         toast({
           title: "Account created successfully!",
-          description: "Please check your email to verify your account.",
+          description: "Please check your email to verify your account before signing in.",
         });
-        // Redirect immediately to dashboard
-        navigate('/dashboard', { replace: true });
+        // Don't redirect to dashboard immediately - user needs to verify email first
+        // Clear the form but stay on the auth page
+        setEmail('');
+        setPassword('');
+        setUsername('');
+        setOccupation('');
+        setGender('');
       }
     } catch (err) {
       setError('An unexpected error occurred');
@@ -398,8 +404,9 @@ const Login = () => {
                   <Alert className="border-green-200 bg-green-50">
                     <CheckCircle className="h-4 w-4 text-green-600" />
                     <AlertDescription className="text-green-800">
-                      Account created successfully! Please check your email to verify your account before signing in. 
-                      You'll be redirected to the sign in page shortly.
+                      <strong>Account created successfully!</strong><br />
+                      Please check your email and click the verification link to activate your account. 
+                      Once verified, you can sign in using the "Sign In" tab above.
                     </AlertDescription>
                   </Alert>
                 )}
