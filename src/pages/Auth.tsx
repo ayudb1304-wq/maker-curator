@@ -96,9 +96,20 @@ const Login = () => {
     setError('');
     setSignupSuccess(false); // Reset success state
     
-    // Validate username availability before proceeding
-    if (!usernameCheck.available) {
-      setError(usernameCheck.message || 'Please choose a valid username');
+    // Basic validation
+    if (!email || !password || !username) {
+      setError('Please fill in all required fields');
+      return;
+    }
+    
+    if (username.length < 3) {
+      setError('Username must be at least 3 characters long');
+      return;
+    }
+    
+    // Validate username availability before proceeding (but don't block if check failed)
+    if (username.length >= 3 && usernameCheck.available === false && usernameCheck.message !== 'Error checking username availability') {
+      setError(usernameCheck.message || 'Please choose a different username');
       return;
     }
     
@@ -408,7 +419,7 @@ const Login = () => {
                 <Button 
                   type="submit" 
                   className="w-full" 
-                  disabled={isLoading || !usernameCheck.available || usernameCheck.isChecking || username.length < 3}
+                  disabled={isLoading}
                 >
                   {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
