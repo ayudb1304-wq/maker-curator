@@ -28,17 +28,51 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    console.log("Received auth email request");
+  try {
+    console.log("Received auth hook request");
     
-    const payload: AuthEmailRequest = await req.json();
-    const { user, email_data } = payload;
+    // Get the raw payload and headers for webhook verification
+    const payload = await req.text();
+    const headers = Object.fromEntries(req.headers);
     
-    console.log("Processing email for:", user.email, "Type:", email_data.email_action_type);
+    // Verify webhook signature if secret is configured
+    if (hookSecret) {
+      const wh = new Webhook(hookSecret);
+      const { user, email_data } = wh.verify(payload, headers) as AuthHookPayload;
+      
+      console.log("Processing email for:", user.email, "Type:", email_data.email_action_type);
+      
+      await sendEmail(user, email_data);
+    } else {
+      // Fallback for development - parse JSON directly
+      console.warn("No SEND_EMAIL_HOOK_SECRET configured, using fallback mode");
+      const { user, email_data } = JSON.parse(payload) as AuthHookPayload;
+      
+      console.log("Processing email for:", user.email, "Type:", email_data.email_action_type);
+      
+      await sendEmail(user, email_data);
+    }
 
-    let subject = "Curately - Authentication";
-    let htmlContent = "";
-    
-    const confirmUrl = `${email_data.site_url}/auth/v1/verify?token=${email_data.token_hash}&type=${email_data.email_action_type}&redirect_to=${email_data.redirect_to}`;
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  } catch (error: any) {
+    console.error("Error in send-auth-email hook:", error);
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
+    );
+  }
+};
+
+  let subject = "Curately - Authentication";
+  let htmlContent = "";
+  
+  const confirmUrl = `${email_data.site_url}/auth/v1/verify?token=${email_data.token_hash}&type=${email_data.email_action_type}&redirect_to=${email_data.redirect_to}`;
 
     switch (email_data.email_action_type) {
       case "signup":
@@ -287,7 +321,7 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
           </div>
         `;
-    }
+serve(handler);
 
     const fromEmail = Deno.env.get("FROM_EMAIL") || "Curately <noreply@resend.dev>";
 
@@ -299,24 +333,10 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     console.log("Email sent successfully:", emailResponse);
-
-    return new Response(JSON.stringify(emailResponse), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
-    });
   } catch (error: any) {
-    console.error("Error in send-auth-email function:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    console.error("Error sending email:", error);
+    throw error;
   }
-};
+}
 
 serve(handler);
