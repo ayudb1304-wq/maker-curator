@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { isValidUrl, isValidLength, sanitizeText, safeOpenUrl } from '@/lib/security';
 import { ImageUpload } from '@/components/ImageUpload';
+import { countWords, validateWordLimit, getWordCountText, getWordCountColor } from '@/lib/textUtils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 interface Item {
@@ -341,8 +342,8 @@ const Dashboard = () => {
       return;
     }
     
-    if (!isValidLength(categoryData.description, 500)) {
-      toast({ description: 'Description is too long (max 500 characters)', variant: 'destructive' });
+    if (categoryData.description.trim() && !validateWordLimit(categoryData.description, 30)) {
+      toast({ description: 'Category description must be 30 words or less', variant: 'destructive' });
       return;
     }
 
@@ -429,19 +430,19 @@ const Dashboard = () => {
       return;
     }
     
+    if (!validateWordLimit(formData.short_description, 25)) {
+      toast({ description: 'Short description must be 25 words or less', variant: 'destructive' });
+      return;
+    }
+    
     // Validate field lengths
     if (!isValidLength(formData.title, 200)) {
       toast({ description: 'Title is too long (max 200 characters)', variant: 'destructive' });
       return;
     }
     
-    if (!isValidLength(formData.short_description, 150)) {
-      toast({ description: 'Short description is too long (max 150 characters)', variant: 'destructive' });
-      return;
-    }
-    
-    if (formData.long_description.trim() && !isValidLength(formData.long_description, 1000)) {
-      toast({ description: 'Long description is too long (max 1000 characters)', variant: 'destructive' });
+    if (formData.long_description.trim() && !validateWordLimit(formData.long_description, 100)) {
+      toast({ description: 'Long description must be 100 words or less', variant: 'destructive' });
       return;
     }
     
@@ -1206,26 +1207,30 @@ const Dashboard = () => {
                     id="short_description"
                     value={formData.short_description}
                     onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
-                    placeholder="Brief description for the grid view (max 150 chars)"
+                    placeholder="Brief description for the grid view (max 25 words)"
                     required
-                    maxLength={150}
-                    className="h-10 sm:h-12 text-sm sm:text-base pr-16"
+                    className="h-10 sm:h-12 text-sm sm:text-base pr-20"
                   />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-muted-foreground">
-                    {formData.short_description.length}/150
+                  <span className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-xs ${getWordCountColor(formData.short_description, 25)}`}>
+                    {getWordCountText(formData.short_description, 25)}
                   </span>
                 </div>
               </div>
               <div className="space-y-1.5 sm:space-y-2">
                 <Label htmlFor="long_description" className="text-sm sm:text-base">Long Description (Optional)</Label>
-                <Textarea
-                  id="long_description"
-                  value={formData.long_description}
-                  onChange={(e) => setFormData({ ...formData, long_description: e.target.value })}
-                  placeholder="Detailed description for the modal view"
-                  rows={3}
-                  className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
-                />
+                <div className="relative">
+                  <Textarea
+                    id="long_description"
+                    value={formData.long_description}
+                    onChange={(e) => setFormData({ ...formData, long_description: e.target.value })}
+                    placeholder="Detailed description for the modal view (max 100 words)"
+                    rows={3}
+                    className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none pr-20"
+                  />
+                  <span className={`absolute bottom-2 right-2 text-xs ${getWordCountColor(formData.long_description, 100)}`}>
+                    {getWordCountText(formData.long_description, 100)}
+                  </span>
+                </div>
               </div>
               <div className="space-y-1.5 sm:space-y-2">
                 <Label htmlFor="target_url" className="text-sm sm:text-base">Affiliate Link (Optional)</Label>
@@ -1266,14 +1271,19 @@ const Dashboard = () => {
               </div>
               <div className="space-y-1.5 sm:space-y-2">
                 <Label htmlFor="category-description" className="text-sm sm:text-base">Description (Optional)</Label>
-                <Textarea
-                  id="category-description"
-                  value={categoryData.description}
-                  onChange={(e) => setCategoryData({ ...categoryData, description: e.target.value })}
-                  placeholder="Brief description of this category"
-                  rows={3}
-                  className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
-                />
+                <div className="relative">
+                  <Textarea
+                    id="category-description"
+                    value={categoryData.description}
+                    onChange={(e) => setCategoryData({ ...categoryData, description: e.target.value })}
+                    placeholder="Brief description of this category (max 30 words)"
+                    rows={3}
+                    className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none pr-20"
+                  />
+                  <span className={`absolute bottom-2 right-2 text-xs ${getWordCountColor(categoryData.description, 30)}`}>
+                    {getWordCountText(categoryData.description, 30)}
+                  </span>
+                </div>
               </div>
               <Button onClick={handleAddCategory} className="w-full h-10 sm:h-12 text-sm sm:text-base mt-4 sm:mt-6">
                 Create Category
@@ -1338,26 +1348,30 @@ const Dashboard = () => {
                     id="edit-short_description"
                     value={formData.short_description}
                     onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
-                    placeholder="Brief description for the grid view (max 150 chars)"
+                    placeholder="Brief description for the grid view (max 25 words)"
                     required
-                    maxLength={150}
-                    className="h-10 sm:h-12 text-sm sm:text-base pr-16"
+                    className="h-10 sm:h-12 text-sm sm:text-base pr-20"
                   />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-muted-foreground">
-                    {formData.short_description.length}/150
+                  <span className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-xs ${getWordCountColor(formData.short_description, 25)}`}>
+                    {getWordCountText(formData.short_description, 25)}
                   </span>
                 </div>
               </div>
               <div className="space-y-1.5 sm:space-y-2">
                 <Label htmlFor="edit-long_description" className="text-sm sm:text-base">Long Description (Optional)</Label>
-                <Textarea
-                  id="edit-long_description"
-                  value={formData.long_description}
-                  onChange={(e) => setFormData({ ...formData, long_description: e.target.value })}
-                  placeholder="Detailed description for the modal view"
-                  rows={3}
-                  className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
-                />
+                <div className="relative">
+                  <Textarea
+                    id="edit-long_description"
+                    value={formData.long_description}
+                    onChange={(e) => setFormData({ ...formData, long_description: e.target.value })}
+                    placeholder="Detailed description for the modal view (max 100 words)"
+                    rows={3}
+                    className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none pr-20"
+                  />
+                  <span className={`absolute bottom-2 right-2 text-xs ${getWordCountColor(formData.long_description, 100)}`}>
+                    {getWordCountText(formData.long_description, 100)}
+                  </span>
+                </div>
               </div>
               <div className="space-y-1.5 sm:space-y-2">
                 <Label htmlFor="edit-target_url" className="text-sm sm:text-base">Affiliate Link (Optional)</Label>
@@ -1397,13 +1411,19 @@ const Dashboard = () => {
               </div>
               <div className="space-y-1.5 sm:space-y-2">
                 <Label htmlFor="edit-category-description" className="text-sm sm:text-base">Description</Label>
-                <Textarea
-                  id="edit-category-description"
-                  value={categoryData.description}
-                  onChange={(e) => setCategoryData({ ...categoryData, description: e.target.value })}
-                  rows={3}
-                  className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none"
-                />
+                <div className="relative">
+                  <Textarea
+                    id="edit-category-description"
+                    value={categoryData.description}
+                    onChange={(e) => setCategoryData({ ...categoryData, description: e.target.value })}
+                    placeholder="Brief description of this category (max 30 words)"
+                    rows={3}
+                    className="text-sm sm:text-base min-h-[80px] sm:min-h-[120px] resize-none pr-20"
+                  />
+                  <span className={`absolute bottom-2 right-2 text-xs ${getWordCountColor(categoryData.description, 30)}`}>
+                    {getWordCountText(categoryData.description, 30)}
+                  </span>
+                </div>
               </div>
               <Button onClick={handleEditCategory} className="w-full h-10 sm:h-12 text-sm sm:text-base mt-4 sm:mt-6">
                 Update Category
