@@ -2,46 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    /* The Digital Curator Palette - Light Mode */
-    --background: 220 14% 98%; /* #F7F8FA */
-    --foreground: 220 26% 14%; /* #1A202C */
-
-    --card: 0 0% 100%; /* #FFFFFF */
-    --card-foreground: 220 26% 14%; /* #1A202C */
-
-    --popover: 0 0% 100%; /* #FFFFFF */
-    --popover-foreground: 220 26% 14%; /* #1A202C */
-
-    /* Primary: Slate Blue - trustworthy, intelligent, modern */
-    --primary: 219 29% 33%; /* #3B4A6A */
-    --primary-foreground: 0 0% 100%; /* White text on primary */
-    --primary-glow: 219 29% 45%; /* Lighter shade of primary */
-    --primary-deep: 219 32% 25%; /* #2c3a57 - deeper navy */
-
-    /* Accent: Muted Coral - energetic, friendly, engaging */
-    --accent: 6 100% 69%; /* #FF6F61 */
-    --accent-foreground: 0 0% 100%; /* White text on accent */
-
-    --secondary: 220 14% 96%; /* Very light grey */
-    --secondary-foreground: 220 26% 14%; /* #1A202C */
-
-    --muted: 220 14% 96%; /* Very light grey */
-    --muted-foreground: 214 15% 52%; /* #718096 */
-
+    --background: 220 14% 98%;
+    --foreground: 220 26% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 26% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 26% 14%;
+    --primary: 219 29% 33%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 219 29% 45%;
+    --primary-deep: 219 32% 25%;
+    --accent: 6 100% 69%;
+    --accent-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 26% 14%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 214 15% 52%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-
-    --border: 214 32% 91%; /* Light border */
-    --input: 214 32% 91%; /* Light input border */
-    --ring: 219 29% 33%; /* Primary color for focus rings */
-
-    /* Design system tokens */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 219 29% 33%;
     --gradient-primary: linear-gradient(135deg, hsl(219 29% 33%), hsl(219 29% 45%));
     --gradient-hero: linear-gradient(135deg, hsl(219 29% 33%) 0%, hsl(219 29% 45%) 50%, hsl(6 100% 69%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(220 14% 98%));
@@ -49,23 +32,16 @@ All colors MUST be HSL.
     --gradient-section-2: linear-gradient(135deg, hsl(6 100% 69%) 0%, hsl(6 100% 75%) 100%);
     --gradient-section-3: linear-gradient(135deg, hsl(219 32% 25%) 0%, hsl(219 29% 33%) 100%);
     --gradient-section-4: linear-gradient(135deg, hsl(214 32% 91%) 0%, hsl(220 14% 96%) 100%);
-
-    /* Enhanced Shadows */
     --shadow-elegant: 0 10px 25px -5px hsl(219 29% 33% / 0.1), 0 8px 10px -6px hsl(219 29% 33% / 0.1);
     --shadow-card: 0 4px 6px -1px hsl(219 29% 33% / 0.1), 0 2px 4px -2px hsl(219 29% 33% / 0.1);
     --shadow-glow: 0 0 20px hsl(219 29% 45% / 0.3);
     --shadow-subtle: 0 1px 3px 0 hsl(219 29% 33% / 0.1), 0 1px 2px -1px hsl(219 29% 33% / 0.1);
     --shadow-focus: 0 0 0 3px hsl(219 29% 33% / 0.1);
     --shadow-pop: 0 20px 25px -5px hsl(219 29% 33% / 0.1), 0 8px 10px -6px hsl(219 29% 33% / 0.1);
-
-    /* Enhanced Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-
     --radius: 0.75rem;
-
-    /* Sidebar tokens */
     --sidebar-background: 220 14% 98%;
     --sidebar-foreground: 220 26% 14%;
     --sidebar-primary: 219 29% 33%;
@@ -77,40 +53,27 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Enhanced Dark Mode Palette - Better Contrast */
-    --background: 218 23% 7%; /* #0F1117 - Rich dark blue */
-    --foreground: 220 14% 95%; /* #F0F2F5 - Off-white */
-
-    --card: 218 23% 10%; /* #151A22 - Slightly lighter than background */
-    --card-foreground: 220 14% 95%; /* #F0F2F5 */
-
-    --popover: 218 23% 10%; /* #151A22 */
-    --popover-foreground: 220 14% 95%; /* #F0F2F5 */
-
-    /* Primary: Lighter slate blue for better contrast */
-    --primary: 219 29% 55%; /* #6B7DB0 - Lighter for accessibility */
-    --primary-foreground: 218 23% 7%; /* Dark text on light primary */
-    --primary-glow: 219 29% 65%; /* Even lighter shade */
-    --primary-deep: 219 32% 45%; /* Deeper but still accessible */
-
-    /* Accent: Softer coral for dark mode */
-    --accent: 6 85% 65%; /* #E85A4F - Softer coral */
-    --accent-foreground: 220 14% 95%; /* Light text on accent */
-
-    --secondary: 218 18% 15%; /* #1D2329 - Dark grey */
-    --secondary-foreground: 220 14% 95%; /* #F0F2F5 */
-
-    --muted: 218 18% 15%; /* #1D2329 */
-    --muted-foreground: 214 15% 65%; /* #9BA3AF - Better contrast */
-
+    --background: 218 23% 7%;
+    --foreground: 220 14% 95%;
+    --card: 218 23% 10%;
+    --card-foreground: 220 14% 95%;
+    --popover: 218 23% 10%;
+    --popover-foreground: 220 14% 95%;
+    --primary: 219 29% 55%;
+    --primary-foreground: 218 23% 7%;
+    --primary-glow: 219 29% 65%;
+    --primary-deep: 219 32% 45%;
+    --accent: 6 85% 65%;
+    --accent-foreground: 220 14% 95%;
+    --secondary: 218 18% 15%;
+    --secondary-foreground: 220 14% 95%;
+    --muted: 218 18% 15%;
+    --muted-foreground: 214 15% 65%;
     --destructive: 0 75% 65%;
     --destructive-foreground: 220 14% 95%;
-
-    --border: 218 18% 20%; /* #2A3037 - Subtle border */
-    --input: 218 18% 20%; /* #2A3037 */
-    --ring: 219 29% 55%; /* Primary color for focus rings */
-
-    /* Dark mode gradients */
+    --border: 218 18% 20%;
+    --input: 218 18% 20%;
+    --ring: 219 29% 55%;
     --gradient-primary: linear-gradient(135deg, hsl(219 29% 55%), hsl(219 29% 65%));
     --gradient-hero: linear-gradient(135deg, hsl(219 29% 55%) 0%, hsl(219 29% 65%) 50%, hsl(6 85% 65%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(218 23% 10%), hsl(218 18% 15%));
@@ -118,16 +81,12 @@ All colors MUST be HSL.
     --gradient-section-2: linear-gradient(135deg, hsl(6 85% 65%) 0%, hsl(6 85% 70%) 100%);
     --gradient-section-3: linear-gradient(135deg, hsl(219 32% 45%) 0%, hsl(219 29% 55%) 100%);
     --gradient-section-4: linear-gradient(135deg, hsl(218 18% 15%) 0%, hsl(218 18% 20%) 100%);
-
-    /* Enhanced dark mode shadows */
     --shadow-elegant: 0 10px 25px -5px hsl(0 0% 0% / 0.3), 0 8px 10px -6px hsl(0 0% 0% / 0.2);
     --shadow-card: 0 4px 6px -1px hsl(0 0% 0% / 0.2), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
     --shadow-glow: 0 0 20px hsl(219 29% 65% / 0.2);
     --shadow-subtle: 0 1px 3px 0 hsl(0 0% 0% / 0.2), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
     --shadow-focus: 0 0 0 3px hsl(219 29% 55% / 0.2);
     --shadow-pop: 0 20px 25px -5px hsl(0 0% 0% / 0.3), 0 8px 10px -6px hsl(0 0% 0% / 0.2);
-
-    /* Dark mode sidebar */
     --sidebar-background: 218 23% 7%;
     --sidebar-foreground: 220 14% 95%;
     --sidebar-primary: 219 29% 55%;
@@ -143,13 +102,13 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     font-variation-settings: 'opsz' 32;
   }
 
-  /* Enhanced Typography Scale - Mobile First */
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-semibold tracking-tight;
     line-height: 1.2;
@@ -190,34 +149,28 @@ All colors MUST be HSL.
     font-weight: 400;
   }
 
-  /* Small text elements */
   small, .text-small {
     @apply text-sm md:text-base;
   }
 
-  /* Focus styles for accessibility */
   :focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 
-  /* Button focus styles */
   button:focus-visible,
   [role="button"]:focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 
-  /* Link focus styles */
   a:focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background rounded-sm;
   }
 
-  /* Enhanced selection colors */
   ::selection {
     @apply bg-primary/20 text-primary-foreground;
   }
 }
 
-/* Preserve native emoji rendering and prevent gradient text effects from interfering with emojis */
 @layer utilities {
   .emoji-native * {
     background: none !important;
@@ -228,10 +181,9 @@ All colors MUST be HSL.
     font-variant-emoji: emoji !important;
   }
 
-  /* Hide scrollbar for webkit browsers */
   .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
   
   .scrollbar-hide::-webkit-scrollbar {
@@ -248,7 +200,6 @@ All colors MUST be HSL.
     z-index: 50 !important;
   }
 
-  /* Mobile safe areas and viewport optimizations */
   @supports (padding: env(safe-area-inset-top)) {
     .safe-top {
       padding-top: env(safe-area-inset-top);
@@ -267,7 +218,6 @@ All colors MUST be HSL.
     }
   }
 
-  /* Enhanced mobile touch targets */
   @media (max-width: 768px) {
     .touch-target {
       min-height: 48px;
@@ -285,7 +235,6 @@ All colors MUST be HSL.
     }
   }
 
-  /* Toast progress bar animation */
   @keyframes shrink {
     from { width: 100%; }
     to { width: 0%; }
