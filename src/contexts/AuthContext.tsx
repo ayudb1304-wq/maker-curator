@@ -27,34 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-        
-        // Send welcome email on first login after verification
-        if (event === 'SIGNED_IN' && session?.user) {
-          setTimeout(async () => {
-            await maybeSendWelcomeEmail(session.user);
-          }, 0);
-        }
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const maybesendWelcomeEmail = async (user: any) => {
+  const maybeSendWelcomeEmail = async (user: any) => {
     try {
       // Check if user has a profile and if welcome email was already sent
       const { data: profile } = await supabase
@@ -83,6 +56,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Welcome email error:', error);
     }
   };
+
+  useEffect(() => {
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setIsLoading(false);
+        
+        // Send welcome email on first login after verification
+        if (event === 'SIGNED_IN' && session?.user) {
+          setTimeout(async () => {
+            await maybeSendWelcomeEmail(session.user);
+          }, 0);
+        }
+      }
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setIsLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({

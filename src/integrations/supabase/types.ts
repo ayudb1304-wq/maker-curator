@@ -72,6 +72,7 @@ export type Database = {
           username: string | null
           username_changed_at: string | null
           username_color: string | null
+          welcome_email_sent: boolean | null
           youtube_url: string | null
         }
         Insert: {
@@ -98,6 +99,7 @@ export type Database = {
           username?: string | null
           username_changed_at?: string | null
           username_color?: string | null
+          welcome_email_sent?: boolean | null
           youtube_url?: string | null
         }
         Update: {
@@ -124,6 +126,7 @@ export type Database = {
           username?: string | null
           username_changed_at?: string | null
           username_color?: string | null
+          welcome_email_sent?: boolean | null
           youtube_url?: string | null
         }
         Relationships: []

@@ -223,19 +223,6 @@ const Dashboard = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [categories]);
 
-  const maybeSendWelcome = async (p: { username: string; display_name: string }) => {
-    try {
-      if (!user?.email) return;
-      const key = `welcome_sent_${user.id}`;
-      if (localStorage.getItem(key)) return;
-      await supabase.functions.invoke('send-welcome-email', {
-        body: { email: user.email, username: p.username, displayName: p.display_name },
-      });
-      localStorage.setItem(key, '1');
-    } catch (e) {
-      console.error('Welcome email error:', e);
-    }
-  };
 
   const fetchProfile = async () => {
     try {
@@ -299,7 +286,7 @@ const Dashboard = () => {
         };
         setProfile(profileData);
         setProfileData(profileData);
-        setTimeout(() => { maybeSendWelcome(profileData); }, 0);
+        
       }
     } catch (error) {
       console.error('Error fetching/creating profile:', error);
