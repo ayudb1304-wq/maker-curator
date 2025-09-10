@@ -18,12 +18,14 @@ export const isEmojiOnly = (text: string): boolean => {
 export const PreserveEmojiText: React.FC<{ 
   children: string; 
   className?: string;
+  style?: React.CSSProperties;
   as?: keyof JSX.IntrinsicElements;
-}> = ({ children, className = '', as: Component = 'span' }) => {
+}> = ({ children, className = '', style, as: Component = 'span' }) => {
   const processedText = wrapEmojisForPreservation(children);
   
   return React.createElement(Component, {
     className: `preserve-emoji-colors ${className}`,
+    style,
     dangerouslySetInnerHTML: { __html: processedText }
   });
 };

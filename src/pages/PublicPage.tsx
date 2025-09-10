@@ -6,6 +6,7 @@ import { ExternalLink, Palette, Youtube, Twitter, Linkedin, Instagram, Camera, A
 import { supabase } from '@/integrations/supabase/client';
 import { safeOpenUrl, sanitizeText } from '@/lib/security';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { PreserveEmojiText } from '@/lib/emoji';
 
 import { cn } from '@/lib/utils';
 import PublicFloatingCTA from '@/components/PublicFloatingCTA';
@@ -337,11 +338,13 @@ const PublicPage = () => {
             <div className="text-center animate-fade-in max-w-4xl mx-auto">
               <div className="space-y-2">
                 {profile.display_name && profile.display_name !== profile.username && (
-                  <h1 
-                    className="text-xl md:text-2xl font-bold drop-shadow-lg preserve-emoji-colors"
+                  <PreserveEmojiText
+                    as="h1"
+                    className="text-xl md:text-2xl font-bold drop-shadow-lg"
                     style={{ color: profile.display_name_color || '#ffffff' }}
-                    dangerouslySetInnerHTML={{ __html: sanitizeText(profile.display_name) }}
-                  />
+                  >
+                    {profile.display_name}
+                  </PreserveEmojiText>
                 )}
                 <p 
                   className="text-base md:text-lg font-mono drop-shadow-md"
@@ -349,16 +352,20 @@ const PublicPage = () => {
                 >
                   @{username}
                 </p>
-                <h2 
-                  className="text-lg md:text-xl font-semibold drop-shadow-md preserve-emoji-colors"
+                <PreserveEmojiText
+                  as="h2"
+                  className="text-lg md:text-xl font-semibold drop-shadow-md"
                   style={{ color: profile.page_title_color || '#ffffff' }}
-                  dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_title) }}
-                />
-                <p 
-                  className="text-sm md:text-base leading-relaxed drop-shadow-md preserve-emoji-colors max-w-2xl mx-auto"
+                >
+                  {profile.page_title}
+                </PreserveEmojiText>
+                <PreserveEmojiText
+                  as="p"
+                  className="text-sm md:text-base leading-relaxed drop-shadow-md max-w-2xl mx-auto"
                   style={{ color: profile.page_description_color || '#a1a1aa' }}
-                  dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_description) }}
-                 />
+                >
+                  {profile.page_description}
+                </PreserveEmojiText>
                   
                   {/* Social Media Links */}
                   <div className="flex justify-center gap-4 mt-4">
@@ -418,11 +425,13 @@ const PublicPage = () => {
               
               <div className="space-y-2">
                 <div>
-                  <h1 
-                    className="text-2xl md:text-3xl font-bold mb-1 preserve-emoji-colors"
+                  <PreserveEmojiText
+                    as="h1"
+                    className="text-2xl md:text-3xl font-bold mb-1"
                     style={{ color: profile.display_name_color || '#ffffff' }}
-                    dangerouslySetInnerHTML={{ __html: sanitizeText(profile.display_name || profile.username) }}
-                  />
+                  >
+                    {profile.display_name || profile.username}
+                  </PreserveEmojiText>
                   <p 
                     className="text-sm font-mono"
                     style={{ color: profile.username_color || '#a1a1aa' }}
@@ -432,16 +441,20 @@ const PublicPage = () => {
                 </div>
                 
                 <div className="max-w-2xl mx-auto">
-                  <h2 
-                    className="text-lg font-semibold mb-2 preserve-emoji-colors"
+                  <PreserveEmojiText
+                    as="h2"
+                    className="text-lg font-semibold mb-2"
                     style={{ color: profile.page_title_color || '#ffffff' }}
-                    dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_title) }}
-                  />
-                  <p 
-                    className="text-base leading-relaxed preserve-emoji-colors"
+                  >
+                    {profile.page_title}
+                  </PreserveEmojiText>
+                  <PreserveEmojiText
+                    as="p"
+                    className="text-base leading-relaxed"
                     style={{ color: profile.page_description_color || '#a1a1aa' }}
-                    dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_description) }}
-                   />
+                  >
+                    {profile.page_description}
+                  </PreserveEmojiText>
                     
                     {/* Social Media Links */}
                     <div className="flex justify-center gap-4 mt-4">
