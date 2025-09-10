@@ -116,11 +116,6 @@ const Login = () => {
         setError(error.message);
       } else {
         setSignupSuccess(true);
-        toast({
-          title: "Account created successfully!",
-          description: "Please check your email to verify your account before signing in.",
-        });
-        // Don't redirect to dashboard immediately - user needs to verify email first
         // Clear the form but stay on the auth page
         setEmail('');
         setPassword('');
@@ -236,13 +231,22 @@ const Login = () => {
           </Link>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue={searchParams.get('username') || searchParams.get('tab') === 'signup' ? "signup" : "signin"} className="w-full">
+          <Tabs value={signupSuccess ? "signin" : (searchParams.get('username') || searchParams.get('tab') === 'signup' ? "signup" : "signin")} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin" className="space-y-4">
+              {signupSuccess && (
+                <Alert className="border-green-200 bg-green-50">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <AlertDescription className="text-green-800">
+                    <strong>Please verify your email!</strong><br />
+                    Check your email and click the verification link, then sign in here.
+                  </AlertDescription>
+                </Alert>
+              )}
               <div className="text-center">
                 <h2 className="text-lg font-semibold">Welcome back</h2>
                 <p className="text-sm text-muted-foreground">
@@ -409,16 +413,6 @@ const Login = () => {
                   {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
                 
-                {signupSuccess && (
-                  <Alert className="border-green-200 bg-green-50">
-                    <CheckCircle className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-800">
-                      <strong>Account created successfully!</strong><br />
-                      Please check your email and click the verification link to activate your account. 
-                      Once verified, you can sign in using the "Sign In" tab above.
-                    </AlertDescription>
-                  </Alert>
-                )}
               </form>
             </TabsContent>
           </Tabs>
