@@ -183,81 +183,16 @@ export type Database = {
       }
     }
     Views: {
-      public_profiles_safe: {
-        Row: {
-          avatar_url: string | null
-          display_name: string | null
-          display_name_color: string | null
-          page_description: string | null
-          page_description_color: string | null
-          page_title: string | null
-          page_title_color: string | null
-          public_profile: boolean | null
-          use_avatar_background: boolean | null
-          user_id: string | null
-          username: string | null
-          username_color: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          display_name?: string | null
-          display_name_color?: string | null
-          page_description?: string | null
-          page_description_color?: string | null
-          page_title?: string | null
-          page_title_color?: string | null
-          public_profile?: boolean | null
-          use_avatar_background?: boolean | null
-          user_id?: string | null
-          username?: string | null
-          username_color?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          display_name?: string | null
-          display_name_color?: string | null
-          page_description?: string | null
-          page_description_color?: string | null
-          page_title?: string | null
-          page_title_color?: string | null
-          public_profile?: boolean | null
-          use_avatar_background?: boolean | null
-          user_id?: string | null
-          username?: string | null
-          username_color?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       can_change_username: {
         Args: { user_id_param: string }
         Returns: boolean
       }
-      can_view_social_links: {
-        Args: { profile_user_id: string }
-        Returns: boolean
-      }
       check_username_availability: {
         Args: { check_username: string }
         Returns: boolean
-      }
-      get_public_profile_safe: {
-        Args: { profile_username: string }
-        Returns: {
-          avatar_url: string
-          display_name: string
-          display_name_color: string
-          page_description: string
-          page_description_color: string
-          page_title: string
-          page_title_color: string
-          public_profile: boolean
-          use_avatar_background: boolean
-          user_id: string
-          username: string
-          username_color: string
-        }[]
       }
       is_username_available: {
         Args: { check_username: string }

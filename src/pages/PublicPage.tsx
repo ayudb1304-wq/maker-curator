@@ -151,9 +151,10 @@ const PublicPage = () => {
       setError(null);
 
       // First get the profile - only public profiles are accessible
+      // For security, we only query safe public columns to prevent exposure of sensitive data
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, use_avatar_background, user_id, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
+        .select('username, display_name, page_title, page_description, avatar_url, use_avatar_background, user_id, display_name_color, username_color, page_title_color, page_description_color')
         .eq('username', username)
         .eq('public_profile', true)
         .maybeSingle();
@@ -360,44 +361,7 @@ const PublicPage = () => {
                   dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_description) }}
                  />
                  
-                 {/* Social Media Links */}
-                 <div className="flex justify-center gap-4 mt-4">
-                   {profile.youtube_url && (
-                     <a href={profile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-red-600 transition-colors">
-                       <Youtube size={20} />
-                     </a>
-                   )}
-                   {profile.twitter_url && (
-                     <a href={profile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
-                       <Twitter size={20} />
-                     </a>
-                   )}
-                   {profile.linkedin_url && (
-                     <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-600 transition-colors">
-                       <Linkedin size={20} />
-                     </a>
-                   )}
-                   {profile.instagram_url && (
-                     <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-pink-600 transition-colors">
-                       <Instagram size={20} />
-                     </a>
-                   )}
-                   {profile.tiktok_url && (
-                     <a href={profile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
-                       <Camera size={20} />
-                     </a>
-                   )}
-                   {profile.threads_url && (
-                     <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
-                       <ExternalLink size={20} />
-                     </a>
-                   )}
-                   {profile.snapchat_url && (
-                     <a href={profile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-yellow-500 transition-colors">
-                       <Camera size={20} />
-                     </a>
-                   )}
-                 </div>
+                  {/* Note: Social media links are not displayed for security reasons on public profiles */}
                </div>
             </div>
           </div>
@@ -443,44 +407,7 @@ const PublicPage = () => {
                     dangerouslySetInnerHTML={{ __html: sanitizeText(profile.page_description) }}
                    />
                    
-                   {/* Social Media Links */}
-                   <div className="flex justify-center gap-4 mt-4">
-                     {profile.youtube_url && (
-                       <a href={profile.youtube_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-red-600 transition-colors">
-                         <Youtube size={20} />
-                       </a>
-                     )}
-                     {profile.twitter_url && (
-                       <a href={profile.twitter_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
-                         <Twitter size={20} />
-                       </a>
-                     )}
-                     {profile.linkedin_url && (
-                       <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-600 transition-colors">
-                         <Linkedin size={20} />
-                       </a>
-                     )}
-                     {profile.instagram_url && (
-                       <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-pink-600 transition-colors">
-                         <Instagram size={20} />
-                       </a>
-                     )}
-                     {profile.tiktok_url && (
-                       <a href={profile.tiktok_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
-                         <Camera size={20} />
-                       </a>
-                     )}
-                     {profile.threads_url && (
-                       <a href={profile.threads_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-gray-700 transition-colors">
-                         <ExternalLink size={20} />
-                       </a>
-                     )}
-                     {profile.snapchat_url && (
-                       <a href={profile.snapchat_url} target="_blank" rel="noopener noreferrer" className="text-black hover:text-yellow-500 transition-colors">
-                         <Camera size={20} />
-                       </a>
-                     )}
-                   </div>
+                    {/* Note: Social media links are not displayed for security reasons on public profiles */}
                  </div>
               </div>
             </div>
