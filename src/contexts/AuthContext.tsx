@@ -7,9 +7,9 @@ interface AuthContextType {
   session: Session | null;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signUp: (email: string, password: string, metadata?: any) => Promise<{ error: any }>;
-  signInWithGoogle: () => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
+  signInWithGoogle: (username?: string) => Promise<void>;
   isLoading: boolean;
 }
 
@@ -67,19 +67,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       password,
       options: {
         emailRedirectTo: redirectUrl,
-        data: metadata || {},
-        captchaToken: undefined // Explicitly set to prevent security warnings
+        data: {
+            ...metadata,
+            username: metadata?.username,
+        }
       }
     });
     return { error };
   };
-
-  const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-    return { error };
-  }
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -97,14 +92,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error };
   };
 
+  const signInWithGoogle = async (username?: string) => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        queryParams: {
+            prompt: 'select_account',
+        },
+        redirectTo: `${window.location.origin}/dashboard`,
+        data: {
+            username: username,
+        }
+      },
+    })
+    if (error) {
+      console.error('Google Sign-In Error:', error.message)
+    }
+  }
+
   const value = {
     user,
     session,
     signIn,
     signUp,
-    signInWithGoogle,
     signOut,
     resetPassword,
+    signInWithGoogle,
     isLoading
   };
 
