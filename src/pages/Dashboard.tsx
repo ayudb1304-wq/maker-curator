@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -66,6 +66,7 @@ interface Profile {
 const Dashboard = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [items, setItems] = useState<Item[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -191,11 +192,75 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user) {
-      fetchProfile();
-      fetchCategories();
-      fetchRecommendations();
+      fetchProfileAndData();
     }
   }, [user]);
+  
+  const fetchProfileAndData = async () => {
+    await fetchProfile();
+    await fetchCategories();
+    await fetchRecommendations();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    // Handle username claim from OAuth redirect
+    const claimUsername = searchParams.get('claim_username');
+    if (claimUsername && user && !loading) {
+      handleClaimUsername(claimUsername);
+      // Clean up the URL
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, loading, searchParams, navigate]);
+  
+  const handleClaimUsername = async (claimedUsername: string) => {
+    if (!user) return;
+  
+    try {
+      // Check if the username is available
+      const { data: existingProfile, error: checkError } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('username', claimedUsername)
+        .single();
+  
+      if (checkError && checkError.code !== 'PGRST116') { // Ignore 'not found' error
+        throw checkError;
+      }
+  
+      if (existingProfile) {
+        toast({
+          title: "Username already taken",
+          description: `The username "${claimedUsername}" was claimed by another user while you were signing up. Please choose a different one.`,
+          variant: "destructive",
+        });
+        return;
+      }
+  
+      // Update the user's profile with the claimed username
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ username: claimedUsername, display_name: claimedUsername })
+        .eq('user_id', user.id);
+  
+      if (updateError) throw updateError;
+  
+      // Refetch profile to update UI
+      await fetchProfile();
+  
+      toast({
+        title: "Username claimed!",
+        description: `Your new username is "${claimedUsername}".`,
+      });
+  
+    } catch (error) {
+      console.error("Error claiming username:", error);
+      toast({
+        description: 'Failed to claim username. Please try again from your profile settings.',
+        variant: "destructive",
+      });
+    }
+  };
 
   useEffect(() => {
     // Initialize visible items count for each category
@@ -272,18 +337,16 @@ const Dashboard = () => {
       let profileRow = data;
       // If no profile, create one using user metadata
       if (!profileRow) {
-        const username = (user.user_metadata as any)?.username || user.email?.split('@')[0] || '';
-        const display_name = (user.user_metadata as any)?.display_name || username;
-        const occupation = (user.user_metadata as any)?.occupation;
-        const gender = (user.user_metadata as any)?.gender;
-        const bio = occupation && gender ? `${occupation} • ${gender}` : occupation || gender || null;
+        // For OAuth, username might be in user_metadata if passed during signup
+        // otherwise default to a sanitized part of the email.
+        const username = user.user_metadata?.username || user.email?.split('@')[0].replace(/[^a-z0-9_]/gi, '') || `user${user.id.substring(0, 5)}`;
+        const display_name = user.user_metadata?.display_name || user.user_metadata?.full_name || username;
 
         const insertData = {
           user_id: user.id,
-          username: username.toLowerCase().trim(),
+          username,
           display_name,
-          bio,
-        } as const;
+        };
 
         const { data: created, error: insertError } = await supabase
           .from('profiles')
@@ -293,7 +356,7 @@ const Dashboard = () => {
 
         if (insertError) throw insertError;
         profileRow = created;
-        toast({ description: 'Profile created successfully!' });
+        toast({ description: 'Welcome! Your profile has been created.' });
       }
 
       if (profileRow) {
@@ -367,8 +430,6 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Error fetching recommendations:', error);
       toast({ description: 'Failed to load recommendations', variant: 'destructive' });
-    } finally {
-      setLoading(false);
     }
   };
 
