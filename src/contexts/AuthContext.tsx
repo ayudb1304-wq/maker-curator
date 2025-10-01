@@ -7,7 +7,7 @@ interface AuthContextType {
   session: Session | null;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signUp: (email: string, password: string, metadata?: any) => Promise<{ error: any }>;
-  signOut: () => Promise<void>;
+  signOut: () => Promise<{ error: any }>;
   resetPassword: (email: string) => Promise<{ error: any }>;
   signInWithGoogle: () => Promise<{ error: any }>;
   isLoading: boolean;
@@ -30,23 +30,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-      }
-    );
-
-    // THEN check for existing session
+    // Immediately check for a session on initial load
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
-    });
 
-    return () => subscription.unsubscribe();
+      // After the initial check, the listener will handle all future auth events
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          setSession(session);
+          setUser(session?.user ?? null);
+          setIsLoading(false);
+        }
+      );
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    });
   }, []);
 
   const signIn = async (email: string, password: string) => {
@@ -75,7 +77,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    return { error };
   };
 
   const resetPassword = async (email: string) => {

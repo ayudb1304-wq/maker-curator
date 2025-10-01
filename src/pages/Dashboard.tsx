@@ -192,8 +192,17 @@ const Dashboard = () => {
   const cooldownInfo = getUsernameCooldownInfo();
 
   const handleSignOut = async () => {
-    await signOut();
-    navigate('/', { replace: true });
+    const { error } = await signOut();
+    if (!error) {
+      navigate('/', { replace: true });
+    } else {
+      console.error('Error signing out:', error);
+      toast({
+        title: "Sign out failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
+    }
   };
 
   useEffect(() => {
