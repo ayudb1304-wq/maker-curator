@@ -203,6 +203,10 @@ export type Database = {
         Args: { check_username: string }
         Returns: boolean
       }
+      claim_username: {
+        Args: { new_username: string }
+        Returns: undefined
+      }
       is_username_available: {
         Args: { check_username: string }
         Returns: boolean

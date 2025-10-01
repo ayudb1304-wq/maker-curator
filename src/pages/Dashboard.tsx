@@ -191,26 +191,157 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    if (user) {
-      fetchProfile();
-      fetchCategories();
-      fetchRecommendations();
-    }
-  }, [user]);
+    if (!user) return;
 
-  // Check if user needs onboarding after profile is loaded
-  useEffect(() => {
-    if (profile && !profile.has_completed_onboarding) {
-      const usernameToClaim = localStorage.getItem('usernameToClaim');
-      if (usernameToClaim) {
-        // If a username was claimed on the landing page, update the profile data
-        setProfileData(prev => ({ ...prev, username: usernameToClaim }));
-        localStorage.removeItem('usernameToClaim');
+    const loadDashboardData = async () => {
+      setLoading(true);
+      try {
+        // Fetch all core data in parallel
+        const [profileResult, categoriesResult, recommendationsResult] = await Promise.allSettled([
+          supabase.from('profiles').select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url, has_completed_onboarding').eq('user_id', user.id).maybeSingle(),
+          supabase.from('categories').select('*').eq('user_id', user.id).eq('is_active', true).order('position'),
+          supabase.from('recommendations').select('*').eq('user_id', user.id).eq('is_active', true).order('position')
+        ]);
+
+        // Process Profile Data and Onboarding
+        if (profileResult.status === 'fulfilled') {
+          let profileRow = profileResult.value.data;
+          
+          // If no profile exists, create one
+          if (!profileRow) {
+            const username = (user.user_metadata as any)?.username || user.email?.split('@')[0] || '';
+            const display_name = (user.user_metadata as any)?.display_name || username;
+            const occupation = (user.user_metadata as any)?.occupation;
+            const gender = (user.user_metadata as any)?.gender;
+            const bio = occupation && gender ? `${occupation} • ${gender}` : occupation || gender || null;
+
+            const insertData = {
+              user_id: user.id,
+              username: username.toLowerCase().trim(),
+              display_name,
+              bio,
+            } as const;
+
+            const { data: created, error: insertError } = await supabase
+              .from('profiles')
+              .insert([insertData])
+              .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url, has_completed_onboarding')
+              .single();
+
+            if (insertError) throw insertError;
+            profileRow = created;
+            toast({ description: 'Profile created successfully!' });
+          }
+
+          if (profileRow) {
+            let profileData = {
+              username: profileRow.username || '',
+              display_name: stripEmojiSpans(profileRow.display_name || ''),
+              page_title: stripEmojiSpans(profileRow.page_title || ''),
+              page_description: stripEmojiSpans(profileRow.page_description || ''),
+              avatar_url: profileRow.avatar_url || '',
+              public_profile: profileRow.public_profile || false,
+              use_avatar_background: profileRow.use_avatar_background || false,
+              username_changed_at: profileRow.username_changed_at,
+              display_name_color: profileRow.display_name_color || '#ffffff',
+              username_color: profileRow.username_color || '#a1a1aa',
+              page_title_color: profileRow.page_title_color || '#ffffff',
+              page_description_color: profileRow.page_description_color || '#a1a1aa',
+              youtube_url: profileRow.youtube_url || '',
+              twitter_url: profileRow.twitter_url || '',
+              linkedin_url: profileRow.linkedin_url || '',
+              tiktok_url: profileRow.tiktok_url || '',
+              instagram_url: profileRow.instagram_url || '',
+              threads_url: profileRow.threads_url || '',
+              snapchat_url: profileRow.snapchat_url || '',
+              has_completed_onboarding: profileRow.has_completed_onboarding || false
+            };
+
+            const usernameToClaim = localStorage.getItem('usernameToClaim');
+
+            // If it's a new user with a claimed username, update it now
+            if (usernameToClaim && !profileData.has_completed_onboarding) {
+              await supabase.rpc('claim_username', { new_username: usernameToClaim });
+              localStorage.removeItem('usernameToClaim');
+
+              // Re-fetch the profile to get the updated username
+              const { data: updatedProfileData } = await supabase
+                .from('profiles')
+                .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url, has_completed_onboarding')
+                .eq('user_id', user.id)
+                .single();
+              
+              if (updatedProfileData) {
+                profileData = {
+                  username: updatedProfileData.username || '',
+                  display_name: stripEmojiSpans(updatedProfileData.display_name || ''),
+                  page_title: stripEmojiSpans(updatedProfileData.page_title || ''),
+                  page_description: stripEmojiSpans(updatedProfileData.page_description || ''),
+                  avatar_url: updatedProfileData.avatar_url || '',
+                  public_profile: updatedProfileData.public_profile || false,
+                  use_avatar_background: updatedProfileData.use_avatar_background || false,
+                  username_changed_at: updatedProfileData.username_changed_at,
+                  display_name_color: updatedProfileData.display_name_color || '#ffffff',
+                  username_color: updatedProfileData.username_color || '#a1a1aa',
+                  page_title_color: updatedProfileData.page_title_color || '#ffffff',
+                  page_description_color: updatedProfileData.page_description_color || '#a1a1aa',
+                  youtube_url: updatedProfileData.youtube_url || '',
+                  twitter_url: updatedProfileData.twitter_url || '',
+                  linkedin_url: updatedProfileData.linkedin_url || '',
+                  tiktok_url: updatedProfileData.tiktok_url || '',
+                  instagram_url: updatedProfileData.instagram_url || '',
+                  threads_url: updatedProfileData.threads_url || '',
+                  snapchat_url: updatedProfileData.snapchat_url || '',
+                  has_completed_onboarding: updatedProfileData.has_completed_onboarding || false
+                };
+              }
+            }
+
+            // Merge with any unsaved draft from localStorage to prevent losing edits after tab switch/reload
+            try {
+              const draft = localStorage.getItem(`profileDraft:${user.id}`);
+              if (draft) {
+                profileData = { ...profileData, ...JSON.parse(draft) };
+              }
+            } catch {}
+
+            setProfile(profileData);
+            setProfileData(profileData);
+
+            // Trigger onboarding modal if needed
+            if (!profileData.has_completed_onboarding) {
+              setIsEditingProfile(true);
+            }
+          }
+        } else {
+          throw new Error(profileResult.reason || 'Failed to fetch profile.');
+        }
+
+        // Process Categories
+        if (categoriesResult.status === 'fulfilled' && categoriesResult.value.data) {
+          setCategories(categoriesResult.value.data);
+        }
+
+        // Process Recommendations
+        if (recommendationsResult.status === 'fulfilled' && recommendationsResult.value.data) {
+          setItems(recommendationsResult.value.data);
+        }
+
+      } catch (error) {
+        console.error('Error loading dashboard:', error);
+        toast({
+          title: "Error",
+          description: "Could not load your dashboard. Please try again.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
       }
-      // Open the onboarding/profile settings modal
-      setIsEditingProfile(true);
-    }
-  }, [profile]);
+    };
+
+    loadDashboardData();
+
+  }, [user, toast]);
 
   useEffect(() => {
     // Initialize visible items count for each category
@@ -273,120 +404,6 @@ const Dashboard = () => {
   }, [categories]);
 
 
-  const fetchProfile = async () => {
-    try {
-      // Try to get existing profile
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url, has_completed_onboarding')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (error) throw error;
-
-      let profileRow = data;
-      // If no profile, create one using user metadata
-      if (!profileRow) {
-        const username = (user.user_metadata as any)?.username || user.email?.split('@')[0] || '';
-        const display_name = (user.user_metadata as any)?.display_name || username;
-        const occupation = (user.user_metadata as any)?.occupation;
-        const gender = (user.user_metadata as any)?.gender;
-        const bio = occupation && gender ? `${occupation} • ${gender}` : occupation || gender || null;
-
-        const insertData = {
-          user_id: user.id,
-          username: username.toLowerCase().trim(),
-          display_name,
-          bio,
-        } as const;
-
-        const { data: created, error: insertError } = await supabase
-          .from('profiles')
-          .insert([insertData])
-          .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url, has_completed_onboarding')
-          .single();
-
-        if (insertError) throw insertError;
-        profileRow = created;
-        toast({ description: 'Profile created successfully!' });
-      }
-
-      if (profileRow) {
-        const profileData = {
-          username: profileRow.username || '',
-          display_name: stripEmojiSpans(profileRow.display_name || ''),
-          page_title: stripEmojiSpans(profileRow.page_title || ''),
-          page_description: stripEmojiSpans(profileRow.page_description || ''),
-          avatar_url: profileRow.avatar_url || '',
-          public_profile: profileRow.public_profile || false,
-          use_avatar_background: profileRow.use_avatar_background || false,
-          username_changed_at: profileRow.username_changed_at,
-          display_name_color: profileRow.display_name_color || '#ffffff',
-          username_color: profileRow.username_color || '#a1a1aa',
-          page_title_color: profileRow.page_title_color || '#ffffff',
-          page_description_color: profileRow.page_description_color || '#a1a1aa',
-          youtube_url: profileRow.youtube_url || '',
-          twitter_url: profileRow.twitter_url || '',
-          linkedin_url: profileRow.linkedin_url || '',
-          tiktok_url: profileRow.tiktok_url || '',
-          instagram_url: profileRow.instagram_url || '',
-          threads_url: profileRow.threads_url || '',
-          snapchat_url: profileRow.snapchat_url || '',
-          has_completed_onboarding: profileRow.has_completed_onboarding || false
-        };
-        // Merge with any unsaved draft from localStorage to prevent losing edits after tab switch/reload
-        let merged = profileData;
-        try {
-          const draft = localStorage.getItem(`profileDraft:${user.id}`);
-          if (draft) {
-            merged = { ...merged, ...JSON.parse(draft) };
-          }
-        } catch {}
-        setProfile(merged);
-        setProfileData(merged);
-        
-      }
-    } catch (error) {
-      console.error('Error fetching/creating profile:', error);
-      toast({ description: 'Failed to load profile', variant: 'destructive' });
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_active', true)
-        .order('position');
-
-      if (error) throw error;
-      setCategories(data || []);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast({ description: 'Failed to load categories', variant: 'destructive' });
-    }
-  };
-
-  const fetchRecommendations = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('recommendations')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_active', true)
-        .order('position');
-
-      if (error) throw error;
-      setItems(data || []);
-    } catch (error) {
-      console.error('Error fetching recommendations:', error);
-      toast({ description: 'Failed to load recommendations', variant: 'destructive' });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleAddCategory = async () => {
     // Validate input data
@@ -647,7 +664,39 @@ const Dashboard = () => {
       if (updateError) throw updateError;
 
       // Fetch fresh profile data
-      await fetchProfile();
+      const { data: updatedProfile } = await supabase
+        .from('profiles')
+        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url, has_completed_onboarding')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (updatedProfile) {
+        const freshProfileData = {
+          username: updatedProfile.username || '',
+          display_name: stripEmojiSpans(updatedProfile.display_name || ''),
+          page_title: stripEmojiSpans(updatedProfile.page_title || ''),
+          page_description: stripEmojiSpans(updatedProfile.page_description || ''),
+          avatar_url: updatedProfile.avatar_url || '',
+          public_profile: updatedProfile.public_profile || false,
+          use_avatar_background: updatedProfile.use_avatar_background || false,
+          username_changed_at: updatedProfile.username_changed_at,
+          display_name_color: updatedProfile.display_name_color || '#ffffff',
+          username_color: updatedProfile.username_color || '#a1a1aa',
+          page_title_color: updatedProfile.page_title_color || '#ffffff',
+          page_description_color: updatedProfile.page_description_color || '#a1a1aa',
+          youtube_url: updatedProfile.youtube_url || '',
+          twitter_url: updatedProfile.twitter_url || '',
+          linkedin_url: updatedProfile.linkedin_url || '',
+          tiktok_url: updatedProfile.tiktok_url || '',
+          instagram_url: updatedProfile.instagram_url || '',
+          threads_url: updatedProfile.threads_url || '',
+          snapchat_url: updatedProfile.snapchat_url || '',
+          has_completed_onboarding: updatedProfile.has_completed_onboarding || false
+        };
+        setProfile(freshProfileData);
+        setProfileData(freshProfileData);
+      }
+      
       // Clear draft after successful save
       if (draftKey) { try { localStorage.removeItem(draftKey); } catch {} }
       setIsEditingProfile(false);
