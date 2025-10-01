@@ -99,10 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         queryParams: {
             prompt: 'select_account',
         },
-        redirectTo: `${window.location.origin}/dashboard`,
-        data: {
-            username: username,
-        }
+        redirectTo: `${window.location.origin}/dashboard`
       },
     })
     if (error) {
