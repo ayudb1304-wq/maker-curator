@@ -49,6 +49,7 @@ interface Profile {
   avatar_url: string;
   public_profile: boolean;
   use_avatar_background: boolean;
+  has_completed_onboarding?: boolean;
   username_changed_at?: string;
   display_name_color?: string;
   username_color?: string;
@@ -76,6 +77,7 @@ const Dashboard = () => {
     avatar_url: '',
     public_profile: false,
     use_avatar_background: false,
+    has_completed_onboarding: false,
     username_changed_at: undefined,
     display_name_color: '#ffffff',
     username_color: '#a1a1aa',
@@ -126,6 +128,7 @@ const Dashboard = () => {
     avatar_url: '',
     public_profile: false,
     use_avatar_background: false,
+    has_completed_onboarding: false,
     username_changed_at: undefined,
     display_name_color: '#ffffff',
     username_color: '#a1a1aa',
@@ -189,12 +192,86 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    if (user) {
-      fetchProfile();
-      fetchCategories();
-      fetchRecommendations();
-    }
-  }, [user]);
+    if (!user) return;
+
+    const loadDashboardData = async () => {
+      setLoading(true);
+      try {
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('*, has_completed_onboarding')
+          .eq('user_id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        let finalProfile = profileData;
+        const usernameToClaim = localStorage.getItem('usernameToClaim');
+
+        if (usernameToClaim && !finalProfile.has_completed_onboarding) {
+          await supabase.rpc('claim_username', { new_username: usernameToClaim });
+          localStorage.removeItem('usernameToClaim');
+
+          const { data: updatedProfile } = await supabase
+            .from('profiles')
+            .select('*, has_completed_onboarding')
+            .eq('user_id', user.id)
+            .single();
+          if (updatedProfile) finalProfile = updatedProfile;
+        }
+
+        const processedProfile = {
+          username: finalProfile.username || '',
+          display_name: stripEmojiSpans(finalProfile.display_name || ''),
+          page_title: stripEmojiSpans(finalProfile.page_title || ''),
+          page_description: stripEmojiSpans(finalProfile.page_description || ''),
+          avatar_url: finalProfile.avatar_url || '',
+          public_profile: finalProfile.public_profile || false,
+          use_avatar_background: finalProfile.use_avatar_background || false,
+          has_completed_onboarding: finalProfile.has_completed_onboarding || false,
+          username_changed_at: finalProfile.username_changed_at,
+          display_name_color: finalProfile.display_name_color || '#ffffff',
+          username_color: finalProfile.username_color || '#a1a1aa',
+          page_title_color: finalProfile.page_title_color || '#ffffff',
+          page_description_color: finalProfile.page_description_color || '#a1a1aa',
+          youtube_url: finalProfile.youtube_url || '',
+          twitter_url: finalProfile.twitter_url || '',
+          linkedin_url: finalProfile.linkedin_url || '',
+          tiktok_url: finalProfile.tiktok_url || '',
+          instagram_url: finalProfile.instagram_url || '',
+          threads_url: finalProfile.threads_url || '',
+          snapchat_url: finalProfile.snapchat_url || ''
+        };
+
+        setProfile(processedProfile);
+        setProfileData(processedProfile);
+
+        if (!finalProfile.has_completed_onboarding) {
+          setIsEditingProfile(true);
+        }
+
+        // Fetch other data concurrently
+        const [categoriesResult, recommendationsResult] = await Promise.all([
+          supabase.from('categories').select('*').eq('user_id', user.id).eq('is_active', true).order('position'),
+          supabase.from('recommendations').select('*').eq('user_id', user.id).eq('is_active', true).order('position')
+        ]);
+
+        if (categoriesResult.error) throw categoriesResult.error;
+        setCategories(categoriesResult.data || []);
+
+        if (recommendationsResult.error) throw recommendationsResult.error;
+        setItems(recommendationsResult.data || []);
+
+      } catch (error) {
+        console.error('Error loading dashboard:', error);
+        toast({ title: "Error", description: "Could not load your dashboard.", variant: "destructive" });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboardData();
+  }, [user, toast]);
 
   useEffect(() => {
     // Initialize visible items count for each category
@@ -255,121 +332,6 @@ const Dashboard = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [categories]);
-
-
-  const fetchProfile = async () => {
-    try {
-      // Try to get existing profile
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (error) throw error;
-
-      let profileRow = data;
-      // If no profile, create one using user metadata
-      if (!profileRow) {
-        const username = (user.user_metadata as any)?.username || user.email?.split('@')[0] || '';
-        const display_name = (user.user_metadata as any)?.display_name || username;
-        const occupation = (user.user_metadata as any)?.occupation;
-        const gender = (user.user_metadata as any)?.gender;
-        const bio = occupation && gender ? `${occupation} • ${gender}` : occupation || gender || null;
-
-        const insertData = {
-          user_id: user.id,
-          username: username.toLowerCase().trim(),
-          display_name,
-          bio,
-        } as const;
-
-        const { data: created, error: insertError } = await supabase
-          .from('profiles')
-          .insert([insertData])
-          .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
-          .single();
-
-        if (insertError) throw insertError;
-        profileRow = created;
-        toast({ description: 'Profile created successfully!' });
-      }
-
-      if (profileRow) {
-        const profileData = {
-          username: profileRow.username || '',
-          display_name: stripEmojiSpans(profileRow.display_name || ''),
-          page_title: stripEmojiSpans(profileRow.page_title || ''),
-          page_description: stripEmojiSpans(profileRow.page_description || ''),
-          avatar_url: profileRow.avatar_url || '',
-          public_profile: profileRow.public_profile || false,
-          use_avatar_background: profileRow.use_avatar_background || false,
-          username_changed_at: profileRow.username_changed_at,
-          display_name_color: profileRow.display_name_color || '#ffffff',
-          username_color: profileRow.username_color || '#a1a1aa',
-          page_title_color: profileRow.page_title_color || '#ffffff',
-          page_description_color: profileRow.page_description_color || '#a1a1aa',
-          youtube_url: profileRow.youtube_url || '',
-          twitter_url: profileRow.twitter_url || '',
-          linkedin_url: profileRow.linkedin_url || '',
-          tiktok_url: profileRow.tiktok_url || '',
-          instagram_url: profileRow.instagram_url || '',
-          threads_url: profileRow.threads_url || '',
-          snapchat_url: profileRow.snapchat_url || ''
-        };
-        // Merge with any unsaved draft from localStorage to prevent losing edits after tab switch/reload
-        let merged = profileData;
-        try {
-          const draft = localStorage.getItem(`profileDraft:${user.id}`);
-          if (draft) {
-            merged = { ...merged, ...JSON.parse(draft) };
-          }
-        } catch {}
-        setProfile(merged);
-        setProfileData(merged);
-        
-      }
-    } catch (error) {
-      console.error('Error fetching/creating profile:', error);
-      toast({ description: 'Failed to load profile', variant: 'destructive' });
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_active', true)
-        .order('position');
-
-      if (error) throw error;
-      setCategories(data || []);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast({ description: 'Failed to load categories', variant: 'destructive' });
-    }
-  };
-
-  const fetchRecommendations = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('recommendations')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('is_active', true)
-        .order('position');
-
-      if (error) throw error;
-      setItems(data || []);
-    } catch (error) {
-      console.error('Error fetching recommendations:', error);
-      toast({ description: 'Failed to load recommendations', variant: 'destructive' });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleAddCategory = async () => {
     // Validate input data
@@ -608,6 +570,7 @@ const Dashboard = () => {
         avatar_url: profileData.avatar_url,
         public_profile: profileData.public_profile,
         use_avatar_background: profileData.use_avatar_background,
+        has_completed_onboarding: true,
         display_name_color: profileData.display_name_color,
         username_color: profileData.username_color,
         page_title_color: profileData.page_title_color,
@@ -621,15 +584,43 @@ const Dashboard = () => {
         snapchat_url: profileData.snapchat_url || null
       };
 
-      const { error: updateError } = await supabase
+      const { data: updatedProfile, error: updateError } = await supabase
         .from('profiles')
         .update(updateData)
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .select('*, has_completed_onboarding')
+        .single();
 
       if (updateError) throw updateError;
 
-      // Fetch fresh profile data
-      await fetchProfile();
+      // Update local state with fresh data
+      if (updatedProfile) {
+        const processedProfile = {
+          username: updatedProfile.username || '',
+          display_name: stripEmojiSpans(updatedProfile.display_name || ''),
+          page_title: stripEmojiSpans(updatedProfile.page_title || ''),
+          page_description: stripEmojiSpans(updatedProfile.page_description || ''),
+          avatar_url: updatedProfile.avatar_url || '',
+          public_profile: updatedProfile.public_profile || false,
+          use_avatar_background: updatedProfile.use_avatar_background || false,
+          has_completed_onboarding: updatedProfile.has_completed_onboarding || false,
+          username_changed_at: updatedProfile.username_changed_at,
+          display_name_color: updatedProfile.display_name_color || '#ffffff',
+          username_color: updatedProfile.username_color || '#a1a1aa',
+          page_title_color: updatedProfile.page_title_color || '#ffffff',
+          page_description_color: updatedProfile.page_description_color || '#a1a1aa',
+          youtube_url: updatedProfile.youtube_url || '',
+          twitter_url: updatedProfile.twitter_url || '',
+          linkedin_url: updatedProfile.linkedin_url || '',
+          tiktok_url: updatedProfile.tiktok_url || '',
+          instagram_url: updatedProfile.instagram_url || '',
+          threads_url: updatedProfile.threads_url || '',
+          snapchat_url: updatedProfile.snapchat_url || ''
+        };
+        setProfile(processedProfile);
+        setProfileData(processedProfile);
+      }
+      
       // Clear draft after successful save
       if (draftKey) { try { localStorage.removeItem(draftKey); } catch {} }
       setIsEditingProfile(false);
@@ -1652,9 +1643,13 @@ const Dashboard = () => {
         <Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
           <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Edit Profile</DialogTitle>
+              <DialogTitle>
+                {profile && !profile.has_completed_onboarding ? "Welcome! Let's set up your page" : "Edit Profile"}
+              </DialogTitle>
               <DialogDescription>
-                Customize your profile picture, display name, page content, and URL
+                {profile && !profile.has_completed_onboarding 
+                  ? "Confirm your username and details to get started."
+                  : "Customize your profile picture, display name, page content, and URL"}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 sm:space-y-6">
