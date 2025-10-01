@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -66,6 +66,7 @@ interface Profile {
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [items, setItems] = useState<Item[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -190,6 +191,10 @@ const Dashboard = () => {
   
   const cooldownInfo = getUsernameCooldownInfo();
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/', { replace: true });
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -752,7 +757,7 @@ const Dashboard = () => {
               <span className="text-xs text-muted-foreground block sm:hidden truncate max-w-20">
                 {username}
               </span>
-              <Button variant="ghost" size="sm" onClick={signOut} className="hover:shadow-card transition-shadow duration-200 flex-shrink-0">
+              <Button variant="ghost" size="sm" onClick={handleSignOut} className="hover:shadow-card transition-shadow duration-200 flex-shrink-0">
                 <LogOut className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Logout</span>
               </Button>
