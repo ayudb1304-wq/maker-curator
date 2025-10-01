@@ -67,10 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       password,
       options: {
         emailRedirectTo: redirectUrl,
-        data: {
-            ...metadata,
-            username: metadata?.username,
-        }
+        data: metadata || {},
       }
     });
     return { error };
@@ -87,23 +84,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: redirectUrl,
-      captchaToken: undefined // Explicitly set to prevent security warnings
     });
     return { error };
   };
 
   const signInWithGoogle = async (username?: string) => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    // Append the username to the redirect URL to claim it after OAuth
+    const redirectUrl = new URL(`${window.location.origin}/dashboard`);
+    if (username) {
+      redirectUrl.searchParams.set('claim_username', username);
+    }
+    
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         queryParams: {
             prompt: 'select_account',
         },
-        redirectTo: `${window.location.origin}/dashboard`
+        redirectTo: redirectUrl.toString(),
       },
     })
     if (error) {
       console.error('Google Sign-In Error:', error.message)
+      // You might want to show a toast notification here
     }
   }
 
