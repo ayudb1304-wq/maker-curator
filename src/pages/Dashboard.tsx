@@ -61,6 +61,7 @@ interface Profile {
   instagram_url?: string;
   threads_url?: string;
   snapchat_url?: string;
+  has_completed_onboarding?: boolean;
 }
 
 const Dashboard = () => {
@@ -137,7 +138,8 @@ const Dashboard = () => {
     tiktok_url: '',
     instagram_url: '',
     threads_url: '',
-    snapchat_url: ''
+    snapchat_url: '',
+    has_completed_onboarding: false
   });
   
   const draftKey = user ? `profileDraft:${user.id}` : null;
@@ -195,6 +197,20 @@ const Dashboard = () => {
       fetchRecommendations();
     }
   }, [user]);
+
+  // Check if user needs onboarding after profile is loaded
+  useEffect(() => {
+    if (profile && !profile.has_completed_onboarding) {
+      const usernameToClaim = localStorage.getItem('usernameToClaim');
+      if (usernameToClaim) {
+        // If a username was claimed on the landing page, update the profile data
+        setProfileData(prev => ({ ...prev, username: usernameToClaim }));
+        localStorage.removeItem('usernameToClaim');
+      }
+      // Open the onboarding/profile settings modal
+      setIsEditingProfile(true);
+    }
+  }, [profile]);
 
   useEffect(() => {
     // Initialize visible items count for each category
@@ -262,7 +278,7 @@ const Dashboard = () => {
       // Try to get existing profile
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
+        .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url, has_completed_onboarding')
         .eq('user_id', user.id)
         .maybeSingle();
 
@@ -287,7 +303,7 @@ const Dashboard = () => {
         const { data: created, error: insertError } = await supabase
           .from('profiles')
           .insert([insertData])
-          .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url')
+          .select('username, display_name, page_title, page_description, avatar_url, public_profile, use_avatar_background, username_changed_at, display_name_color, username_color, page_title_color, page_description_color, youtube_url, twitter_url, linkedin_url, tiktok_url, instagram_url, threads_url, snapchat_url, has_completed_onboarding')
           .single();
 
         if (insertError) throw insertError;
@@ -315,7 +331,8 @@ const Dashboard = () => {
           tiktok_url: profileRow.tiktok_url || '',
           instagram_url: profileRow.instagram_url || '',
           threads_url: profileRow.threads_url || '',
-          snapchat_url: profileRow.snapchat_url || ''
+          snapchat_url: profileRow.snapchat_url || '',
+          has_completed_onboarding: profileRow.has_completed_onboarding || false
         };
         // Merge with any unsaved draft from localStorage to prevent losing edits after tab switch/reload
         let merged = profileData;
@@ -618,7 +635,8 @@ const Dashboard = () => {
         tiktok_url: profileData.tiktok_url || null,
         instagram_url: profileData.instagram_url || null,
         threads_url: profileData.threads_url || null,
-        snapchat_url: profileData.snapchat_url || null
+        snapchat_url: profileData.snapchat_url || null,
+        has_completed_onboarding: true
       };
 
       const { error: updateError } = await supabase
@@ -1652,9 +1670,13 @@ const Dashboard = () => {
         <Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
           <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Edit Profile</DialogTitle>
+              <DialogTitle>
+                {profile && !profile.has_completed_onboarding ? "Welcome! Let's set up your page" : "Edit Profile"}
+              </DialogTitle>
               <DialogDescription>
-                Customize your profile picture, display name, page content, and URL
+                {profile && !profile.has_completed_onboarding 
+                  ? "Confirm your username and details to get started." 
+                  : "Customize your profile picture, display name, page content, and URL"}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 sm:space-y-6">

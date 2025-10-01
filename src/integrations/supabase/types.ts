@@ -54,6 +54,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           display_name_color: string | null
+          has_completed_onboarding: boolean
           id: string
           instagram_url: string | null
           linkedin_url: string | null
@@ -81,6 +82,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           display_name_color?: string | null
+          has_completed_onboarding?: boolean
           id?: string
           instagram_url?: string | null
           linkedin_url?: string | null
@@ -108,6 +110,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           display_name_color?: string | null
+          has_completed_onboarding?: boolean
           id?: string
           instagram_url?: string | null
           linkedin_url?: string | null

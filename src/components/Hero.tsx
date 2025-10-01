@@ -4,19 +4,27 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Users, Sparkles, Zap, Check, X, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUsernameCheck } from "@/hooks/useUsernameCheck";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import HeroSlideshow from "@/components/HeroSlideshow";
 
 const Hero = () => {
   const [username, setUsername] = useState("");
+  const [showAuthOptions, setShowAuthOptions] = useState(false);
   const navigate = useNavigate();
+  const { signInWithGoogle } = useAuth();
   const usernameCheck = useUsernameCheck(username, 300);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (usernameCheck.available && username.trim()) {
-      navigate(`/auth?username=${encodeURIComponent(username.trim().toLowerCase())}&tab=signup`);
+      setShowAuthOptions(true);
     }
+  };
+
+  const handleGoogleAuth = () => {
+    localStorage.setItem('usernameToClaim', username);
+    signInWithGoogle();
   };
 
   const getInputIcon = () => {
@@ -75,41 +83,64 @@ const Hero = () => {
 
             {/* Username Claiming Section */}
             <div className="space-y-4 lg:space-y-6">
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-md mx-auto lg:mx-0">
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
-                    thecurately.com/
+              <div className="max-w-md mx-auto lg:mx-0">
+                {!showAuthOptions ? (
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                    <div className="relative">
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                        thecurately.com/
+                      </div>
+                      <Input
+                        type="text"
+                        inputMode="text"
+                        autoComplete="username"
+                        placeholder="yourname"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
+                        className={cn(
+                          "pl-[130px] pr-12 h-14 bg-white border-2 border-primary text-foreground placeholder:text-muted-foreground focus:border-primary ring-2 ring-primary/20 text-base min-h-[56px]",
+                          getInputStatus()
+                        )}
+                        maxLength={20}
+                      />
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        {getInputIcon()}
+                      </div>
+                    </div>
+                    <Button 
+                      type="submit" 
+                      size="mobile" 
+                      className="h-14 px-8 group bg-primary text-primary-foreground hover:bg-primary/90 min-h-[56px]"
+                      disabled={!usernameCheck.available || username.length < 3 || usernameCheck.isChecking}
+                    >
+                      Claim My Page
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </form>
+                ) : (
+                  <div className="space-y-4 bg-muted/50 p-6 rounded-lg border">
+                    <h3 className="text-center font-semibold text-lg">Create your account to claim:</h3>
+                    <p className="text-center text-primary font-bold text-lg -mt-2">thecurately.com/{username}</p>
+                    <Button
+                      variant="outline"
+                      className="w-full h-14 text-base bg-white"
+                      onClick={handleGoogleAuth}
+                    >
+                      <svg className="mr-2 h-5 w-5" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 381.5 512 244 512 109.8 512 0 402.2 0 261.8S109.8 11.6 244 11.6c70.3 0 129.8 27.8 174.2 71.9l-67.7 61.3C333.3 129 292.5 108.3 244 108.3 162.2 108.3 95 174.4 95 261.8s67.2 153.5 149 153.5c86.4 0 122.3-63.3 126.5-93.4H244v-81.8h244z"></path></svg>
+                      Continue with Google
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      className="w-full h-14 text-base"
+                      onClick={() => navigate(`/auth?username=${encodeURIComponent(username.trim().toLowerCase())}&tab=signup`)}
+                    >
+                      Continue with Email
+                    </Button>
                   </div>
-                  <Input
-                    type="text"
-                    inputMode="text"
-                    autoComplete="username"
-                    placeholder="yourname"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
-                    className={cn(
-                      "pl-[130px] pr-12 h-14 bg-white border-2 border-primary text-foreground placeholder:text-muted-foreground focus:border-primary ring-2 ring-primary/20 text-base min-h-[56px]",
-                      getInputStatus()
-                    )}
-                    maxLength={20}
-                  />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    {getInputIcon()}
-                  </div>
-                </div>
-                <Button 
-                  type="submit" 
-                  size="mobile" 
-                  variant="default"
-                  className="h-14 px-8 group bg-primary text-primary-foreground hover:bg-primary/90 min-h-[56px]"
-                  disabled={!usernameCheck.available || username.length < 3 || usernameCheck.isChecking}
-                >
-                  Claim It
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </form>
+                )}
+              </div>
               
-              {usernameCheck.message && (
+              {!showAuthOptions && usernameCheck.message && (
                 <p className={cn(
                   "text-sm text-center lg:text-left",
                   usernameCheck.available ? "text-green-600" : "text-destructive"
@@ -118,11 +149,13 @@ const Hero = () => {
                 </p>
               )}
               
-              <Button variant="secondary" size="mobile" className="bg-white/90 text-foreground hover:bg-white border-0 mx-auto lg:mx-0 min-h-[56px]" asChild>
-                <Link to="/demo">
-                  View Example
-                </Link>
-              </Button>
+              {!showAuthOptions && (
+                <Button variant="secondary" size="mobile" className="bg-white/90 text-foreground hover:bg-white border-0 mx-auto lg:mx-0 min-h-[56px]" asChild>
+                  <Link to="/demo">
+                    View Example
+                  </Link>
+                </Button>
+              )}
             </div>
 
             {/* Social proof */}
