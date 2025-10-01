@@ -28,6 +28,7 @@ const Login = () => {
   const [resetEmail, setResetEmail] = useState('');
   const [showResetForm, setShowResetForm] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
+  const [isProcessingOAuth, setIsProcessingOAuth] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(() => {
     // Determine initial tab based on URL parameters
     const urlTab = searchParams.get('tab');
@@ -37,6 +38,13 @@ const Login = () => {
   });
   
   const usernameCheck = useUsernameCheck(username);
+
+  // Check for OAuth callback
+  useEffect(() => {
+    if (window.location.hash.includes('access_token')) {
+      setIsProcessingOAuth(true);
+    }
+  }, []);
 
   // Handle URL parameters and initialize tab state
   useEffect(() => {
@@ -78,6 +86,15 @@ const Login = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (isProcessingOAuth) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-8 h-8 animate-spin" />
+        <p className="text-muted-foreground">Finalizing your sign-in...</p>
       </div>
     );
   }
