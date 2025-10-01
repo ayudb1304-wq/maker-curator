@@ -6,12 +6,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUsernameCheck } from "@/hooks/useUsernameCheck";
 import { cn } from "@/lib/utils";
 import HeroSlideshow from "@/components/HeroSlideshow";
-import { useAuth } from "@/contexts/AuthContext";
 
 const Hero = () => {
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
-  const { signInWithGoogle } = useAuth();
   const usernameCheck = useUsernameCheck(username, 300);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -19,10 +17,6 @@ const Hero = () => {
     if (usernameCheck.available && username.trim()) {
       navigate(`/auth?username=${encodeURIComponent(username.trim().toLowerCase())}&tab=signup`);
     }
-  };
-
-  const handleGoogleSignIn = async () => {
-    await signInWithGoogle(username);
   };
 
   const getInputIcon = () => {
@@ -112,9 +106,6 @@ const Hero = () => {
                 >
                   Claim It
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button variant="outline" size="mobile" className="w-full" onClick={handleGoogleSignIn}>
-                  Sign Up with Google
                 </Button>
               </form>
               

@@ -14,7 +14,7 @@ import { useUsernameCheck } from '@/hooks/useUsernameCheck';
 import { cn } from '@/lib/utils';
 
 const Login = () => {
-  const { user, signIn, signUp, resetPassword, signInWithGoogle, isLoading: authLoading } = useAuth();
+  const { user, signIn, signUp, resetPassword, isLoading: authLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -95,8 +95,6 @@ const Login = () => {
       const { error } = await signIn(email, password);
       if (error) {
         setError(error.message);
-      } else {
-        navigate('/dashboard');
       }
     } catch (err) {
       setError('An unexpected error occurred');
@@ -178,10 +176,6 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-  
-  const handleGoogleSignIn = async () => {
-    await signInWithGoogle(username);
   };
 
   if (showResetForm) {
@@ -322,9 +316,6 @@ const Login = () => {
                 </div>
                 <Button type="submit" size="mobile" className="w-full" disabled={isLoading}>
                   {isLoading ? 'Signing in...' : 'Sign In'}
-                </Button>
-                <Button variant="outline" size="mobile" className="w-full" onClick={handleGoogleSignIn}>
-                  Sign In with Google
                 </Button>
                 <button
                   type="button"
