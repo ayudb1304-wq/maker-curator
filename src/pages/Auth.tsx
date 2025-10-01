@@ -14,7 +14,7 @@ import { useUsernameCheck } from '@/hooks/useUsernameCheck';
 import { cn } from '@/lib/utils';
 
 const Login = () => {
-  const { user, signIn, signUp, resetPassword, isLoading: authLoading } = useAuth();
+  const { user, signIn, signUp, resetPassword, signInWithGoogle, isLoading: authLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -258,6 +258,30 @@ const Login = () => {
           </Link>
         </CardHeader>
         <CardContent>
+          <div className="space-y-4">
+            <Button 
+              variant="outline" 
+              type="button" 
+              className="w-full h-14 text-base" 
+              onClick={signInWithGoogle} 
+              disabled={isLoading}
+            >
+              <svg className="mr-2 h-5 w-5" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+                <path fill="currentColor" d="M488 261.8C488 403.3 381.5 512 244 512 109.8 512 0 402.2 0 261.8S109.8 11.6 244 11.6c70.3 0 129.8 27.8 174.2 71.9l-67.7 61.3C333.3 129 292.5 108.3 244 108.3 162.2 108.3 95 174.4 95 261.8s67.2 153.5 149 153.5c86.4 0 122.3-63.3 126.5-93.4H244v-81.8h244z"></path>
+              </svg>
+              Continue with Google
+            </Button>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with email
+                </span>
+              </div>
+            </div>
+          </div>
           <Tabs value={signupSuccess ? "signin" : activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>

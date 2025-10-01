@@ -3,6 +3,7 @@ import { MobileFriendlyForm } from '@/components/MobileFriendlyForm';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 import { EnhancedImageUpload } from '@/components/EnhancedImageUpload';
 import { ColorPicker } from '@/components/ColorPicker';
 import { useAutoSave } from '@/hooks/useAutoSave';
@@ -53,7 +54,7 @@ export function ProfileForm({
   isLoading = false,
   cooldownInfo
 }: ProfileFormProps) {
-  const { user } = useAuth();
+  const { user, signInWithGoogle } = useAuth();
   const [formData, setFormData] = useState<ProfileFormData>(initialData);
   
   const usernameCheck = useUsernameCheck(formData.username);
@@ -314,6 +315,40 @@ export function ProfileForm({
                 />
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Account Linking */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Account Linking</h3>
+          <div className="p-4 border border-border rounded-lg bg-muted/30">
+            {user?.app_metadata?.providers?.includes('google') ? (
+              <div className="flex items-center gap-4">
+                <svg className="w-6 h-6 flex-shrink-0 text-green-600" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+                  <path fill="currentColor" d="M488 261.8C488 403.3 381.5 512 244 512 109.8 512 0 402.2 0 261.8S109.8 11.6 244 11.6c70.3 0 129.8 27.8 174.2 71.9l-67.7 61.3C333.3 129 292.5 108.3 244 108.3 162.2 108.3 95 174.4 95 261.8s67.2 153.5 149 153.5c86.4 0 122.3-63.3 126.5-93.4H244v-81.8h244z"></path>
+                </svg>
+                <div className="flex-1">
+                  <p className="font-medium text-sm">Google Account Linked</p>
+                  <p className="text-sm text-muted-foreground">{user.email}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Link your Google account for a faster, password-free sign-in experience.
+                </p>
+                <Button 
+                  type="button" 
+                  variant="outline"
+                  onClick={signInWithGoogle}
+                >
+                  <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+                    <path fill="currentColor" d="M488 261.8C488 403.3 381.5 512 244 512 109.8 512 0 402.2 0 261.8S109.8 11.6 244 11.6c70.3 0 129.8 27.8 174.2 71.9l-67.7 61.3C333.3 129 292.5 108.3 244 108.3 162.2 108.3 95 174.4 95 261.8s67.2 153.5 149 153.5c86.4 0 122.3-63.3 126.5-93.4H244v-81.8h244z"></path>
+                  </svg>
+                  Link Google Account
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
