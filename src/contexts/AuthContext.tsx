@@ -29,23 +29,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+    let isMounted = true;
+
+    // This function runs once to get the initial session state.
+    async function getInitialSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      // We only update the state if the component is still mounted.
+      if (isMounted) {
         setSession(session);
         setUser(session?.user ?? null);
+        // Crucially, we set loading to false only AFTER the first session check is done.
         setIsLoading(false);
+      }
+    }
+
+    getInitialSession();
+
+    // This listener handles all subsequent auth events (SIGN_IN, SIGN_OUT, etc.)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (isMounted) {
+          setSession(session);
+          setUser(session?.user ?? null);
+        }
       }
     );
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    // The cleanup function runs when the component unmounts.
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signIn = async (email: string, password: string) => {
