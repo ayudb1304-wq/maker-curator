@@ -14,7 +14,7 @@ import { useUsernameCheck } from '@/hooks/useUsernameCheck';
 import { cn } from '@/lib/utils';
 
 const Login = () => {
-  const { user, signIn, signUp, signInWithGoogle, resetPassword, isLoading: authLoading } = useAuth();
+  const { user, signIn, signUp, resetPassword, signInWithGoogle, isLoading: authLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -95,6 +95,8 @@ const Login = () => {
       const { error } = await signIn(email, password);
       if (error) {
         setError(error.message);
+      } else {
+        navigate('/dashboard');
       }
     } catch (err) {
       setError('An unexpected error occurred');
@@ -154,21 +156,6 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setError('');
-    setIsLoading(true);
-    try {
-      const { error } = await signInWithGoogle();
-      if (error) {
-        setError(error.message);
-      }
-    } catch (err) {
-      setError('An unexpected error occurred');
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -191,6 +178,10 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+  
+  const handleGoogleSignIn = async () => {
+    await signInWithGoogle(username);
   };
 
   if (showResetForm) {
@@ -302,9 +293,6 @@ const Login = () => {
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-                <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
-                  Sign In with Google
-                </Button>
                 <div className="space-y-2">
                   <Label htmlFor="signin-email">Email</Label>
                   <Input
@@ -334,6 +322,9 @@ const Login = () => {
                 </div>
                 <Button type="submit" size="mobile" className="w-full" disabled={isLoading}>
                   {isLoading ? 'Signing in...' : 'Sign In'}
+                </Button>
+                <Button variant="outline" size="mobile" className="w-full" onClick={handleGoogleSignIn}>
+                  Sign In with Google
                 </Button>
                 <button
                   type="button"
@@ -369,9 +360,6 @@ const Login = () => {
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-                <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
-                  Sign Up with Google
-                </Button>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
